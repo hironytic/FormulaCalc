@@ -18,6 +18,12 @@
 		50CE21B71DFD85D30042E103 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B61DFD85D30042E103 /* RxSwift.framework */; };
 		50CE21BA1DFD85F30042E103 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B81DFD85F30042E103 /* Realm.framework */; };
 		50CE21BB1DFD85F30042E103 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B91DFD85F30042E103 /* RealmSwift.framework */; };
+		50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */; };
+		50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */; };
+		50F6FEC61E02BF8E002E849C /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEC01E02BF8E002E849C /* Message.swift */; };
+		50F6FEC71E02BF8E002E849C /* MessageSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEC11E02BF8E002E849C /* MessageSlot.swift */; };
+		50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEC21E02BF8E002E849C /* ViewModel.swift */; };
+		50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,7 +39,7 @@
 /* Begin PBXFileReference section */
 		50CE218E1DFD83140042E103 /* FormulaCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulaCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50CE21911DFD83140042E103 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		50CE21931DFD83140042E103 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		50CE21931DFD83140042E103 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = View/ViewController.swift; sourceTree = "<group>"; };
 		50CE21961DFD83140042E103 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		50CE21981DFD83140042E103 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		50CE219B1DFD83140042E103 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -46,6 +52,12 @@
 		50CE21B61DFD85D30042E103 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		50CE21B81DFD85F30042E103 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50CE21B91DFD85F30042E103 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionObserver.swift; sourceTree = "<group>"; };
+		50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionMessage.swift; sourceTree = "<group>"; };
+		50F6FEC01E02BF8E002E849C /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		50F6FEC11E02BF8E002E849C /* MessageSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageSlot.swift; sourceTree = "<group>"; };
+		50F6FEC21E02BF8E002E849C /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Transition.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,9 +105,10 @@
 		50CE21901DFD83140042E103 /* FormulaCalc */ = {
 			isa = PBXGroup;
 			children = (
-				50CE21911DFD83140042E103 /* AppDelegate.swift */,
+				50F6FEC91E02C724002E849C /* View */,
 				50CE21931DFD83140042E103 /* ViewController.swift */,
-				50CE21951DFD83140042E103 /* Main.storyboard */,
+				50F6FEBB1E02BF8E002E849C /* AppFramework */,
+				50CE21911DFD83140042E103 /* AppDelegate.swift */,
 				50CE21981DFD83140042E103 /* Assets.xcassets */,
 				50CE219A1DFD83140042E103 /* LaunchScreen.storyboard */,
 				50CE219D1DFD83140042E103 /* Info.plist */,
@@ -122,6 +135,43 @@
 				50CE21B21DFD85CC0042E103 /* Formulitic.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		50F6FEBB1E02BF8E002E849C /* AppFramework */ = {
+			isa = PBXGroup;
+			children = (
+				50F6FEBD1E02BF8E002E849C /* Message */,
+				50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */,
+				50F6FEC01E02BF8E002E849C /* Message.swift */,
+				50F6FEC11E02BF8E002E849C /* MessageSlot.swift */,
+				50F6FEC21E02BF8E002E849C /* ViewModel.swift */,
+				50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */,
+			);
+			path = AppFramework;
+			sourceTree = "<group>";
+		};
+		50F6FEBD1E02BF8E002E849C /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		50F6FEC91E02C724002E849C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				50F6FECA1E02C724002E849C /* Storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		50F6FECA1E02C724002E849C /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				50CE21951DFD83140042E103 /* Main.storyboard */,
+			);
+			path = Storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,7 +303,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				50CE21941DFD83140042E103 /* ViewController.swift in Sources */,
+				50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */,
+				50F6FEC71E02BF8E002E849C /* MessageSlot.swift in Sources */,
+				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
+				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,
+				50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */,
+				50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

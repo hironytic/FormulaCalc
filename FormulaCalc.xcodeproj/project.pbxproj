@@ -24,6 +24,7 @@
 		50F6FEC71E02BF8E002E849C /* MessageSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEC11E02BF8E002E849C /* MessageSlot.swift */; };
 		50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEC21E02BF8E002E849C /* ViewModel.swift */; };
 		50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */; };
+		50F6FECE1E035A1C002E849C /* DismissingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FECD1E035A1C002E849C /* DismissingMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		50F6FEC11E02BF8E002E849C /* MessageSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageSlot.swift; sourceTree = "<group>"; };
 		50F6FEC21E02BF8E002E849C /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Transition.swift"; sourceTree = "<group>"; };
+		50F6FECD1E035A1C002E849C /* DismissingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissingMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */,
+				50F6FECD1E035A1C002E849C /* DismissingMessage.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 			files = (
 				50CE21941DFD83140042E103 /* ViewController.swift in Sources */,
 				50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */,
+				50F6FECE1E035A1C002E849C /* DismissingMessage.swift in Sources */,
 				50F6FEC71E02BF8E002E849C /* MessageSlot.swift in Sources */,
 				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,

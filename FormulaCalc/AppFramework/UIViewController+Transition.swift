@@ -33,19 +33,27 @@ public func createViewController(for viewModel: IViewModel) -> UIViewController 
 public extension UIViewController {
     public func transitioner(_ observable: Observable<Message>) -> Disposable {
         return observable
-            .filter { $0 is TransitionMessage }
             .subscribe(onNext: { [unowned self] message in
-                let message = message as! TransitionMessage
-                let viewController = createViewController(for: message.viewModel)
-                switch message.type {
-                case .present:
-                    self.present(viewController, animated: message.animated, completion: nil)
-                case .push:
-                    self.navigationController?.pushViewController(viewController, animated: message.animated)
-                case .dismiss:
-                    self.dismiss(animated: message.animated, completion: nil)
-                case .pop:
-                    _ = self.navigationController?.popViewController(animated: message.animated)
+                switch message {
+                case let message as TransitionMessage:
+                    let viewController = createViewController(for: message.viewModel)
+                    switch message.type {
+                    case .present:
+                        self.present(viewController, animated: message.animated, completion: nil)
+                    case .push:
+                        self.navigationController?.pushViewController(viewController, animated: message.animated)
+                    }
+                
+                case let message as DismissingMessage:
+                    switch message.type {
+                    case .dismiss:
+                        self.dismiss(animated: message.animated, completion: nil)
+                    case .pop:
+                        _ = self.navigationController?.popViewController(animated: message.animated)
+                    }
+                    
+                default:
+                    break
                 }
             })
     }

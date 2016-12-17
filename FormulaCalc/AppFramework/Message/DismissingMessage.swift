@@ -1,5 +1,5 @@
 //
-// TransitionMessage.swift
+// DismissingMessage.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,13 +25,12 @@
 
 import Foundation
 
-public enum TransitionType {
-    case present
-    case push
+public enum DismissingType {
+    case dismiss
+    case pop
 }
 
-public struct TransitionMessage: Message {
-    public let viewModel: IViewModel
-    public let type: TransitionType
+public struct DismissingMessage: Message {
+    public let type: DismissingType
     public let animated: Bool
 }

@@ -26,10 +26,6 @@
 import UIKit
 import RxSwift
 
-public func createViewController(for viewModel: IViewModel) -> UIViewController {
-    fatalError()
-}
-
 public extension UIViewController {
     public func transitioner(_ observable: Observable<Message>) -> Disposable {
         return observable

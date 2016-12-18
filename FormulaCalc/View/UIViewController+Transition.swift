@@ -37,7 +37,11 @@ public extension UIViewController {
                     case .present:
                         self.present(viewController, animated: message.animated, completion: nil)
                     case .push:
-                        self.navigationController?.pushViewController(viewController, animated: message.animated)
+                        var vc = viewController
+                        if let navvc = vc as? UINavigationController {
+                            vc = navvc.viewControllers[0]
+                        }
+                        self.navigationController?.pushViewController(vc, animated: message.animated)
                     }
                 
                 case let message as DismissingMessage:

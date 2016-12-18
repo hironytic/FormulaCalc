@@ -34,5 +34,8 @@ public extension Resource {
         
         /// Name of the storyboard "SheetList"
         public static let sheetList = "SheetList"
+        
+        /// Name of the storyboard "TextEntry"
+        public static let textEntry = "TextEntry"
     }
 }

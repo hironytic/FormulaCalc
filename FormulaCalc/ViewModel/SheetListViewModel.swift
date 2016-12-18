@@ -71,9 +71,24 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
         
         super.init()
         
-        _onNew.handler = { print("onNew") }
+        _onNew.handler = { [weak self] in self?.handleOnNew() }
         _onSelect.handler = { item in print("onSelect - \((item as! SheetListElementViewModel).id)") }
-        _onDelete.handler = { item in print("onDelete - \((item as! SheetListElementViewModel).id)") }        
+        _onDelete.handler = { item in print("onDelete - \((item as! SheetListElementViewModel).id)") }
+    }
+    
+    private func handleOnNew() {
+        let sheetTitle = Variable<String?>("")
+        let onDone = ActionObserver<Void>()
+        let onCancel = ActionObserver<Void>()
+        let textEntryViewModel = TextEntryViewModel(
+            title: "新しい計算シート",
+            placeholder: "タイトル",
+            text: sheetTitle.asObservable(),
+            onTextChanged: ActionObserver<String?>(handler: { text in sheetTitle.value = text }).asObserver(),
+            onDone: onDone.asObserver(),
+            onCancel: onCancel.asObserver()
+        )
+        sendMessage(TransitionMessage(viewModel: textEntryViewModel, type: .push, animated: true))
     }
 }
 

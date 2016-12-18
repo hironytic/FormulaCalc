@@ -1,5 +1,5 @@
 //
-// ViewControllerFactory.swift
+// TextEntryViewController.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,29 +24,35 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-public func createViewController(for viewModel: IViewModel) -> UIViewController {
-    switch viewModel {
-    case let viewModel as ISheetListViewModel:
-        let (viewController, view) = instantiateFromStoryboard(R.Id.sheetList, SheetListViewController.self)
-        view.viewModel = viewModel
-        return viewController
+public class TextEntryViewController: UITableViewController {
+    private var _disposeBag: DisposeBag?
+    public var viewModel: ITextEntryViewModel?
+    
+    @IBOutlet weak var entryTextField: UITextField!
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
         
-    case let viewModel as ITextEntryViewModel:
-        let (viewController, view) = instantiateFromStoryboard(R.Id.textEntry, TextEntryViewController.self)
-        view.viewModel = viewModel
-        return viewController
-        
-    default:
-        fatalError()
+        bindViewModel()
     }
-}
+    
+    private func bindViewModel() {
+        _disposeBag = nil
+        guard let viewModel = viewModel else { return }
+        
+        let disposeBag = DisposeBag()
+    
+        viewModel.title
+            .bindTo(rx.title)
+            .addDisposableTo(disposeBag)
 
-private func instantiateFromStoryboard<View>(_ storyboardName: String, _ type: View.Type) -> (UIViewController, View) {
-    let storyboard: UIStoryboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
-    let viewController = storyboard.instantiateInitialViewController()!
-    return (
-        viewController,
-        ((viewController as? UINavigationController)?.viewControllers[0] ?? viewController) as! View
-    )
+        viewModel.text
+            .bindTo(entryTextField.rx.text)
+            .addDisposableTo(disposeBag)
+        
+        _disposeBag = disposeBag
+    }
 }

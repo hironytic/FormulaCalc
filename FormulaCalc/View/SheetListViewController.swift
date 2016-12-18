@@ -30,7 +30,7 @@ import RxCocoa
 typealias R = Resource
 
 public class SheetListElementCell: UITableViewCell {
-    var _disposeBag: DisposeBag?
+    private var _disposeBag: DisposeBag?
 
     public var viewModel: ISheetListElementViewModel? {
         didSet {
@@ -61,6 +61,7 @@ public class SheetListViewController: UITableViewController {
     public var viewModel: ISheetListViewModel?
     
     @IBOutlet weak var newButton: UIBarButtonItem!
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 

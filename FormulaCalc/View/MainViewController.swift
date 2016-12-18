@@ -1,5 +1,5 @@
 //
-// ViewController.swift
+// MainViewController.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,19 +24,34 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
+public class MainViewController: UIViewController {
+    public let viewModel = MainViewModel()
+    
+    private var _disposeBag: DisposeBag?
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        bindViewModel()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    private func bindViewModel() {
+        _disposeBag = nil
+        
+        let disposeBag = DisposeBag()
+        
+        viewModel.message
+            .bindTo(transitioner)
+            .addDisposableTo(disposeBag)
+        
+        rx.sentMessage(#selector(viewDidAppear(_:)))
+            .bindTo(viewModel.onViewDidAppear)
+            .addDisposableTo(disposeBag)
+        
+        _disposeBag = disposeBag
     }
-
-
 }
 

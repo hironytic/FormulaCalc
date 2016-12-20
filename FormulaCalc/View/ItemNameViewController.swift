@@ -1,5 +1,5 @@
 //
-// TextEntryViewController.swift
+// ItemNameViewController.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -27,11 +27,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class TextEntryViewController: UITableViewController {
+public class ItemNameViewController: UITableViewController {
     private var _disposeBag: DisposeBag?
-    public var viewModel: ITextEntryViewModel?
+    public var viewModel: IItemNameViewModel?
     
-    @IBOutlet weak var entryTextField: UITextField!
+    @IBOutlet weak var nameField: UITextField!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,12 +45,8 @@ public class TextEntryViewController: UITableViewController {
         
         let disposeBag = DisposeBag()
     
-        viewModel.title
-            .bindTo(rx.title)
-            .addDisposableTo(disposeBag)
-
-        viewModel.text
-            .bindTo(entryTextField.rx.text)
+        viewModel.name
+            .bindTo(nameField.rx.text)
             .addDisposableTo(disposeBag)
         
         _disposeBag = disposeBag

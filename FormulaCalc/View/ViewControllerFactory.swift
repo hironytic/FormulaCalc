@@ -32,8 +32,8 @@ public func createViewController(for viewModel: IViewModel) -> UIViewController 
         view.viewModel = viewModel
         return viewController
         
-    case let viewModel as ITextEntryViewModel:
-        let (viewController, view) = instantiateFromStoryboard(R.Id.textEntry, TextEntryViewController.self)
+    case let viewModel as IItemNameViewModel:
+        let (viewController, view) = instantiateFromStoryboard(R.Id.itemName, ItemNameViewController.self)
         view.viewModel = viewModel
         return viewController
         

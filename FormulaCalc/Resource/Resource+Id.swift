@@ -35,7 +35,7 @@ public extension Resource {
         /// Name of the storyboard "SheetList"
         public static let sheetList = "SheetList"
         
-        /// Name of the storyboard "TextEntry"
-        public static let textEntry = "TextEntry"
+        /// Name of the storyboard "ItemName"
+        public static let itemName = "ItemName"
     }
 }

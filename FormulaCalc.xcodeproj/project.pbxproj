@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		50AE03541E0642CF00739B0B /* RxCocoaComplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */; };
-		50AE03561E06586400739B0B /* TextEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03551E06586400739B0B /* TextEntryViewModel.swift */; };
-		50AE035B1E06B25200739B0B /* TextEntry.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50AE035A1E06B25200739B0B /* TextEntry.storyboard */; };
-		50AE035D1E06B42400739B0B /* TextEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE035C1E06B42400739B0B /* TextEntryViewController.swift */; };
+		50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03551E06586400739B0B /* ItemNameViewModel.swift */; };
+		50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50AE035A1E06B25200739B0B /* ItemName.storyboard */; };
+		50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE035C1E06B42400739B0B /* ItemNameViewController.swift */; };
 		50BD22FE1E0514D200A64650 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD22FC1E0514D200A64650 /* Resource.swift */; };
 		50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD22FD1E0514D200A64650 /* Resource+Id.swift */; };
 		50BD23021E05165500A64650 /* SheetListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23011E05165500A64650 /* SheetListViewModel.swift */; };
@@ -50,9 +50,9 @@
 
 /* Begin PBXFileReference section */
 		50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxCocoaComplement.swift; sourceTree = "<group>"; };
-		50AE03551E06586400739B0B /* TextEntryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEntryViewModel.swift; sourceTree = "<group>"; };
-		50AE035A1E06B25200739B0B /* TextEntry.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TextEntry.storyboard; sourceTree = "<group>"; };
-		50AE035C1E06B42400739B0B /* TextEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEntryViewController.swift; sourceTree = "<group>"; };
+		50AE03551E06586400739B0B /* ItemNameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewModel.swift; sourceTree = "<group>"; };
+		50AE035A1E06B25200739B0B /* ItemName.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemName.storyboard; sourceTree = "<group>"; };
+		50AE035C1E06B42400739B0B /* ItemNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewController.swift; sourceTree = "<group>"; };
 		50BD22FC1E0514D200A64650 /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		50BD22FD1E0514D200A64650 /* Resource+Id.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+Id.swift"; sourceTree = "<group>"; };
 		50BD23011E05165500A64650 /* SheetListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListViewModel.swift; sourceTree = "<group>"; };
@@ -134,9 +134,9 @@
 		50BD23001E05163F00A64650 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				50AE03551E06586400739B0B /* ItemNameViewModel.swift */,
 				50BD23031E05289100A64650 /* MainViewModel.swift */,
 				50BD23011E05165500A64650 /* SheetListViewModel.swift */,
-				50AE03551E06586400739B0B /* TextEntryViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -223,9 +223,9 @@
 			isa = PBXGroup;
 			children = (
 				50F6FECA1E02C724002E849C /* Storyboard */,
+				50AE035C1E06B42400739B0B /* ItemNameViewController.swift */,
 				50CE21931DFD83140042E103 /* MainViewController.swift */,
 				50F6FED11E051056002E849C /* SheetListViewController.swift */,
-				50AE035C1E06B42400739B0B /* TextEntryViewController.swift */,
 				50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */,
 				50BD23051E05360900A64650 /* ViewControllerFactory.swift */,
 			);
@@ -235,9 +235,9 @@
 		50F6FECA1E02C724002E849C /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				50AE035A1E06B25200739B0B /* ItemName.storyboard */,
 				50CE21951DFD83140042E103 /* Main.storyboard */,
 				50F6FECF1E050FBC002E849C /* SheetList.storyboard */,
-				50AE035A1E06B25200739B0B /* TextEntry.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -330,7 +330,7 @@
 			files = (
 				50F6FED01E050FBC002E849C /* SheetList.storyboard in Resources */,
 				50CE219C1DFD83140042E103 /* LaunchScreen.storyboard in Resources */,
-				50AE035B1E06B25200739B0B /* TextEntry.storyboard in Resources */,
+				50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */,
 				50CE21991DFD83140042E103 /* Assets.xcassets in Resources */,
 				50CE21971DFD83140042E103 /* Main.storyboard in Resources */,
 			);
@@ -382,11 +382,11 @@
 				50BD23061E05360900A64650 /* ViewControllerFactory.swift in Sources */,
 				50F6FED21E051056002E849C /* SheetListViewController.swift in Sources */,
 				50BD23041E05289100A64650 /* MainViewModel.swift in Sources */,
-				50AE03561E06586400739B0B /* TextEntryViewModel.swift in Sources */,
+				50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */,
 				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
 				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
-				50AE035D1E06B42400739B0B /* TextEntryViewController.swift in Sources */,
+				50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */,
 				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,
 				50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */,
 				50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */,

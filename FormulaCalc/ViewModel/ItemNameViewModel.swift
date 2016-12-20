@@ -26,43 +26,23 @@
 import Foundation
 import RxSwift
 
-public protocol ITextEntryViewModel: IViewModel {
-    var title: Observable<String> { get }
-    var placeholder: Observable<String?> { get }
-    var text: Observable<String?> { get }
+public protocol IItemNameViewModel: IViewModel {
+    var name: Observable<String?> { get }
     
-    var onTextChanged: AnyObserver<String?> { get }
-    var onDone: AnyObserver<Void> { get }
-    var onCancel: AnyObserver<Void> { get }
+    var onNameChanged: AnyObserver<String?> { get }
 }
 
-public class TextEntryViewModel: ViewModel, ITextEntryViewModel {
-    public let title: Observable<String>
-    public let placeholder: Observable<String?>
-    public let text: Observable<String?>
-    public let onTextChanged: AnyObserver<String?>
-    public let onDone: AnyObserver<Void>
-    public let onCancel: AnyObserver<Void>
+public class ItemNameViewModel: ViewModel, IItemNameViewModel {
+    public let name: Observable<String?>
+    public let onNameChanged: AnyObserver<String?>
     
-    public init(title: String,
-                placeholder: String,
-                text: Observable<String?>,
-                onTextChanged: AnyObserver<String?>,
-                onDone: AnyObserver<Void>,
-                onCancel: AnyObserver<Void>) {
-        self.title = Observable
-            .just(title)
+    private let _onNameChanged = ActionObserver<String?>()
+    
+    public override init() {
+        self.name = Observable
+            .just("なまえ")
         
-        self.placeholder = Observable
-            .just(placeholder)
-        
-        self.text = text
-            .asDriver(onErrorJustReturn: "")
-            .asObservable()
-
-        self.onTextChanged = onTextChanged
-        self.onDone = onDone
-        self.onCancel = onCancel
+        self.onNameChanged = _onNameChanged.asObserver()
         
         super.init()
     }

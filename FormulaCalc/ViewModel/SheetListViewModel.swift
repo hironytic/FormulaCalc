@@ -77,18 +77,8 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     }
     
     private func handleOnNew() {
-        let sheetTitle = Variable<String?>("")
-        let onDone = ActionObserver<Void>()
-        let onCancel = ActionObserver<Void>()
-        let textEntryViewModel = TextEntryViewModel(
-            title: "新しい計算シート",
-            placeholder: "タイトル",
-            text: sheetTitle.asObservable(),
-            onTextChanged: ActionObserver<String?>(handler: { text in sheetTitle.value = text }).asObserver(),
-            onDone: onDone.asObserver(),
-            onCancel: onCancel.asObserver()
-        )
-        sendMessage(TransitionMessage(viewModel: textEntryViewModel, type: .push, animated: true))
+        let itemNameViewModel = ItemNameViewModel()
+        sendMessage(TransitionMessage(viewModel: itemNameViewModel, type: .push, animated: true))
     }
 }
 

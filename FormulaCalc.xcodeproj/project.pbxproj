@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		505BFC111E09741E00AAC3D2 /* Sheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505BFC101E09741E00AAC3D2 /* Sheet.storyboard */; };
+		505BFC151E0ABE4000AAC3D2 /* SheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC141E0ABE4000AAC3D2 /* SheetViewController.swift */; };
+		505BFC171E0ABE7100AAC3D2 /* ComputedSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC161E0ABE7100AAC3D2 /* ComputedSheetViewController.swift */; };
+		505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */; };
 		50AE03541E0642CF00739B0B /* RxCocoaComplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */; };
 		50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03551E06586400739B0B /* ItemNameViewModel.swift */; };
 		50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50AE035A1E06B25200739B0B /* ItemName.storyboard */; };
@@ -49,6 +53,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		505BFC101E09741E00AAC3D2 /* Sheet.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Sheet.storyboard; sourceTree = "<group>"; };
+		505BFC141E0ABE4000AAC3D2 /* SheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetViewController.swift; sourceTree = "<group>"; };
+		505BFC161E0ABE7100AAC3D2 /* ComputedSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputedSheetViewController.swift; sourceTree = "<group>"; };
+		505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignSheetViewController.swift; sourceTree = "<group>"; };
 		50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxCocoaComplement.swift; sourceTree = "<group>"; };
 		50AE03551E06586400739B0B /* ItemNameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewModel.swift; sourceTree = "<group>"; };
 		50AE035A1E06B25200739B0B /* ItemName.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemName.storyboard; sourceTree = "<group>"; };
@@ -226,6 +234,9 @@
 				50AE035C1E06B42400739B0B /* ItemNameViewController.swift */,
 				50CE21931DFD83140042E103 /* MainViewController.swift */,
 				50F6FED11E051056002E849C /* SheetListViewController.swift */,
+				505BFC141E0ABE4000AAC3D2 /* SheetViewController.swift */,
+				505BFC161E0ABE7100AAC3D2 /* ComputedSheetViewController.swift */,
+				505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */,
 				50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */,
 				50BD23051E05360900A64650 /* ViewControllerFactory.swift */,
 			);
@@ -238,6 +249,7 @@
 				50AE035A1E06B25200739B0B /* ItemName.storyboard */,
 				50CE21951DFD83140042E103 /* Main.storyboard */,
 				50F6FECF1E050FBC002E849C /* SheetList.storyboard */,
+				505BFC101E09741E00AAC3D2 /* Sheet.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -330,6 +342,7 @@
 			files = (
 				50F6FED01E050FBC002E849C /* SheetList.storyboard in Resources */,
 				50CE219C1DFD83140042E103 /* LaunchScreen.storyboard in Resources */,
+				505BFC111E09741E00AAC3D2 /* Sheet.storyboard in Resources */,
 				50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */,
 				50CE21991DFD83140042E103 /* Assets.xcassets in Resources */,
 				50CE21971DFD83140042E103 /* Main.storyboard in Resources */,
@@ -386,10 +399,13 @@
 				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
 				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
+				505BFC151E0ABE4000AAC3D2 /* SheetViewController.swift in Sources */,
 				50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */,
 				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,
 				50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */,
 				50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */,
+				505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */,
+				505BFC171E0ABE7100AAC3D2 /* ComputedSheetViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 //
-// Resource+Id.swift
+// SheetViewModel.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,21 +24,34 @@
 //
 
 import Foundation
+import RxSwift
 
-public extension Resource {
-    public struct Id {
-        private init() { }
-        
-        /// General cell identifier
-        public static let cell = "Cell"
-        
-        /// Name of the storyboard "SheetList"
-        public static let sheetList = "SheetList"
-        
-        /// Name of the storyboard "Sheet"
-        public static let sheet = "Sheet"
-        
-        /// Name of the storyboard "ItemName"
-        public static let itemName = "ItemName"
+public protocol ISheetElementViewModel: IViewModel {
+    var name: Observable<String?> { get }
+    var value: Observable<String?> { get }
+}
+
+public protocol ISheetViewModel: IViewModel {
+    var title: Observable<String?> { get }
+    var itemList: Observable<[ISheetElementViewModel]> { get }
+}
+
+public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
+    public let name: Observable<String?>
+    public let value: Observable<String?>
+    
+    public override init() {
+        name = Observable.just("項目名")
+        value = Observable.just("12345.6")
+    }
+}
+
+public class SheetViewModel: ViewModel, ISheetViewModel {
+    public let title: Observable<String?>
+    public let itemList: Observable<[ISheetElementViewModel]>
+    
+    public override init() {
+        title = Observable.just("シート名")
+        itemList = Observable.just([SheetElementViewModel(), SheetElementViewModel()])
     }
 }

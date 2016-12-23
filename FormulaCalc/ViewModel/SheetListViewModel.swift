@@ -77,8 +77,8 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     }
     
     private func handleOnNew() {
-        let itemNameViewModel = ItemNameViewModel()
-        sendMessage(TransitionMessage(viewModel: itemNameViewModel, type: .push, animated: true))
+        let viewModel = SheetViewModel()
+        sendMessage(TransitionMessage(viewModel: viewModel, type: .push, animated: true))
     }
 }
 

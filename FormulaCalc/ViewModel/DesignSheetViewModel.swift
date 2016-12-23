@@ -1,5 +1,5 @@
 //
-// Resource+Id.swift
+// DesignSheetViewModel.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,20 +25,10 @@
 
 import Foundation
 
-public extension Resource {
-    public struct Id {
-        private init() { }
-        
-        /// General cell identifier
-        public static let cell = "Cell"
-        
-        /// Name of the storyboard "SheetList"
-        public static let sheetList = "SheetList"
-        
-        /// Name of the storyboard "Sheet"
-        public static let sheet = "Sheet"
-        
-        /// Name of the storyboard "ItemName"
-        public static let itemName = "ItemName"
-    }
+public protocol IDesignSheetViewModel: IViewModel {
+    
+}
+
+public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
+    
 }

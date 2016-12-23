@@ -24,8 +24,11 @@
 //
 
 import UIKit
+import RxSwift
 
 class DesignSheetViewController: UITableViewController {
+    private var _disposeBag: DisposeBag?
+    public var viewModel: IDesignSheetViewModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		505BFC111E09741E00AAC3D2 /* Sheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505BFC101E09741E00AAC3D2 /* Sheet.storyboard */; };
-		505BFC151E0ABE4000AAC3D2 /* SheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC141E0ABE4000AAC3D2 /* SheetViewController.swift */; };
-		505BFC171E0ABE7100AAC3D2 /* ComputedSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC161E0ABE7100AAC3D2 /* ComputedSheetViewController.swift */; };
+		505BFC171E0ABE7100AAC3D2 /* SheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC161E0ABE7100AAC3D2 /* SheetViewController.swift */; };
 		505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */; };
+		505BFC1D1E0CCDEB00AAC3D2 /* SheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC1C1E0CCDEB00AAC3D2 /* SheetViewModel.swift */; };
+		505BFC1F1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */; };
+		505BFC231E0CFC8B00AAC3D2 /* DesignSheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */; };
 		50AE03541E0642CF00739B0B /* RxCocoaComplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */; };
 		50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03551E06586400739B0B /* ItemNameViewModel.swift */; };
 		50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50AE035A1E06B25200739B0B /* ItemName.storyboard */; };
@@ -54,9 +56,11 @@
 
 /* Begin PBXFileReference section */
 		505BFC101E09741E00AAC3D2 /* Sheet.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Sheet.storyboard; sourceTree = "<group>"; };
-		505BFC141E0ABE4000AAC3D2 /* SheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetViewController.swift; sourceTree = "<group>"; };
-		505BFC161E0ABE7100AAC3D2 /* ComputedSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputedSheetViewController.swift; sourceTree = "<group>"; };
+		505BFC161E0ABE7100AAC3D2 /* SheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetViewController.swift; sourceTree = "<group>"; };
 		505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignSheetViewController.swift; sourceTree = "<group>"; };
+		505BFC1C1E0CCDEB00AAC3D2 /* SheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetViewModel.swift; sourceTree = "<group>"; };
+		505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignSheetViewModel.swift; sourceTree = "<group>"; };
+		505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DesignSheet.storyboard; sourceTree = "<group>"; };
 		50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxCocoaComplement.swift; sourceTree = "<group>"; };
 		50AE03551E06586400739B0B /* ItemNameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewModel.swift; sourceTree = "<group>"; };
 		50AE035A1E06B25200739B0B /* ItemName.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemName.storyboard; sourceTree = "<group>"; };
@@ -123,13 +127,6 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		50AE03571E067ADA00739B0B /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		50BD22FB1E05149F00A64650 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,9 +139,11 @@
 		50BD23001E05163F00A64650 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */,
 				50AE03551E06586400739B0B /* ItemNameViewModel.swift */,
 				50BD23031E05289100A64650 /* MainViewModel.swift */,
 				50BD23011E05165500A64650 /* SheetListViewModel.swift */,
+				505BFC1C1E0CCDEB00AAC3D2 /* SheetViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -173,7 +172,6 @@
 			children = (
 				50F6FEC91E02C724002E849C /* View */,
 				50BD23001E05163F00A64650 /* ViewModel */,
-				50AE03571E067ADA00739B0B /* Model */,
 				50AE03521E0642A600739B0B /* Utility */,
 				50F6FEBB1E02BF8E002E849C /* AppFramework */,
 				50BD22FB1E05149F00A64650 /* Resource */,
@@ -231,12 +229,11 @@
 			isa = PBXGroup;
 			children = (
 				50F6FECA1E02C724002E849C /* Storyboard */,
+				505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */,
 				50AE035C1E06B42400739B0B /* ItemNameViewController.swift */,
 				50CE21931DFD83140042E103 /* MainViewController.swift */,
 				50F6FED11E051056002E849C /* SheetListViewController.swift */,
-				505BFC141E0ABE4000AAC3D2 /* SheetViewController.swift */,
-				505BFC161E0ABE7100AAC3D2 /* ComputedSheetViewController.swift */,
-				505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */,
+				505BFC161E0ABE7100AAC3D2 /* SheetViewController.swift */,
 				50F6FECB1E02D2DA002E849C /* UIViewController+Transition.swift */,
 				50BD23051E05360900A64650 /* ViewControllerFactory.swift */,
 			);
@@ -250,6 +247,7 @@
 				50CE21951DFD83140042E103 /* Main.storyboard */,
 				50F6FECF1E050FBC002E849C /* SheetList.storyboard */,
 				505BFC101E09741E00AAC3D2 /* Sheet.storyboard */,
+				505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -342,6 +340,7 @@
 			files = (
 				50F6FED01E050FBC002E849C /* SheetList.storyboard in Resources */,
 				50CE219C1DFD83140042E103 /* LaunchScreen.storyboard in Resources */,
+				505BFC231E0CFC8B00AAC3D2 /* DesignSheet.storyboard in Resources */,
 				505BFC111E09741E00AAC3D2 /* Sheet.storyboard in Resources */,
 				50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */,
 				50CE21991DFD83140042E103 /* Assets.xcassets in Resources */,
@@ -395,17 +394,18 @@
 				50BD23061E05360900A64650 /* ViewControllerFactory.swift in Sources */,
 				50F6FED21E051056002E849C /* SheetListViewController.swift in Sources */,
 				50BD23041E05289100A64650 /* MainViewModel.swift in Sources */,
+				505BFC1D1E0CCDEB00AAC3D2 /* SheetViewModel.swift in Sources */,
 				50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */,
 				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
 				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
-				505BFC151E0ABE4000AAC3D2 /* SheetViewController.swift in Sources */,
 				50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */,
 				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,
 				50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */,
+				505BFC1F1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift in Sources */,
 				50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */,
 				505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */,
-				505BFC171E0ABE7100AAC3D2 /* ComputedSheetViewController.swift in Sources */,
+				505BFC171E0ABE7100AAC3D2 /* SheetViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

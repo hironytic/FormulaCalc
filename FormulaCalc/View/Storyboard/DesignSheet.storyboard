@@ -34,7 +34,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" editingAccessoryType="disclosureIndicator" id="fGk-rS-qOg">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" editingAccessoryType="disclosureIndicator" id="fGk-rS-qOg" customClass="DesignSheetElementCell" customModule="FormulaCalc" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="56" width="375" height="85"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fGk-rS-qOg" id="QAA-zt-csV">
@@ -77,6 +77,11 @@
                                         <constraint firstItem="khl-GD-zex" firstAttribute="leading" secondItem="QAA-zt-csV" secondAttribute="leading" constant="15" id="vjO-Fa-ubN"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="invisibleMark" destination="yLM-rQ-4AB" id="EyO-YF-c2X"/>
+                                    <outlet property="nameLabel" destination="eJI-0D-Tc7" id="Lbg-Vx-cVr"/>
+                                    <outlet property="typeLabel" destination="Eze-AO-Le6" id="fZ9-HU-96G"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -90,6 +95,10 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="plh-w2-4PC"/>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="doneButton" destination="plh-w2-4PC" id="rnq-V3-tem"/>
+                        <outlet property="newItemButton" destination="enh-of-Ceb" id="j25-jR-px3"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Ij-Hx-R2o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

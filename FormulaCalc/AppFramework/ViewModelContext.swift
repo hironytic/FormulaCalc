@@ -1,5 +1,5 @@
 //
-// MainViewModel.swift
+// ViewModelContext.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,31 +24,9 @@
 //
 
 import Foundation
-import RxSwift
 
-public protocol IMainViewModel: IViewModel {
-    var onViewDidAppear: AnyObserver<[Any]> { get }
+public protocol IViewModelContext {
 }
 
-public class MainViewModel: ViewModel, IMainViewModel {
-    public let onViewDidAppear: AnyObserver<[Any]>
-    
-    private var _startupDidEnd: Bool = false
-    private let _onViewDidAppear = ActionObserver<[Any]>()
-    
-    public override init(context: IViewModelContext) {
-        onViewDidAppear = _onViewDidAppear.asObserver()
-        
-        super.init(context: context)
-        
-        _onViewDidAppear.handler = { [weak self] _ in self?.handleViewDidAppear() }
-    }
-    
-    private func handleViewDidAppear() {
-        if !_startupDidEnd {
-            let sheetListViewModel = SheetListViewModel(context: context)
-            sendMessage(TransitionMessage(viewModel: sheetListViewModel, type: .present, animated: false))
-            _startupDidEnd = true
-        }
-    }
+public class ViewModelContext: IViewModelContext {
 }

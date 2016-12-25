@@ -42,9 +42,11 @@ public class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
     public let id: String
     public let title: Observable<String?>
     
-    public init(id: String, title: String) {
+    public init(context: IViewModelContext, id: String, title: String) {
         self.id = id
         self.title = Observable.just(title)
+        
+        super.init(context: context)
     }
 }
 
@@ -59,17 +61,17 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
     private let _onSelect = ActionObserver<ISheetListElementViewModel>()
 
-    public override init() {
+    public override init(context: IViewModelContext) {
         sheetList = Observable.just([
-            SheetListElementViewModel(id: "test1", title: "Test1"),
-            SheetListElementViewModel(id: "test2", title: "Test2"),
+            SheetListElementViewModel(context: context, id: "test1", title: "Test1"),
+            SheetListElementViewModel(context: context, id: "test2", title: "Test2"),
         ])
         
         onNew = _onNew.asObserver()
         onDelete = _onDelete.asObserver()
         onSelect = _onSelect.asObserver()
         
-        super.init()
+        super.init(context: context)
         
         _onNew.handler = { [weak self] in self?.handleOnNew() }
         _onSelect.handler = { item in print("onSelect - \((item as! SheetListElementViewModel).id)") }
@@ -77,7 +79,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     }
     
     private func handleOnNew() {
-        let viewModel = DesignSheetViewModel()
+        let viewModel = DesignSheetViewModel(context: context)
         sendMessage(TransitionMessage(viewModel: viewModel, type: .push, animated: true))
     }
 }

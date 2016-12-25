@@ -36,9 +36,11 @@ public class ViewModel: IViewModel {
             return _messageSlot.message
         }
     }
+    public let context: IViewModelContext
     private let _messageSlot = MessageSlot()
-    
-    public init() {
+
+    public init(context: IViewModelContext) {
+        self.context = context
     }
     
     public func sendMessage(_ message: Message) {

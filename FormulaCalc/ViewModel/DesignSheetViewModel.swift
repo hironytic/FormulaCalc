@@ -46,10 +46,12 @@ public class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewMode
     public let type: Observable<String?>
     public let invisibleMarkHidden: Observable<Bool>
     
-    public override init() {
+    public override init(context: IViewModelContext) {
         name = Observable.just("項目名")
         type = Observable.just("数値入力")
         invisibleMarkHidden = Observable.just(false)
+        
+        super.init(context: context)
     }
 }
 
@@ -65,11 +67,13 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
     private let _onSelectItem = ActionObserver<IDesignSheetElementViewModel>()
     private let _onDone = ActionObserver<Void>()
     
-    public override init() {
+    public override init(context: IViewModelContext) {
         title = Observable.just("シート名")
-        itemList = Observable.just([DesignSheetElementViewModel(), DesignSheetElementViewModel()])
+        itemList = Observable.just([DesignSheetElementViewModel(context: context), DesignSheetElementViewModel(context: context)])
         onNewItem = _onNewItem.asObserver()
         onSelectItem = _onSelectItem.asObserver()
         onDone = _onDone.asObserver()
+        
+        super.init(context: context)
     }
 }

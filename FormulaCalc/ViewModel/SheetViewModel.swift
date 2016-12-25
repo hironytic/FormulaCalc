@@ -40,9 +40,11 @@ public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     public let name: Observable<String?>
     public let value: Observable<String?>
     
-    public override init() {
+    public override init(context: IViewModelContext) {
         name = Observable.just("項目名")
         value = Observable.just("12345.6")
+        
+        super.init(context: context)
     }
 }
 
@@ -50,8 +52,10 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>
     
-    public override init() {
+    public override init(context: IViewModelContext) {
         title = Observable.just("シート名")
-        itemList = Observable.just([SheetElementViewModel(), SheetElementViewModel()])
+        itemList = Observable.just([SheetElementViewModel(context: context), SheetElementViewModel(context: context)])
+        
+        super.init(context: context)
     }
 }

@@ -32,16 +32,19 @@ public extension Resource {
         /// General cell identifier
         public static let cell = "Cell"
         
-        /// Name of the storyboard "SheetList"
-        public static let sheetList = "SheetList"
-        
-        /// Name of the storyboard "Sheet"
-        public static let sheet = "Sheet"
-        
         /// Name of the storyboard "DesignSheet"
         public static let designSheet = "DesignSheet"
+
+        /// Name of the storyboard "Item"
+        public static let item = "Item"
         
         /// Name of the storyboard "ItemName"
         public static let itemName = "ItemName"
+
+        /// Name of the storyboard "Sheet"
+        public static let sheet = "Sheet"
+
+        /// Name of the storyboard "SheetList"
+        public static let sheetList = "SheetList"
     }
 }

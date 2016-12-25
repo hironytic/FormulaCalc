@@ -13,6 +13,9 @@
 		505BFC1D1E0CCDEB00AAC3D2 /* SheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC1C1E0CCDEB00AAC3D2 /* SheetViewModel.swift */; };
 		505BFC1F1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */; };
 		505BFC231E0CFC8B00AAC3D2 /* DesignSheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */; };
+		505BFC251E0E09D900AAC3D2 /* Item.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505BFC241E0E09D900AAC3D2 /* Item.storyboard */; };
+		505BFC271E0E0C4000AAC3D2 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC261E0E0C4000AAC3D2 /* ItemViewController.swift */; };
+		505BFC291E0E0C7C00AAC3D2 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC281E0E0C7C00AAC3D2 /* ItemViewModel.swift */; };
 		50AE03541E0642CF00739B0B /* RxCocoaComplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */; };
 		50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03551E06586400739B0B /* ItemNameViewModel.swift */; };
 		50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50AE035A1E06B25200739B0B /* ItemName.storyboard */; };
@@ -62,6 +65,9 @@
 		505BFC1C1E0CCDEB00AAC3D2 /* SheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetViewModel.swift; sourceTree = "<group>"; };
 		505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignSheetViewModel.swift; sourceTree = "<group>"; };
 		505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DesignSheet.storyboard; sourceTree = "<group>"; };
+		505BFC241E0E09D900AAC3D2 /* Item.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Item.storyboard; sourceTree = "<group>"; };
+		505BFC261E0E0C4000AAC3D2 /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		505BFC281E0E0C7C00AAC3D2 /* ItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
 		50AE03531E0642CF00739B0B /* RxCocoaComplement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxCocoaComplement.swift; sourceTree = "<group>"; };
 		50AE03551E06586400739B0B /* ItemNameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewModel.swift; sourceTree = "<group>"; };
 		50AE035A1E06B25200739B0B /* ItemName.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemName.storyboard; sourceTree = "<group>"; };
@@ -142,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */,
+				505BFC281E0E0C7C00AAC3D2 /* ItemViewModel.swift */,
 				50AE03551E06586400739B0B /* ItemNameViewModel.swift */,
 				50BD23031E05289100A64650 /* MainViewModel.swift */,
 				50BD23011E05165500A64650 /* SheetListViewModel.swift */,
@@ -233,6 +240,7 @@
 			children = (
 				50F6FECA1E02C724002E849C /* Storyboard */,
 				505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */,
+				505BFC261E0E0C4000AAC3D2 /* ItemViewController.swift */,
 				50AE035C1E06B42400739B0B /* ItemNameViewController.swift */,
 				50CE21931DFD83140042E103 /* MainViewController.swift */,
 				50F6FED11E051056002E849C /* SheetListViewController.swift */,
@@ -246,11 +254,12 @@
 		50F6FECA1E02C724002E849C /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */,
+				505BFC241E0E09D900AAC3D2 /* Item.storyboard */,
 				50AE035A1E06B25200739B0B /* ItemName.storyboard */,
 				50CE21951DFD83140042E103 /* Main.storyboard */,
-				50F6FECF1E050FBC002E849C /* SheetList.storyboard */,
 				505BFC101E09741E00AAC3D2 /* Sheet.storyboard */,
-				505BFC221E0CFC8B00AAC3D2 /* DesignSheet.storyboard */,
+				50F6FECF1E050FBC002E849C /* SheetList.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -346,6 +355,7 @@
 				505BFC231E0CFC8B00AAC3D2 /* DesignSheet.storyboard in Resources */,
 				505BFC111E09741E00AAC3D2 /* Sheet.storyboard in Resources */,
 				50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */,
+				505BFC251E0E09D900AAC3D2 /* Item.storyboard in Resources */,
 				50CE21991DFD83140042E103 /* Assets.xcassets in Resources */,
 				50CE21971DFD83140042E103 /* Main.storyboard in Resources */,
 			);
@@ -391,6 +401,7 @@
 				50CE21941DFD83140042E103 /* MainViewController.swift in Sources */,
 				50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */,
 				50F6FECE1E035A1C002E849C /* DismissingMessage.swift in Sources */,
+				505BFC271E0E0C4000AAC3D2 /* ItemViewController.swift in Sources */,
 				50BD23021E05165500A64650 /* SheetListViewModel.swift in Sources */,
 				50BD22FE1E0514D200A64650 /* Resource.swift in Sources */,
 				50AE03541E0642CF00739B0B /* RxCocoaComplement.swift in Sources */,
@@ -404,6 +415,7 @@
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
 				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
 				50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */,
+				505BFC291E0E0C7C00AAC3D2 /* ItemViewModel.swift in Sources */,
 				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,
 				50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */,
 				505BFC1F1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift in Sources */,

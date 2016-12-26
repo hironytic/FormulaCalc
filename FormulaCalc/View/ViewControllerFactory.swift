@@ -42,6 +42,11 @@ public func createViewController(for viewModel: IViewModel) -> UIViewController 
         view.viewModel = viewModel
         return viewController
         
+    case let viewModel as IItemTypeViewModel:
+        let (viewController, view) = instantiateFromStoryboard(R.Id.itemType, ItemTypeViewController.self)
+        view.viewModel = viewModel
+        return viewController
+        
     case let viewModel as ISheetViewModel:
         let (viewController, view) = instantiateFromStoryboard(R.Id.sheet, SheetViewController.self)
         view.viewModel = viewModel

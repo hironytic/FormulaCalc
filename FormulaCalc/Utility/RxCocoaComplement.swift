@@ -40,3 +40,14 @@ extension Reactive where Base: UITableView {
         return ControlEvent(events: source)
     }
 }
+
+extension Reactive where Base: UITableViewCell {
+    /**
+     Bindable sink for `accessoryType` property.
+     */
+    public var accessoryType: AnyObserver<UITableViewCellAccessoryType> {
+        return UIBindingObserver(UIElement: self.base) { UIElement, accessoryType in
+            UIElement.accessoryType = accessoryType
+        }.asObserver()
+    }
+}

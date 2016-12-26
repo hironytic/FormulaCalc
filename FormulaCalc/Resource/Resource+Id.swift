@@ -41,6 +41,9 @@ public extension Resource {
         /// Name of the storyboard "ItemName"
         public static let itemName = "ItemName"
 
+        /// Name of the storyboard "ItemType"
+        public static let itemType = "ItemType"
+        
         /// Name of the storyboard "Sheet"
         public static let sheet = "Sheet"
 

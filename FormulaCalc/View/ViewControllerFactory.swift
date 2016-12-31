@@ -36,6 +36,11 @@ public func createViewController(for viewModel: IViewModel) -> UIViewController 
         let (viewController, view) = instantiateFromStoryboard(R.Id.item, ItemViewController.self)
         view.viewModel = viewModel
         return viewController
+    
+    case let viewModel as IItemFormatViewModel:
+        let (viewController, view) = instantiateFromStoryboard(R.Id.itemFormat, ItemFormatViewController.self)
+        view.viewModel = viewModel
+        return viewController
         
     case let viewModel as IItemNameViewModel:
         let (viewController, view) = instantiateFromStoryboard(R.Id.itemName, ItemNameViewController.self)

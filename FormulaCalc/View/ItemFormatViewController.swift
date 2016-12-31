@@ -1,5 +1,5 @@
 //
-// ItemTypeViewController.swift
+// ItemFormatViewController.swift
 // FormulaCalc
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -27,22 +27,53 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class ItemTypeElementCell: UITableViewCell {
+public class ThousandSeparatorElementCell: UITableViewCell {
     private var _disposeBag: DisposeBag?
     
-    public var viewModel: IItemTypeElementViewModel? {
+    @IBOutlet weak var thousandSeparatorSwitch: UISwitch!
+    
+    public var viewModel: IThousandSeparatorElementViewModel? {
         didSet {
             _disposeBag = nil
             guard let viewModel = viewModel else { return }
             
             let disposeBag = DisposeBag()
+            
+            viewModel.thousandSeparator
+                .bindTo(thousandSeparatorSwitch.rx.value)
+                .addDisposableTo(disposeBag)
 
+            thousandSeparatorSwitch.rx.value
+                .bindTo(viewModel.onChangeThousandSeparator)
+                .addDisposableTo(disposeBag)
+            
+            _disposeBag = disposeBag
+        }
+    }
+    
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.viewModel = nil
+    }
+}
+
+public class FractionDigitsElementCell: UITableViewCell {
+    private var _disposeBag: DisposeBag?
+    
+    public var viewModel: IFractionsDigitsElementViewModel? {
+        didSet {
+            _disposeBag = nil
+            guard let viewModel = viewModel else { return }
+            
+            let disposeBag = DisposeBag()
+            
             if let textLabel = textLabel {
                 viewModel.name
                     .bindTo(textLabel.rx.text)
                     .addDisposableTo(disposeBag)
             }
-
+            
             viewModel.accessoryType
                 .bindTo(self.rx.accessoryType)
                 .addDisposableTo(disposeBag)
@@ -56,16 +87,15 @@ public class ItemTypeElementCell: UITableViewCell {
         
         self.viewModel = nil
     }
-    
 }
 
-public class ItemTypeViewController: UITableViewController {
+public class ItemFormatViewController: UITableViewController {
     private var _disposeBag: DisposeBag?
-    public var viewModel: IItemTypeViewModel?
+    public var viewModel: IItemFormatViewModel?
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         bindViewModel()
     }
     
@@ -75,42 +105,59 @@ public class ItemTypeViewController: UITableViewController {
         
         let disposeBag = DisposeBag()
         
-        let dataSource = ItemTypeDataSource()
-        viewModel.typeList
+        let dataSource = ItemFormatDataSource()
+        viewModel.items
             .bindTo(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
         
-        tableView.rx.modelSelected(IItemTypeElementViewModel.self)
-            .bindTo(viewModel.onSelect)
+        tableView.rx.modelSelected(IFractionsDigitsElementViewModel.self)
+            .bindTo(viewModel.onSelectFractionDigits)
             .addDisposableTo(disposeBag)
         
         _disposeBag = disposeBag
     }
 }
 
-public class ItemTypeDataSource: NSObject {
-    fileprivate var _itemModels: Element = []
+public class ItemFormatDataSource: NSObject {
+    fileprivate var _itemModels: Element = ItemFormatElementViewModels(thousandSeparator: [], fractionDigits: [])
 }
 
-extension ItemTypeDataSource: UITableViewDataSource {
+extension ItemFormatDataSource: UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return _itemModels.count
+        switch section {
+        case 0:
+            return _itemModels.thousandSeparator.count
+        case 1:
+            return _itemModels.fractionDigits.count
+        default:
+            fatalError()
+        }
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.cell, for: indexPath) as! ItemTypeElementCell
-        let element = _itemModels[indexPath.row]
-        cell.viewModel = element
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.thousandSeparator, for: indexPath) as! ThousandSeparatorElementCell
+            let element = _itemModels.thousandSeparator[indexPath.row]
+            cell.viewModel = element
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.fractionDigits, for: indexPath) as! FractionDigitsElementCell
+            let element = _itemModels.fractionDigits[indexPath.row]
+            cell.viewModel = element
+            return cell
+        default:
+            fatalError()
+        }
     }
 }
 
-extension ItemTypeDataSource: RxTableViewDataSourceType {
-    public typealias Element = [IItemTypeElementViewModel]
+extension ItemFormatDataSource: RxTableViewDataSourceType {
+    public typealias Element = ItemFormatElementViewModels
     
     public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in
@@ -121,9 +168,9 @@ extension ItemTypeDataSource: RxTableViewDataSourceType {
     }
 }
 
-extension ItemTypeDataSource: SectionedViewDataSourceType {
+extension ItemFormatDataSource: SectionedViewDataSourceType {
     public func model(at indexPath: IndexPath) throws -> Any {
-        precondition(indexPath.section == 0)
-        return _itemModels[indexPath.row]
+        precondition(indexPath.section == 1)
+        return _itemModels.fractionDigits[indexPath.row]
     }
 }

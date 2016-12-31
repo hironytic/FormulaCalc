@@ -32,11 +32,21 @@ public extension Resource {
         /// General cell identifier
         public static let cell = "Cell"
         
+        /// Cell identifier for thousand separator
+        public static let thousandSeparator = "ThousandSeparator"
+        
+        // Cell identifier for fraction digits
+        public static let fractionDigits = "FractionDigits"
+        
+        
         /// Name of the storyboard "DesignSheet"
         public static let designSheet = "DesignSheet"
 
         /// Name of the storyboard "Item"
         public static let item = "Item"
+        
+        /// Nmae of the storyboard "ItemFormat"
+        public static let itemFormat = "ItemFormat"
         
         /// Name of the storyboard "ItemName"
         public static let itemName = "ItemName"

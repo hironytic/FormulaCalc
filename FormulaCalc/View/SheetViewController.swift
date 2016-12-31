@@ -75,9 +75,10 @@ public class SheetViewController: UITableViewController {
         
         let disposeBag = DisposeBag()
         
-        let dataSource = SheetDataSource()
         viewModel.itemList
-            .bindTo(tableView.rx.items(dataSource: dataSource))
+            .bindTo(tableView.rx.items(cellIdentifier: R.Id.cell, cellType: SheetElementCell.self)) { (row, element, cell) in
+                cell.viewModel = element
+            }
             .addDisposableTo(disposeBag)
         
         viewModel.title
@@ -85,45 +86,5 @@ public class SheetViewController: UITableViewController {
             .addDisposableTo(disposeBag)
         
         _disposeBag = disposeBag
-    }
-}
-
-public class SheetDataSource: NSObject {
-    fileprivate var _itemModels: Element = []
-}
-
-extension SheetDataSource: UITableViewDataSource {
-    public func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return _itemModels.count
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.cell, for: indexPath) as! SheetElementCell
-        let element = _itemModels[(indexPath as NSIndexPath).row]
-        cell.viewModel = element
-        return cell
-    }
-}
-
-extension SheetDataSource: RxTableViewDataSourceType {
-    public typealias Element = [ISheetElementViewModel]
-    
-    public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
-        UIBindingObserver(UIElement: self) { (dataSource, element) in
-            dataSource._itemModels = element
-            tableView.reloadData()
-        }
-        .on(observedEvent)
-    }
-}
-
-extension SheetDataSource: SectionedViewDataSourceType {
-    public func model(at indexPath: IndexPath) throws -> Any {
-        precondition(indexPath.section == 0)
-        return _itemModels[indexPath.row]
     }
 }

@@ -85,9 +85,10 @@ public class DesignSheetViewController: UITableViewController {
         
         let disposeBag = DisposeBag()
         
-        let dataSource = DesignSheetDataSource()
         viewModel.itemList
-            .bindTo(tableView.rx.items(dataSource: dataSource))
+            .bindTo(tableView.rx.items(cellIdentifier:R.Id.cell, cellType: DesignSheetElementCell.self)) { (row, element, cell) in
+                cell.viewModel = element
+            }
             .addDisposableTo(disposeBag)
         
         viewModel.title
@@ -107,45 +108,5 @@ public class DesignSheetViewController: UITableViewController {
             .addDisposableTo(disposeBag)
         
         _disposeBag = disposeBag
-    }
-}
-
-public class DesignSheetDataSource: NSObject {
-    fileprivate var _itemModels: Element = []
-}
-
-extension DesignSheetDataSource: UITableViewDataSource {
-    public func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return _itemModels.count
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.cell, for: indexPath) as! DesignSheetElementCell
-        let element = _itemModels[(indexPath as NSIndexPath).row]
-        cell.viewModel = element
-        return cell
-    }
-}
-
-extension DesignSheetDataSource: RxTableViewDataSourceType {
-    public typealias Element = [IDesignSheetElementViewModel]
-    
-    public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
-        UIBindingObserver(UIElement: self) { (dataSource, element) in
-            dataSource._itemModels = element
-            tableView.reloadData()
-        }
-        .on(observedEvent)
-    }
-}
-
-extension DesignSheetDataSource: SectionedViewDataSourceType {
-    public func model(at indexPath: IndexPath) throws -> Any {
-        precondition(indexPath.section == 0)
-        return _itemModels[indexPath.row]
     }
 }

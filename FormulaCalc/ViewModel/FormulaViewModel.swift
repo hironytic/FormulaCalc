@@ -1,8 +1,8 @@
 //
-// ItemNameViewModel.swift
+// FormulaViewModel.swift
 // FormulaCalc
 //
-// Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
+// Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,23 +26,23 @@
 import Foundation
 import RxSwift
 
-public protocol IItemNameViewModel: IViewModel {
-    var name: Observable<String?> { get }
+public protocol IFormulaViewModel: IViewModel {
+    var formula: Observable<String?> { get }
     
-    var onNameChanged: AnyObserver<String?> { get }
+    var onFormulaChanged: AnyObserver<String?> { get }
 }
 
-public class ItemNameViewModel: ViewModel, IItemNameViewModel {
-    public let name: Observable<String?>
-    public let onNameChanged: AnyObserver<String?>
+public class FormulaViewModel: ViewModel, IFormulaViewModel {
+    public let formula: Observable<String?>
+    public let onFormulaChanged: AnyObserver<String?>
     
-    private let _onNameChanged = ActionObserver<String?>()
+    private let _onFormulaChanged = ActionObserver<String?>()
     
     public override init(context: IViewModelContext) {
-        self.name = Observable
-            .just("なまえ")
+        self.formula = Observable
+            .just("{身長(cm)}/100")
         
-        self.onNameChanged = _onNameChanged.asObserver()
+        self.onFormulaChanged = _onFormulaChanged.asObserver()
         
         super.init(context: context)
     }

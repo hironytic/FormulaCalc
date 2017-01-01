@@ -1,8 +1,8 @@
 //
-// ItemNameViewModel.swift
+// FormulaViewController.swift
 // FormulaCalc
 //
-// Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
+// Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,32 @@
 // THE SOFTWARE.
 //
 
-import Foundation
+import UIKit
 import RxSwift
+import RxCocoa
 
-public protocol IItemNameViewModel: IViewModel {
-    var name: Observable<String?> { get }
+public class FormulaViewController: UITableViewController {
+    private var _disposeBag: DisposeBag?
+    public var viewModel: IFormulaViewModel?
     
-    var onNameChanged: AnyObserver<String?> { get }
-}
-
-public class ItemNameViewModel: ViewModel, IItemNameViewModel {
-    public let name: Observable<String?>
-    public let onNameChanged: AnyObserver<String?>
+    @IBOutlet weak var formulaField: UITextField!
     
-    private let _onNameChanged = ActionObserver<String?>()
-    
-    public override init(context: IViewModelContext) {
-        self.name = Observable
-            .just("なまえ")
+    public override func viewDidLoad() {
+        super.viewDidLoad()
         
-        self.onNameChanged = _onNameChanged.asObserver()
+        bindViewModel()
+    }
+    
+    private func bindViewModel() {
+        _disposeBag = nil
+        guard let viewModel = viewModel else { return }
         
-        super.init(context: context)
+        let disposeBag = DisposeBag()
+        
+        viewModel.formula
+            .bindTo(formulaField.rx.text)
+            .addDisposableTo(disposeBag)
+        
+        _disposeBag = disposeBag
     }
 }

@@ -32,6 +32,11 @@ public func createViewController(for viewModel: IViewModel) -> UIViewController 
         view.viewModel = viewModel
         return viewController
         
+    case let viewModel as IFormulaViewModel:
+        let (viewController, view) = instantiateFromStoryboard(R.Id.formula, FormulaViewController.self)
+        view.viewModel = viewModel
+        return viewController
+        
     case let viewModel as IItemViewModel:
         let (viewController, view) = instantiateFromStoryboard(R.Id.item, ItemViewController.self)
         view.viewModel = viewModel

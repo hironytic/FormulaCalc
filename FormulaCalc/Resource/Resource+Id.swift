@@ -42,6 +42,9 @@ public extension Resource {
         /// Name of the storyboard "DesignSheet"
         public static let designSheet = "DesignSheet"
 
+        /// Name of the storyboard "Formula"
+        public static let formula = "Formula"
+        
         /// Name of the storyboard "Item"
         public static let item = "Item"
         

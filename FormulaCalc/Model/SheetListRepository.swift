@@ -50,51 +50,47 @@ public class SheetListRepository: ISheetListRepository {
     public let onDeleteSheet: AnyObserver</* id: */ String>
     
     private let _sheetDatabase: ISheetDatabase
-    private var _notificationToken: NotificationToken!
+    private let _notificationToken: NotificationToken
     private let _errorSubject = PublishSubject<Error>()
-    private let _changeSubject = BehaviorSubject<SheetListRepositoryChange>(value: SheetListRepositoryChange(sheetList: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+    private let _changeSubject: BehaviorSubject<SheetListRepositoryChange>
     
     private let _onCreateNewSheet = ActionObserver</* name: */ String>()
     private let _onDeleteSheet = ActionObserver</* id: */ String>()
     
     public init(context: IContext) throws {
         _sheetDatabase = (context as! ISheetListRepositoryContext).sheetDatabase
+
+        let realm = try _sheetDatabase.createRealm()
+        let results = realm.objects(Sheet.self).sorted(byProperty: "name")
+        let changeSubject = BehaviorSubject(value: SheetListRepositoryChange(sheetList: AnyRandomAccessCollection(results),
+                                                                          deletions: [],
+                                                                          insertions: (0 ..< results.count).map { $0 },
+                                                                          modifications: []))
+        _changeSubject = changeSubject
+        _notificationToken = results.addNotificationBlock { changes in
+            switch changes {
+            case .update(let results, let deletions, let insertions, let modifications):
+                changeSubject.onNext(SheetListRepositoryChange(sheetList: AnyRandomAccessCollection(results),
+                                                               deletions: deletions,
+                                                               insertions: insertions,
+                                                               modifications: modifications))
+            default:
+                break
+            }
+        }
+
         error = _errorSubject.asObservable()
         change = _changeSubject.asObservable()
         
         onCreateNewSheet = _onCreateNewSheet.asObserver()
         onDeleteSheet = _onDeleteSheet.asObserver()
-
+        
         _onCreateNewSheet.handler = { [weak self] name in self?.createNewSheet(name: name) }
         _onDeleteSheet.handler = { [weak self] id in self?.deleteSheet(id: id) }
-
-        try configureNotification()
     }
     
     deinit {
         self._notificationToken.stop()
-    }
-    
-    private func configureNotification() throws {
-        try _sheetDatabase.withRealm { realm in
-            let sheetResults = realm.objects(Sheet.self).sorted(byProperty: "name")
-            let changes = SheetListRepositoryChange(sheetList: AnyRandomAccessCollection(sheetResults),
-                                                    deletions: [],
-                                                    insertions: (0 ..< sheetResults.count).map { $0 },
-                                                    modifications: [])
-            self._changeSubject.onNext(changes)
-            self._notificationToken = sheetResults.addNotificationBlock { [unowned self] changes in
-                switch changes {
-                case .update(let results, let deletions, let insertions, let modifications):
-                    self._changeSubject.onNext(SheetListRepositoryChange(sheetList: AnyRandomAccessCollection(results),
-                                                                         deletions: deletions,
-                                                                         insertions: insertions,
-                                                                         modifications: modifications))
-                default:
-                    break
-                }
-            }
-        }
     }
     
     private func createNewSheet(name: String) {
@@ -103,10 +99,9 @@ public class SheetListRepository: ISheetListRepository {
         newSheet.name = name
         
         do {
-            try _sheetDatabase.withRealm { realm in
-                try realm.write {
-                    realm.add(newSheet)
-                }
+            let realm = try _sheetDatabase.createRealm()
+            try realm.write {
+                realm.add(newSheet)
             }
         } catch let error {
             _errorSubject.onNext(error)
@@ -115,11 +110,10 @@ public class SheetListRepository: ISheetListRepository {
     
     private func deleteSheet(id: String) {
         do {
-            try _sheetDatabase.withRealm { realm in
-                if let sheet = realm.objects(Sheet.self).filter("id = %@", id).first {
-                    try realm.write {
-                        realm.delete(sheet)
-                    }
+            let realm = try _sheetDatabase.createRealm()
+            if let sheet = realm.objects(Sheet.self).filter("id = %@", id).first {
+                try realm.write {
+                    realm.delete(sheet)
                 }
             }
         } catch let error {
@@ -128,14 +122,5 @@ public class SheetListRepository: ISheetListRepository {
     }
 }
 
-public protocol ISheetListRepositoryContext {
-    var sheetDatabase: ISheetDatabase { get }
-}
-
-extension DefaultContext: ISheetListRepositoryContext {
-    public var sheetDatabase: ISheetDatabase {
-        get {
-            return SheetDatabase.sharedInstance
-        }
-    }
+public protocol ISheetListRepositoryContext: IContext, ISheetDatabaseGetter {
 }

@@ -34,11 +34,7 @@ class TestSheetDatabase: ISheetDatabase {
         self.inMemoryIdentifier = inMemoryIdentifier
     }
     
-    private func createRealm() throws -> Realm {
+    public func createRealm() throws -> Realm {
         return try Realm(configuration: Realm.Configuration(inMemoryIdentifier: inMemoryIdentifier))
-    }
-    
-    public func withRealm<Result>(_ proc: (Realm) throws -> Result) throws -> Result {
-        return try proc(createRealm())
     }
 }

@@ -30,7 +30,7 @@ private let SHEET_DIR = "sheet"
 private let SHEET_DB = "sheet.realm"
 
 public protocol ISheetDatabase {
-    func withRealm<Result>(_ proc: (Realm) throws -> Result) throws -> Result
+    func createRealm() throws -> Realm
 }
 
 public class SheetDatabase: ISheetDatabase {
@@ -43,14 +43,10 @@ public class SheetDatabase: ISheetDatabase {
         try? FileManager.default.createDirectory(at: sheetDirURL, withIntermediateDirectories: true, attributes: nil)
     }
     
-    private func createRealm() throws -> Realm {
+    public func createRealm() throws -> Realm {
         let sheetDBURL = sheetDirURL.appendingPathComponent(SHEET_DB)
         let config = Realm.Configuration(fileURL: sheetDBURL, objectTypes: [Sheet.self, SheetItem.self])
         return try Realm(configuration: config)
-    }
-    
-    public func withRealm<Result>(_ proc: (Realm) throws -> Result) throws -> Result {
-        return try proc(createRealm())
     }
 }
 
@@ -90,5 +86,17 @@ public class SheetItem: Object {
     
     public override static func primaryKey() -> String? {
         return "id"
+    }
+}
+
+public protocol ISheetDatabaseGetter {
+    var sheetDatabase: ISheetDatabase { get }
+}
+
+extension DefaultContext: ISheetDatabaseGetter {
+    public var sheetDatabase: ISheetDatabase {
+        get {
+            return SheetDatabase.sharedInstance
+        }
     }
 }

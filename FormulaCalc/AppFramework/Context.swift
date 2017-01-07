@@ -1,6 +1,6 @@
 //
-// FormulaCalcTests.swift
-// FormulaCalcTests
+// Context.swift
+// FormulaCalc
 //
 // Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
 //
@@ -23,19 +23,10 @@
 // THE SOFTWARE.
 //
 
-import XCTest
-@testable import FormulaCalc
+import Foundation
 
-class FormulaCalcTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
+public protocol IContext {
+}
+
+public class DefaultContext: IContext {
 }

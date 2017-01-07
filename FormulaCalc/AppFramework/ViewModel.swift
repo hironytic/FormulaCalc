@@ -36,10 +36,10 @@ public class ViewModel: IViewModel {
             return _messageSlot.message
         }
     }
-    public let context: IViewModelContext
+    public let context: IContext
     private let _messageSlot = MessageSlot()
 
-    public init(context: IViewModelContext) {
+    public init(context: IContext) {
         self.context = context
     }
     

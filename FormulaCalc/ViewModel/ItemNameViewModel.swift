@@ -38,7 +38,7 @@ public class ItemNameViewModel: ViewModel, IItemNameViewModel {
     
     private let _onNameChanged = ActionObserver<String?>()
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         self.name = Observable
             .just("なまえ")
         

@@ -61,7 +61,7 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     private let _onChangeVisible = ActionObserver<Bool>()
     private let _onSelectFormat = ActionObserver<Void>()
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         title = Observable.just("タイトル")
         name = Observable.just("項目名")
         type = Observable.just("計算式")

@@ -52,7 +52,7 @@ class ThousandSeparatorElementViewModel: ViewModel, IThousandSeparatorElementVie
     let thousandSeparator: Observable<Bool>
     let onChangeThousandSeparator: AnyObserver<Bool>
     
-    init(context: IViewModelContext, thousandSeparator: Observable<Bool>, onChangeThousandSeparator: AnyObserver<Bool>) {
+    init(context: IContext, thousandSeparator: Observable<Bool>, onChangeThousandSeparator: AnyObserver<Bool>) {
         self.thousandSeparator = thousandSeparator
         self.onChangeThousandSeparator = onChangeThousandSeparator
         super.init(context: context)
@@ -63,7 +63,7 @@ class FractionDigitsElementViewModel: ViewModel, IFractionsDigitsElementViewMode
     let name: Observable<String?>
     let accessoryType: Observable<UITableViewCellAccessoryType>
     
-    override init(context: IViewModelContext) {
+    override init(context: IContext) {
         name = Observable.just("自動")
         accessoryType = Observable.just(.checkmark)
         
@@ -82,7 +82,7 @@ public class ItemFormatViewModel: ViewModel, IItemFormatViewModel {
     private let _onChangeThousandSeparator = ActionObserver<Bool>()
     private let _onSelectFractionDigits = ActionObserver<IFractionsDigitsElementViewModel>()
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         _thousandSeparator = Observable.just(true)
         _fractionDigits = [FractionDigitsElementViewModel(context: context), FractionDigitsElementViewModel(context: context)]
         

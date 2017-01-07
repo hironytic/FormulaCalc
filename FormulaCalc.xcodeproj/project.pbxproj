@@ -25,7 +25,7 @@
 		50BD23021E05165500A64650 /* SheetListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23011E05165500A64650 /* SheetListViewModel.swift */; };
 		50BD23041E05289100A64650 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23031E05289100A64650 /* MainViewModel.swift */; };
 		50BD23061E05360900A64650 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23051E05360900A64650 /* ViewControllerFactory.swift */; };
-		50C45E1D1E0F70E500F72DD0 /* ViewModelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E1C1E0F70E500F72DD0 /* ViewModelContext.swift */; };
+		50C45E1D1E0F70E500F72DD0 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E1C1E0F70E500F72DD0 /* Context.swift */; };
 		50C45E1F1E11470B00F72DD0 /* ItemType.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50C45E1E1E11470B00F72DD0 /* ItemType.storyboard */; };
 		50C45E211E11479200F72DD0 /* ItemTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E201E11479200F72DD0 /* ItemTypeViewController.swift */; };
 		50C45E231E11482100F72DD0 /* ItemTypeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E221E11482100F72DD0 /* ItemTypeViewModel.swift */; };
@@ -35,15 +35,22 @@
 		50C45E2B1E191E5600F72DD0 /* FormulaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E2A1E191E5600F72DD0 /* FormulaViewModel.swift */; };
 		50C45E2D1E19215900F72DD0 /* FormulaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E2C1E19215900F72DD0 /* FormulaViewController.swift */; };
 		50C45E2F1E1926A400F72DD0 /* Formula.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50C45E2E1E1926A400F72DD0 /* Formula.storyboard */; };
-		50C45E331E209B6200F72DD0 /* SheetDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E321E209B6200F72DD0 /* SheetDB.swift */; };
+		50C45E331E209B6200F72DD0 /* SheetDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E321E209B6200F72DD0 /* SheetDatabase.swift */; };
 		50C45E371E20B7D200F72DD0 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E361E20B7D200F72DD0 /* Storage.swift */; };
 		50C45E391E20C14300F72DD0 /* SheetListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E381E20C14300F72DD0 /* SheetListRepository.swift */; };
+		50C45E3C1E21034800F72DD0 /* SheetListRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E3B1E21034800F72DD0 /* SheetListRepositoryTests.swift */; };
+		50C45E3E1E2103CF00F72DD0 /* TestSheetDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E3D1E2103CF00F72DD0 /* TestSheetDatabase.swift */; };
+		50C45E3F1E21093200F72DD0 /* Formulitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B21DFD85CC0042E103 /* Formulitic.framework */; };
+		50C45E401E21093200F72DD0 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B81DFD85F30042E103 /* Realm.framework */; };
+		50C45E411E21093200F72DD0 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B91DFD85F30042E103 /* RealmSwift.framework */; };
+		50C45E421E21093200F72DD0 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B41DFD85D00042E103 /* RxCocoa.framework */; };
+		50C45E431E21093200F72DD0 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B61DFD85D30042E103 /* RxSwift.framework */; };
+		50C45E451E210E1500F72DD0 /* FulfillObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E441E210E1500F72DD0 /* FulfillObserver.swift */; };
 		50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21911DFD83140042E103 /* AppDelegate.swift */; };
 		50CE21941DFD83140042E103 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21931DFD83140042E103 /* MainViewController.swift */; };
 		50CE21971DFD83140042E103 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50CE21951DFD83140042E103 /* Main.storyboard */; };
 		50CE21991DFD83140042E103 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50CE21981DFD83140042E103 /* Assets.xcassets */; };
 		50CE219C1DFD83140042E103 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50CE219A1DFD83140042E103 /* LaunchScreen.storyboard */; };
-		50CE21A71DFD83140042E103 /* FormulaCalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21A61DFD83140042E103 /* FormulaCalcTests.swift */; };
 		50CE21B31DFD85CC0042E103 /* Formulitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B21DFD85CC0042E103 /* Formulitic.framework */; };
 		50CE21B51DFD85D00042E103 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B41DFD85D00042E103 /* RxCocoa.framework */; };
 		50CE21B71DFD85D30042E103 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B61DFD85D30042E103 /* RxSwift.framework */; };
@@ -89,7 +96,7 @@
 		50BD23011E05165500A64650 /* SheetListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListViewModel.swift; sourceTree = "<group>"; };
 		50BD23031E05289100A64650 /* MainViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		50BD23051E05360900A64650 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
-		50C45E1C1E0F70E500F72DD0 /* ViewModelContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelContext.swift; sourceTree = "<group>"; };
+		50C45E1C1E0F70E500F72DD0 /* Context.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
 		50C45E1E1E11470B00F72DD0 /* ItemType.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemType.storyboard; sourceTree = "<group>"; };
 		50C45E201E11479200F72DD0 /* ItemTypeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTypeViewController.swift; sourceTree = "<group>"; };
 		50C45E221E11482100F72DD0 /* ItemTypeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTypeViewModel.swift; sourceTree = "<group>"; };
@@ -99,9 +106,12 @@
 		50C45E2A1E191E5600F72DD0 /* FormulaViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormulaViewModel.swift; sourceTree = "<group>"; };
 		50C45E2C1E19215900F72DD0 /* FormulaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormulaViewController.swift; sourceTree = "<group>"; };
 		50C45E2E1E1926A400F72DD0 /* Formula.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Formula.storyboard; sourceTree = "<group>"; };
-		50C45E321E209B6200F72DD0 /* SheetDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetDB.swift; sourceTree = "<group>"; };
+		50C45E321E209B6200F72DD0 /* SheetDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetDatabase.swift; sourceTree = "<group>"; };
 		50C45E361E20B7D200F72DD0 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		50C45E381E20C14300F72DD0 /* SheetListRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListRepository.swift; sourceTree = "<group>"; };
+		50C45E3B1E21034800F72DD0 /* SheetListRepositoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListRepositoryTests.swift; sourceTree = "<group>"; };
+		50C45E3D1E2103CF00F72DD0 /* TestSheetDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSheetDatabase.swift; sourceTree = "<group>"; };
+		50C45E441E210E1500F72DD0 /* FulfillObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FulfillObserver.swift; sourceTree = "<group>"; };
 		50CE218E1DFD83140042E103 /* FormulaCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulaCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50CE21911DFD83140042E103 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50CE21931DFD83140042E103 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -110,7 +120,6 @@
 		50CE219B1DFD83140042E103 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		50CE219D1DFD83140042E103 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50CE21A21DFD83140042E103 /* FormulaCalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FormulaCalcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		50CE21A61DFD83140042E103 /* FormulaCalcTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaCalcTests.swift; sourceTree = "<group>"; };
 		50CE21A81DFD83140042E103 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50CE21B21DFD85CC0042E103 /* Formulitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Formulitic.framework; path = Carthage/Build/iOS/Formulitic.framework; sourceTree = "<group>"; };
 		50CE21B41DFD85D00042E103 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
@@ -145,6 +154,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50C45E3F1E21093200F72DD0 /* Formulitic.framework in Frameworks */,
+				50C45E401E21093200F72DD0 /* Realm.framework in Frameworks */,
+				50C45E411E21093200F72DD0 /* RealmSwift.framework in Frameworks */,
+				50C45E421E21093200F72DD0 /* RxCocoa.framework in Frameworks */,
+				50C45E431E21093200F72DD0 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,8 +202,17 @@
 			isa = PBXGroup;
 			children = (
 				50C45E361E20B7D200F72DD0 /* Storage.swift */,
-				50C45E321E209B6200F72DD0 /* SheetDB.swift */,
+				50C45E321E209B6200F72DD0 /* SheetDatabase.swift */,
 				50C45E381E20C14300F72DD0 /* SheetListRepository.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		50C45E3A1E21031C00F72DD0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				50C45E3B1E21034800F72DD0 /* SheetListRepositoryTests.swift */,
+				50C45E3D1E2103CF00F72DD0 /* TestSheetDatabase.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -233,7 +256,8 @@
 		50CE21A51DFD83140042E103 /* FormulaCalcTests */ = {
 			isa = PBXGroup;
 			children = (
-				50CE21A61DFD83140042E103 /* FormulaCalcTests.swift */,
+				50C45E3A1E21031C00F72DD0 /* Model */,
+				50C45E441E210E1500F72DD0 /* FulfillObserver.swift */,
 				50CE21A81DFD83140042E103 /* Info.plist */,
 			);
 			path = FormulaCalcTests;
@@ -256,10 +280,10 @@
 			children = (
 				50F6FEBD1E02BF8E002E849C /* Message */,
 				50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */,
+				50C45E1C1E0F70E500F72DD0 /* Context.swift */,
 				50F6FEC01E02BF8E002E849C /* Message.swift */,
 				50F6FEC11E02BF8E002E849C /* MessageSlot.swift */,
 				50F6FEC21E02BF8E002E849C /* ViewModel.swift */,
-				50C45E1C1E0F70E500F72DD0 /* ViewModelContext.swift */,
 			);
 			path = AppFramework;
 			sourceTree = "<group>";
@@ -444,7 +468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50C45E1D1E0F70E500F72DD0 /* ViewModelContext.swift in Sources */,
+				50C45E1D1E0F70E500F72DD0 /* Context.swift in Sources */,
 				50CE21941DFD83140042E103 /* MainViewController.swift in Sources */,
 				50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */,
 				50F6FECE1E035A1C002E849C /* DismissingMessage.swift in Sources */,
@@ -477,7 +501,7 @@
 				50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */,
 				505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */,
 				505BFC171E0ABE7100AAC3D2 /* SheetViewController.swift in Sources */,
-				50C45E331E209B6200F72DD0 /* SheetDB.swift in Sources */,
+				50C45E331E209B6200F72DD0 /* SheetDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,7 +509,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50CE21A71DFD83140042E103 /* FormulaCalcTests.swift in Sources */,
+				50C45E3E1E2103CF00F72DD0 /* TestSheetDatabase.swift in Sources */,
+				50C45E451E210E1500F72DD0 /* FulfillObserver.swift in Sources */,
+				50C45E3C1E21034800F72DD0 /* SheetListRepositoryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +680,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = EPZSBGGQZS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = FormulaCalcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hironytic.FormulaCalcTests;
@@ -669,6 +699,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = EPZSBGGQZS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = FormulaCalcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hironytic.FormulaCalcTests;

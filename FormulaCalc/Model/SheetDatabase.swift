@@ -1,5 +1,5 @@
 //
-// SheetDB.swift
+// SheetDatabase.swift
 // FormulaCalc
 //
 // Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -29,12 +29,12 @@ import RealmSwift
 private let SHEET_DIR = "sheet"
 private let SHEET_DB = "sheet.realm"
 
-public protocol ISheetDB {
-    func withRealm<Result>(_ proc: (Realm) throws -> Result) rethrows -> Result
+public protocol ISheetDatabase {
+    func withRealm<Result>(_ proc: (Realm) throws -> Result) throws -> Result
 }
 
-public class SheetDB: ISheetDB {
-    public static let sharedInstance = SheetDB()
+public class SheetDatabase: ISheetDatabase {
+    public static let sharedInstance = SheetDatabase()
     
     public let sheetDirURL: URL
     
@@ -43,13 +43,13 @@ public class SheetDB: ISheetDB {
         try? FileManager.default.createDirectory(at: sheetDirURL, withIntermediateDirectories: true, attributes: nil)
     }
     
-    private func createRealm() -> Realm {
+    private func createRealm() throws -> Realm {
         let sheetDBURL = sheetDirURL.appendingPathComponent(SHEET_DB)
         let config = Realm.Configuration(fileURL: sheetDBURL, objectTypes: [Sheet.self, SheetItem.self])
-        return try! Realm(configuration: config)
+        return try Realm(configuration: config)
     }
     
-    public func withRealm<Result>(_ proc: (Realm) throws -> Result) rethrows -> Result {
+    public func withRealm<Result>(_ proc: (Realm) throws -> Result) throws -> Result {
         return try proc(createRealm())
     }
 }

@@ -41,7 +41,7 @@ public class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
     public let name: Observable<String?>
     public let accessoryType: Observable<UITableViewCellAccessoryType>
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         name = Observable.just("数値入力")
         accessoryType = Observable.just(UITableViewCellAccessoryType.checkmark)
         
@@ -56,7 +56,7 @@ public class ItemTypeViewModel: ViewModel, IItemTypeViewModel {
     
     public let _onSelect = ActionObserver<IItemTypeElementViewModel>()
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         typeList = Observable.just([ItemTypeElementViewModel(context: context), ItemTypeElementViewModel(context: context)])
         onSelect = _onSelect.asObserver()
         

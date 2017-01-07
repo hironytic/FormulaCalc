@@ -49,7 +49,7 @@ public class SheetListRepository: ISheetListRepository {
     public let onCreateNewSheet: AnyObserver</* name: */ String>
     public let onDeleteSheet: AnyObserver<Sheet>
     
-    private let _sheetDB = SheetDB.sharedInstance
+    private let _sheetDatabase: ISheetDatabase
     private var _notificationToken: NotificationToken!
     private let _errorSubject = PublishSubject<Error>()
     private let _changeSubject = BehaviorSubject<SheetListRepositoryChange>(value: SheetListRepositoryChange(sheetList: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
@@ -57,25 +57,26 @@ public class SheetListRepository: ISheetListRepository {
     private let _onCreateNewSheet = ActionObserver</* name: */ String>()
     private let _onDeleteSheet = ActionObserver<Sheet>()
     
-    public init() {
+    public init(context: IContext) throws {
+        _sheetDatabase = (context as! ISheetListRepositoryContext).sheetDatabase
         error = _errorSubject.asObservable()
         change = _changeSubject.asObservable()
         
         onCreateNewSheet = _onCreateNewSheet.asObserver()
         onDeleteSheet = _onDeleteSheet.asObserver()
 
-        configureNotification()
-        
         _onCreateNewSheet.handler = { [weak self] name in self?.createNewSheet(name: name) }
         _onDeleteSheet.handler = { [weak self] sheet in self?.deleteSheet(sheet) }
+
+        try configureNotification()
     }
     
     deinit {
         self._notificationToken.stop()
     }
     
-    private func configureNotification() {
-        _sheetDB.withRealm { realm in
+    private func configureNotification() throws {
+        try _sheetDatabase.withRealm { realm in
             let sheetResults = realm.objects(Sheet.self)
             let changes = SheetListRepositoryChange(sheetList: AnyRandomAccessCollection(sheetResults),
                                                     deletions: [],
@@ -102,7 +103,7 @@ public class SheetListRepository: ISheetListRepository {
         newSheet.name = name
         
         do {
-            try _sheetDB.withRealm { realm in
+            try _sheetDatabase.withRealm { realm in
                 try realm.write {
                     realm.add(newSheet)
                 }
@@ -114,13 +115,25 @@ public class SheetListRepository: ISheetListRepository {
     
     private func deleteSheet(_ sheet: Sheet) {
         do {
-            try _sheetDB.withRealm { realm in
+            try _sheetDatabase.withRealm { realm in
                 try realm.write {
                     realm.delete(sheet)
                 }
             }
         } catch let error {
             _errorSubject.onNext(error)
+        }
+    }
+}
+
+public protocol ISheetListRepositoryContext {
+    var sheetDatabase: ISheetDatabase { get }
+}
+
+extension DefaultContext: ISheetListRepositoryContext {
+    public var sheetDatabase: ISheetDatabase {
+        get {
+            return SheetDatabase.sharedInstance
         }
     }
 }

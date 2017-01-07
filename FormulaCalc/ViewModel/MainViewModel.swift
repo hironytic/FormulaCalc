@@ -36,7 +36,7 @@ public class MainViewModel: ViewModel, IMainViewModel {
     private var _startupDidEnd: Bool = false
     private let _onViewDidAppear = ActionObserver<[Any]>()
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         onViewDidAppear = _onViewDidAppear.asObserver()
         
         super.init(context: context)

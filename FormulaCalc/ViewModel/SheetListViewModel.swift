@@ -42,7 +42,7 @@ public class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
     public let id: String
     public let title: Observable<String?>
     
-    public init(context: IViewModelContext, id: String, title: String) {
+    public init(context: IContext, id: String, title: String) {
         self.id = id
         self.title = Observable.just(title)
         
@@ -61,7 +61,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
     private let _onSelect = ActionObserver<ISheetListElementViewModel>()
 
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         sheetList = Observable.just([
             SheetListElementViewModel(context: context, id: "test1", title: "Test1"),
             SheetListElementViewModel(context: context, id: "test2", title: "Test2"),

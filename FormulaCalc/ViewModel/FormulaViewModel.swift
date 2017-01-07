@@ -38,7 +38,7 @@ public class FormulaViewModel: ViewModel, IFormulaViewModel {
     
     private let _onFormulaChanged = ActionObserver<String?>()
     
-    public override init(context: IViewModelContext) {
+    public override init(context: IContext) {
         self.formula = Observable
             .just("{身長(cm)}/100")
         

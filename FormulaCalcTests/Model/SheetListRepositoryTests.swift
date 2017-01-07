@@ -111,10 +111,10 @@ class SheetListRepositoryTests: XCTestCase {
         sheetListRepository.onCreateNewSheet.onNext("Sheet 3")
         sheetListRepository.onCreateNewSheet.onNext("Sheet 4")
 
-        var sheet2: Sheet? = nil
+        var sheet2Id: String? = nil
         let changeObserver = FulfillObserver(expectation(description: "There are four items")) { (change: SheetListRepositoryChange) in
             if change.sheetList.count == 4 {
-                sheet2 = change.sheetList.first { $0.name == "Sheet 2" }
+                sheet2Id = change.sheetList.first(where: { $0.name == "Sheet 2" }).map({ $0.id })
                 return true
             }
             return false
@@ -124,8 +124,8 @@ class SheetListRepositoryTests: XCTestCase {
             .addDisposableTo(disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 
-        XCTAssertNotNil(sheet2, "'Sheet 2' should be found")
-        if let sheet2 = sheet2 {
+        XCTAssertNotNil(sheet2Id, "'Sheet 2' should be found")
+        if let sheet2Id = sheet2Id {
             changeObserver.reset(expectation(description: "There are three items then")) { (change: SheetListRepositoryChange) in
                 if change.sheetList.count == 3 {
                     if !change.sheetList.contains(where: { $0.name == "Sheet 2" }) {
@@ -134,7 +134,7 @@ class SheetListRepositoryTests: XCTestCase {
                 }
                 return false
             }
-            sheetListRepository.onDeleteSheet.onNext(sheet2)
+            sheetListRepository.onDeleteSheet.onNext(sheet2Id)
             waitForExpectations(timeout: 3.0, handler: nil)
         }
     }

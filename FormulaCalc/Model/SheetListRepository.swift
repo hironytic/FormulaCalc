@@ -39,7 +39,7 @@ public protocol ISheetListRepository: class {
     var change: Observable<SheetListRepositoryChange> { get }
     
     var onCreateNewSheet: AnyObserver</* name: */ String> { get }
-    var onDeleteSheet: AnyObserver<Sheet> { get }
+    var onDeleteSheet: AnyObserver</* id: */ String> { get }
 }
 
 public class SheetListRepository: ISheetListRepository {
@@ -47,7 +47,7 @@ public class SheetListRepository: ISheetListRepository {
     public let change: Observable<SheetListRepositoryChange>
     
     public let onCreateNewSheet: AnyObserver</* name: */ String>
-    public let onDeleteSheet: AnyObserver<Sheet>
+    public let onDeleteSheet: AnyObserver</* id: */ String>
     
     private let _sheetDatabase: ISheetDatabase
     private var _notificationToken: NotificationToken!
@@ -55,7 +55,7 @@ public class SheetListRepository: ISheetListRepository {
     private let _changeSubject = BehaviorSubject<SheetListRepositoryChange>(value: SheetListRepositoryChange(sheetList: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
     
     private let _onCreateNewSheet = ActionObserver</* name: */ String>()
-    private let _onDeleteSheet = ActionObserver<Sheet>()
+    private let _onDeleteSheet = ActionObserver</* id: */ String>()
     
     public init(context: IContext) throws {
         _sheetDatabase = (context as! ISheetListRepositoryContext).sheetDatabase
@@ -66,7 +66,7 @@ public class SheetListRepository: ISheetListRepository {
         onDeleteSheet = _onDeleteSheet.asObserver()
 
         _onCreateNewSheet.handler = { [weak self] name in self?.createNewSheet(name: name) }
-        _onDeleteSheet.handler = { [weak self] sheet in self?.deleteSheet(sheet) }
+        _onDeleteSheet.handler = { [weak self] id in self?.deleteSheet(id: id) }
 
         try configureNotification()
     }
@@ -77,7 +77,7 @@ public class SheetListRepository: ISheetListRepository {
     
     private func configureNotification() throws {
         try _sheetDatabase.withRealm { realm in
-            let sheetResults = realm.objects(Sheet.self)
+            let sheetResults = realm.objects(Sheet.self).sorted(byProperty: "name")
             let changes = SheetListRepositoryChange(sheetList: AnyRandomAccessCollection(sheetResults),
                                                     deletions: [],
                                                     insertions: (0 ..< sheetResults.count).map { $0 },
@@ -113,11 +113,13 @@ public class SheetListRepository: ISheetListRepository {
         }
     }
     
-    private func deleteSheet(_ sheet: Sheet) {
+    private func deleteSheet(id: String) {
         do {
             try _sheetDatabase.withRealm { realm in
-                try realm.write {
-                    realm.delete(sheet)
+                if let sheet = realm.objects(Sheet.self).filter("id = %@", id).first {
+                    try realm.write {
+                        realm.delete(sheet)
+                    }
                 }
             }
         } catch let error {

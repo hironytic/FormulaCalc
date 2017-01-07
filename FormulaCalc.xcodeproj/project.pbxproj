@@ -35,8 +35,9 @@
 		50C45E2B1E191E5600F72DD0 /* FormulaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E2A1E191E5600F72DD0 /* FormulaViewModel.swift */; };
 		50C45E2D1E19215900F72DD0 /* FormulaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E2C1E19215900F72DD0 /* FormulaViewController.swift */; };
 		50C45E2F1E1926A400F72DD0 /* Formula.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50C45E2E1E1926A400F72DD0 /* Formula.storyboard */; };
-		50C45E331E209B6200F72DD0 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E321E209B6200F72DD0 /* Sheet.swift */; };
-		50C45E351E209CE900F72DD0 /* SheetItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E341E209CE900F72DD0 /* SheetItem.swift */; };
+		50C45E331E209B6200F72DD0 /* SheetDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E321E209B6200F72DD0 /* SheetDB.swift */; };
+		50C45E371E20B7D200F72DD0 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E361E20B7D200F72DD0 /* Storage.swift */; };
+		50C45E391E20C14300F72DD0 /* SheetListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E381E20C14300F72DD0 /* SheetListRepository.swift */; };
 		50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21911DFD83140042E103 /* AppDelegate.swift */; };
 		50CE21941DFD83140042E103 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21931DFD83140042E103 /* MainViewController.swift */; };
 		50CE21971DFD83140042E103 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50CE21951DFD83140042E103 /* Main.storyboard */; };
@@ -98,8 +99,9 @@
 		50C45E2A1E191E5600F72DD0 /* FormulaViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormulaViewModel.swift; sourceTree = "<group>"; };
 		50C45E2C1E19215900F72DD0 /* FormulaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormulaViewController.swift; sourceTree = "<group>"; };
 		50C45E2E1E1926A400F72DD0 /* Formula.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Formula.storyboard; sourceTree = "<group>"; };
-		50C45E321E209B6200F72DD0 /* Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
-		50C45E341E209CE900F72DD0 /* SheetItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetItem.swift; sourceTree = "<group>"; };
+		50C45E321E209B6200F72DD0 /* SheetDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetDB.swift; sourceTree = "<group>"; };
+		50C45E361E20B7D200F72DD0 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		50C45E381E20C14300F72DD0 /* SheetListRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListRepository.swift; sourceTree = "<group>"; };
 		50CE218E1DFD83140042E103 /* FormulaCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulaCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50CE21911DFD83140042E103 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50CE21931DFD83140042E103 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -185,18 +187,11 @@
 		50C45E301E209B0A00F72DD0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				50C45E311E209B2900F72DD0 /* Entity */,
+				50C45E361E20B7D200F72DD0 /* Storage.swift */,
+				50C45E321E209B6200F72DD0 /* SheetDB.swift */,
+				50C45E381E20C14300F72DD0 /* SheetListRepository.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		50C45E311E209B2900F72DD0 /* Entity */ = {
-			isa = PBXGroup;
-			children = (
-				50C45E321E209B6200F72DD0 /* Sheet.swift */,
-				50C45E341E209CE900F72DD0 /* SheetItem.swift */,
-			);
-			path = Entity;
 			sourceTree = "<group>";
 		};
 		50CE21851DFD83140042E103 = {
@@ -464,16 +459,17 @@
 				50BD23061E05360900A64650 /* ViewControllerFactory.swift in Sources */,
 				50F6FED21E051056002E849C /* SheetListViewController.swift in Sources */,
 				50C45E251E17595600F72DD0 /* ItemFormatViewController.swift in Sources */,
+				50C45E371E20B7D200F72DD0 /* Storage.swift in Sources */,
 				50BD23041E05289100A64650 /* MainViewModel.swift in Sources */,
 				50C45E2B1E191E5600F72DD0 /* FormulaViewModel.swift in Sources */,
 				505BFC1D1E0CCDEB00AAC3D2 /* SheetViewModel.swift in Sources */,
 				50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */,
 				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
+				50C45E391E20C14300F72DD0 /* SheetListRepository.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
 				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
 				50C45E211E11479200F72DD0 /* ItemTypeViewController.swift in Sources */,
 				50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */,
-				50C45E351E209CE900F72DD0 /* SheetItem.swift in Sources */,
 				505BFC291E0E0C7C00AAC3D2 /* ItemViewModel.swift in Sources */,
 				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,
 				50F6FEC81E02BF8E002E849C /* ViewModel.swift in Sources */,
@@ -481,7 +477,7 @@
 				50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */,
 				505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */,
 				505BFC171E0ABE7100AAC3D2 /* SheetViewController.swift in Sources */,
-				50C45E331E209B6200F72DD0 /* Sheet.swift in Sources */,
+				50C45E331E209B6200F72DD0 /* SheetDB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

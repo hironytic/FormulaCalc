@@ -1,5 +1,5 @@
 //
-// SheetItem.swift
+// SheetDB.swift
 // FormulaCalc
 //
 // Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -26,6 +26,44 @@
 import Foundation
 import RealmSwift
 
+private let SHEET_DIR = "sheet"
+private let SHEET_DB = "sheet.realm"
+
+public protocol ISheetDB {
+    func withRealm<Result>(_ proc: (Realm) throws -> Result) rethrows -> Result
+}
+
+public class SheetDB: ISheetDB {
+    public static let sharedInstance = SheetDB()
+    
+    public let sheetDirURL: URL
+    
+    private init() {
+        sheetDirURL = URL(fileURLWithPath: Storage.privateDataDirectory).appendingPathComponent(SHEET_DIR)
+        try? FileManager.default.createDirectory(at: sheetDirURL, withIntermediateDirectories: true, attributes: nil)
+    }
+    
+    private func createRealm() -> Realm {
+        let sheetDBURL = sheetDirURL.appendingPathComponent(SHEET_DB)
+        let config = Realm.Configuration(fileURL: sheetDBURL, objectTypes: [Sheet.self, SheetItem.self])
+        return try! Realm(configuration: config)
+    }
+    
+    public func withRealm<Result>(_ proc: (Realm) throws -> Result) rethrows -> Result {
+        return try proc(createRealm())
+    }
+}
+
+public class Sheet: Object {
+    public dynamic var id: String = ""
+    public dynamic var name: String = ""
+    public let items = List<SheetItem>()
+    
+    public override static func primaryKey() -> String? {
+        return "id"
+    }
+}
+
 public enum SheetItemType: String {
     case numeric = "numeric"
     case string = "string"
@@ -36,12 +74,6 @@ public class SheetItem: Object {
     public dynamic var id: String = ""
     public dynamic var name: String = ""
     private dynamic var _type: String = SheetItemType.numeric.rawValue
-    public dynamic var numberValue: Double = 0.0
-    public dynamic var stringValue: String = ""
-    public dynamic var formula: String = ""
-    public dynamic var thousandSeparator: Bool = false
-    public dynamic var fractionDigits: Int = -1
-    
     public var type: SheetItemType {
         get {
             return SheetItemType(rawValue: _type) ?? .numeric
@@ -50,6 +82,11 @@ public class SheetItem: Object {
             _type = newValue.rawValue
         }
     }
+    public dynamic var numberValue: Double = 0.0
+    public dynamic var stringValue: String = ""
+    public dynamic var formula: String = ""
+    public dynamic var thousandSeparator: Bool = false
+    public dynamic var fractionDigits: Int = -1
     
     public override static func primaryKey() -> String? {
         return "id"

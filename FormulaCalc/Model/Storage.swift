@@ -1,5 +1,5 @@
 //
-// Sheet.swift
+// Storage.swift
 // FormulaCalc
 //
 // Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,14 +24,16 @@
 //
 
 import Foundation
-import RealmSwift
 
-public class Sheet: Object {
-    public dynamic var id: String = ""
-    public dynamic var name: String = ""
-    public let items = List<SheetItem>()
-    
-    public override static func primaryKey() -> String? {
-        return "id"
+public struct Storage {
+    private init() { }
+
+    public static var privateDataDirectory: String {
+        get {
+            let libraryDir = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
+            let privateDir = (libraryDir as NSString).appendingPathComponent("com.hironytic")
+            return privateDir
+        }
     }
 }
+

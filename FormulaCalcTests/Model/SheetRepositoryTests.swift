@@ -49,17 +49,15 @@ class SheetRepositoryTests: XCTestCase {
         testContext = try! TestContext(sheetDatabase: testSheetDatabase)
         
         // test data
-        func newSheet(id: String, name: String) -> Sheet {
-            let sheet = Sheet()
-            sheet.id = id
-            sheet.name = name
-            return sheet
-        }
         let testData = [
-            newSheet(id: "sheet-1", name: "Sheet 1"),
-            newSheet(id: "sheet-2", name: "Sheet 2"),
-            newSheet(id: "sheet-3", name: "Sheet 3"),
-            newSheet(id: "sheet-4", name: "Sheet 4"),
+            Sheet(value: ["id": "sheet-1", "name": "Sheet 1"]),
+            Sheet(value: ["id": "sheet-2", "name": "Sheet 2"]),
+            Sheet(value: ["id": "sheet-3", "name": "Sheet 3"]),
+            Sheet(value: ["id": "sheet-4", "name": "Sheet 4", "items": [
+                ["id": "item-1", "name": "Item 1", "_type": "numeric", "numberValue": 5.0],
+                ["id": "item-2", "name": "Item 2", "_type": "string", "stringValue": ""],
+                ["id": "item-3", "name": "Item 3", "_type": "formula", "formula": "1+2"],
+            ]]),
         ]
         let realm = try! testSheetDatabase.createRealm()
         try! realm.write {
@@ -114,7 +112,7 @@ class SheetRepositoryTests: XCTestCase {
         
         waitForExpectations(timeout: 3.0, handler: nil)
 
-        changeObserver.reset(expectation(description: "Sheet name shoule be changed")) { (sheet: Sheet?) in
+        changeObserver.reset(expectation(description: "Sheet name should be changed")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
             return sheet.name == "Renamed"
         }
@@ -154,7 +152,7 @@ class SheetRepositoryTests: XCTestCase {
         waitForExpectations(timeout: 3.0, handler: nil)
 
         var newItem: SheetItem? = nil
-        changeObserver.reset(expectation(description: "A new item shoulde be added")) { (sheet: Sheet?) in
+        changeObserver.reset(expectation(description: "A new item should be added")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
             guard !sheet.items.isEmpty else { return false }
             newItem = sheet.items.first
@@ -172,7 +170,7 @@ class SheetRepositoryTests: XCTestCase {
         }
     }
     
-    func testUpdateNonexistentItem() {
+    func testNewItemOnNonexistentSheet() {
         let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-x")
         
         let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
@@ -187,6 +185,47 @@ class SheetRepositoryTests: XCTestCase {
             .addDisposableTo(disposeBag)
         
         sheetRepository.onNewItem.onNext(())
+        waitForExpectations(timeout: 3.0, handler: nil)
+    }
+    
+    func testDeleteItem() {
+        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-4")
+        
+        let changeObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-4'")) { (sheet: Sheet?) in
+            guard let sheet = sheet else { return false }
+            guard sheet.items.count == 3 else { return false }
+            return true
+        }
+        sheetRepository.change
+            .bindTo(changeObserver)
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 3.0, handler: nil)
+        
+        changeObserver.reset(expectation(description: "An item should be deleted")) { (sheet: Sheet?) in
+            guard let sheet = sheet else { return false }
+            guard sheet.items.count == 2 else { return false }
+            return !sheet.items.contains(where: { $0.name == "Item 2" })
+        }
+        sheetRepository.onDeleteItem.onNext("item-2")
+        waitForExpectations(timeout: 3.0, handler: nil)
+    }
+    
+    func testDeleteNonexistentItem() {
+        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-4")
+        
+        let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
+            if case SheetRepositoryError.itemNotFound = error {
+                return true
+            } else {
+                return false
+            }
+        })
+        sheetRepository.error
+            .bindTo(errorObserver)
+            .addDisposableTo(disposeBag)
+        
+        sheetRepository.onDeleteItem.onNext("item-x")
         waitForExpectations(timeout: 3.0, handler: nil)
     }
 }

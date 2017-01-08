@@ -29,6 +29,7 @@ import RealmSwift
 
 public enum SheetRepositoryError: Error {
     case sheetNotFound
+    case itemNotFound
 }
 
 public protocol ISheetRepository: class {
@@ -37,6 +38,7 @@ public protocol ISheetRepository: class {
     
     var onUpdateName: AnyObserver</* newName: */ String> { get }
     var onNewItem: AnyObserver<Void> { get }
+    var onDeleteItem: AnyObserver</* id: */ String> { get }
 }
 
 public class SheetRepository: ISheetRepository {
@@ -45,6 +47,7 @@ public class SheetRepository: ISheetRepository {
 
     public let onUpdateName: AnyObserver</* newName: */ String>
     public let onNewItem: AnyObserver<Void>
+    public let onDeleteItem: AnyObserver</* id: */ String>
     
     private let _sheetDatabase: ISheetDatabase
     private let _notificationToken: NotificationToken
@@ -54,6 +57,7 @@ public class SheetRepository: ISheetRepository {
     
     private let _onUpdateName = ActionObserver</* newName: */ String>()
     private let _onNewItem = ActionObserver<Void>()
+    private let _onDeleteItem = ActionObserver</* id: */ String>()
     
     public init(context: IContext, id: String) throws {
         _sheetDatabase = (context as! ISheetRepositoryContext).sheetDatabase
@@ -77,9 +81,11 @@ public class SheetRepository: ISheetRepository {
         
         onUpdateName = _onUpdateName.asObserver()
         onNewItem = _onNewItem.asObserver()
+        onDeleteItem = _onDeleteItem.asObserver()
         
         _onUpdateName.handler = { [weak self] newName in self?.updateName(newName) }
         _onNewItem.handler = { [weak self] in self?.newItem() }
+        _onDeleteItem.handler = { [weak self] id in self?.deleteItem(id: id) }
     }
     
     deinit {
@@ -118,6 +124,20 @@ public class SheetRepository: ISheetRepository {
             let realm = try _sheetDatabase.createRealm()
             try realm.write {
                 sheet.items.append(newItem)
+            }
+        } catch let error {
+            _errorSubject.onNext(error)
+        }
+    }
+    
+    private func deleteItem(id: String) {
+        do {
+            guard let sheet = try _changeSubject.value() else { throw SheetRepositoryError.sheetNotFound }
+            guard let index = sheet.items.index(where: { $0.id == id }) else { throw SheetRepositoryError.itemNotFound }
+
+            let realm = try _sheetDatabase.createRealm()
+            try realm.write {
+                sheet.items.remove(objectAtIndex: index)
             }
         } catch let error {
             _errorSubject.onNext(error)

@@ -35,7 +35,7 @@ class SheetListRepositoryTests: XCTestCase {
         }
     }
 
-    var disposeBag = DisposeBag()
+    var disposeBag: DisposeBag!
     var testContext: TestContext!
     var sheetListRepository: SheetListRepository!
     
@@ -51,6 +51,7 @@ class SheetListRepositoryTests: XCTestCase {
     override func tearDown() {
         sheetListRepository = nil
         testContext = nil
+        disposeBag = nil
         
         super.tearDown()
     }

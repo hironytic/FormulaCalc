@@ -139,4 +139,54 @@ class SheetRepositoryTests: XCTestCase {
         sheetRepository.onUpdateName.onNext("Renamed")
         waitForExpectations(timeout: 3.0, handler: nil)
     }
+    
+    func testNewItem() {
+        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-2")
+        
+        let changeObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
+            guard let sheet = sheet else { return false }
+            return sheet.items.isEmpty
+        }
+        sheetRepository.change
+            .bindTo(changeObserver)
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 3.0, handler: nil)
+
+        var newItem: SheetItem? = nil
+        changeObserver.reset(expectation(description: "A new item shoulde be added")) { (sheet: Sheet?) in
+            guard let sheet = sheet else { return false }
+            guard !sheet.items.isEmpty else { return false }
+            newItem = sheet.items.first
+            return true
+        }
+        sheetRepository.onNewItem.onNext(())
+        waitForExpectations(timeout: 3.0, handler: nil)
+        
+        XCTAssertNotNil(newItem)
+        if let newItem = newItem {
+            XCTAssert(!newItem.name.isEmpty)
+            XCTAssertEqual(newItem.type, .numeric)
+        } else {
+            XCTFail()
+        }
+    }
+    
+    func testUpdateNonexistentItem() {
+        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-x")
+        
+        let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
+            if case SheetRepositoryError.sheetNotFound = error {
+                return true
+            } else {
+                return false
+            }
+        })
+        sheetRepository.error
+            .bindTo(errorObserver)
+            .addDisposableTo(disposeBag)
+        
+        sheetRepository.onNewItem.onNext(())
+        waitForExpectations(timeout: 3.0, handler: nil)
+    }
 }

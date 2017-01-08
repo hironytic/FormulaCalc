@@ -36,6 +36,7 @@ public protocol ISheetRepository: class {
     var change: Observable<Sheet?> { get }
     
     var onUpdateName: AnyObserver</* newName: */ String> { get }
+    var onNewItem: AnyObserver<Void> { get }
 }
 
 public class SheetRepository: ISheetRepository {
@@ -43,13 +44,16 @@ public class SheetRepository: ISheetRepository {
     public let change: Observable<Sheet?>
 
     public let onUpdateName: AnyObserver</* newName: */ String>
+    public let onNewItem: AnyObserver<Void>
     
     private let _sheetDatabase: ISheetDatabase
     private let _notificationToken: NotificationToken
+    private var _lastNewItemNumber = 0
     private let _errorSubject = PublishSubject<Error>()
     private let _changeSubject: BehaviorSubject<Sheet?>
     
     private let _onUpdateName = ActionObserver</* newName: */ String>()
+    private let _onNewItem = ActionObserver<Void>()
     
     public init(context: IContext, id: String) throws {
         _sheetDatabase = (context as! ISheetRepositoryContext).sheetDatabase
@@ -72,8 +76,10 @@ public class SheetRepository: ISheetRepository {
         change = _changeSubject.asObservable()
         
         onUpdateName = _onUpdateName.asObserver()
+        onNewItem = _onNewItem.asObserver()
         
         _onUpdateName.handler = { [weak self] newName in self?.updateName(newName) }
+        _onNewItem.handler = { [weak self] in self?.newItem() }
     }
     
     deinit {
@@ -87,6 +93,31 @@ public class SheetRepository: ISheetRepository {
             let realm = try _sheetDatabase.createRealm()
             try realm.write {
                 sheet.name = newName
+            }
+        } catch let error {
+            _errorSubject.onNext(error)
+        }
+    }
+    
+    private func newItem() {
+        do {
+            guard let sheet = try _changeSubject.value() else { throw SheetRepositoryError.sheetNotFound }
+            
+            let newItem = SheetItem()
+            newItem.id = UUID().uuidString
+            
+            var newName: String
+            repeat {
+                _lastNewItemNumber += 1
+                newName = "項目 \(_lastNewItemNumber)"
+            } while sheet.items.contains(where: { $0.name == newName })
+            newItem.name = newName
+            
+            newItem.type = .numeric
+            
+            let realm = try _sheetDatabase.createRealm()
+            try realm.write {
+                sheet.items.append(newItem)
             }
         } catch let error {
             _errorSubject.onNext(error)

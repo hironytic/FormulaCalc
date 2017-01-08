@@ -48,6 +48,7 @@
 		50C45E451E210E1500F72DD0 /* FulfillObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E441E210E1500F72DD0 /* FulfillObserver.swift */; };
 		50C45E471E212C1300F72DD0 /* SheetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E461E212C1300F72DD0 /* SheetRepository.swift */; };
 		50C45E491E2202A400F72DD0 /* SheetRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E481E2202A400F72DD0 /* SheetRepositoryTests.swift */; };
+		50C45E4B1E2273F200F72DD0 /* InputOneTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E4A1E2273F200F72DD0 /* InputOneTextViewModel.swift */; };
 		50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21911DFD83140042E103 /* AppDelegate.swift */; };
 		50CE21941DFD83140042E103 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21931DFD83140042E103 /* MainViewController.swift */; };
 		50CE21971DFD83140042E103 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50CE21951DFD83140042E103 /* Main.storyboard */; };
@@ -116,6 +117,7 @@
 		50C45E441E210E1500F72DD0 /* FulfillObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FulfillObserver.swift; sourceTree = "<group>"; };
 		50C45E461E212C1300F72DD0 /* SheetRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetRepository.swift; sourceTree = "<group>"; };
 		50C45E481E2202A400F72DD0 /* SheetRepositoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetRepositoryTests.swift; sourceTree = "<group>"; };
+		50C45E4A1E2273F200F72DD0 /* InputOneTextViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputOneTextViewModel.swift; sourceTree = "<group>"; };
 		50CE218E1DFD83140042E103 /* FormulaCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulaCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50CE21911DFD83140042E103 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50CE21931DFD83140042E103 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 			children = (
 				505BFC1E1E0CCE3100AAC3D2 /* DesignSheetViewModel.swift */,
 				50C45E2A1E191E5600F72DD0 /* FormulaViewModel.swift */,
+				50C45E4A1E2273F200F72DD0 /* InputOneTextViewModel.swift */,
 				50C45E261E175B7400F72DD0 /* ItemFormatViewModel.swift */,
 				50AE03551E06586400739B0B /* ItemNameViewModel.swift */,
 				50C45E221E11482100F72DD0 /* ItemTypeViewModel.swift */,
@@ -499,6 +502,7 @@
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
 				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
 				50C45E211E11479200F72DD0 /* ItemTypeViewController.swift in Sources */,
+				50C45E4B1E2273F200F72DD0 /* InputOneTextViewModel.swift in Sources */,
 				50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */,
 				505BFC291E0E0C7C00AAC3D2 /* ItemViewModel.swift in Sources */,
 				50F6FECC1E02D2DA002E849C /* UIViewController+Transition.swift in Sources */,

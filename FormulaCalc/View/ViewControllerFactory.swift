@@ -66,6 +66,9 @@ public func createViewController(for viewModel: IViewModel) -> UIViewController 
         let (viewController, view) = instantiateFromStoryboard(R.Id.sheetList, SheetListViewController.self)
         view.viewModel = viewModel
         return viewController
+    
+    case let viewModel as IInputOneTextViewModel:
+        return createInputOneTextViewController(viewModel: viewModel)
         
     default:
         fatalError()
@@ -79,4 +82,25 @@ private func instantiateFromStoryboard<View>(_ storyboardName: String, _ type: V
         viewController,
         ((viewController as? UINavigationController)?.viewControllers[0] ?? viewController) as! View
     )
+}
+
+private func createInputOneTextViewController(viewModel: IInputOneTextViewModel) -> UIViewController {
+    let alertController = UIAlertController(title: viewModel.title, message: viewModel.messageText, preferredStyle: .alert)
+    alertController.addTextField { textField in
+        textField.text = viewModel.initialText
+    }
+    alertController.addAction(UIAlertAction(title: viewModel.cancelButtonTitle, style: .cancel, handler: { _ in
+        alertController.dismiss(animated: true, completion: nil)
+        viewModel.onCancel.onNext(())
+        viewModel.onDone.onCompleted()
+        viewModel.onCancel.onCompleted()
+    }))
+    alertController.addAction(UIAlertAction(title: viewModel.doneButtonTitle, style: .default, handler: { _ in
+        let resultText = alertController.textFields![0].text ?? ""
+        alertController.dismiss(animated: true, completion: nil)
+        viewModel.onDone.onNext(resultText)
+        viewModel.onDone.onCompleted()
+        viewModel.onCancel.onCompleted()
+    }))    
+    return alertController
 }

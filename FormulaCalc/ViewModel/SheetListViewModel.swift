@@ -79,8 +79,36 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     }
     
     private func handleOnNew() {
-        let viewModel = FormulaViewModel(context: context)
-        sendMessage(TransitionMessage(viewModel: viewModel, type: .push, animated: true))
+        class InputNameViewModel: ViewModel, IInputOneTextViewModel {
+            let title = "あああ"
+            let messageText = "いいい"
+            let initialText = "ううう"
+            let cancelButtonTitle = "キャンセル"
+            let doneButtonTitle = "完了"
+            
+            let onDone: AnyObserver<String>
+            let onCancel = ActionObserver<Void>().asObserver()
+
+            init(context: IContext, onDone: @escaping (String) -> Void) {
+                self.onDone = AnyObserver(eventHandler: { event in
+                    switch event {
+                    case .next(let element):
+                        onDone(element)
+                    case .error(_):
+                        break
+                    case .completed:
+                        break
+                    }
+                })
+
+                super.init(context: context)
+            }
+        }
+        
+        let viewModel = InputNameViewModel(context: context) { name in
+            print("name = \(name)")
+        }
+        sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
     }
 }
 

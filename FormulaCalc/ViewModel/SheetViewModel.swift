@@ -93,19 +93,22 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
             .map { sheet in
                 return sheet?.name ?? ""
             }
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
         
         let editingItemId = _editingItemIdSubject.asObservable()
         let onChangeEditingItemId: AnyObserver<String?> = _editingItemIdSubject.asObserver()
-        itemList = _sheetStore.update
-            .map { sheet in
-                guard let sheet = sheet else { return [] }
-                return sheet.items.map { item in
+        itemList = _sheetStore.itemListUpdate
+            .map { update in
+                return update.itemList.map { item in
                     return SheetElementViewModel(context: context,
                                                  id: item.id,
                                                  editingItemId: editingItemId,
                                                  onChangeEditingItemId: onChangeEditingItemId)
                 }
             }
+            .asDriver(onErrorJustReturn: [])
+            .asObservable()
         
         super.init(context: context)
     }

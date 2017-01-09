@@ -27,8 +27,11 @@ import Foundation
 import RxSwift
 
 public protocol ISheetElementViewModel: IViewModel {
+    var id: String { get }
     var name: Observable<String?> { get }
     var value: Observable<String?> { get }
+    
+    var onTapValue: AnyObserver<Void> { get }
 }
 
 public protocol ISheetViewModel: IViewModel {
@@ -37,22 +40,37 @@ public protocol ISheetViewModel: IViewModel {
 }
 
 public protocol ISheetViewModelFactory {
-    func newSheetViewModel(context: IContext) throws -> ISheetViewModel
+    func newSheetViewModel(context: IContext, id: String) -> ISheetViewModel
 }
 
 extension DefaultContext: ISheetViewModelFactory {
-    public func newSheetViewModel(context: IContext) throws -> ISheetViewModel {
-        return SheetViewModel(context: context)
+    public func newSheetViewModel(context: IContext, id: String) -> ISheetViewModel {
+        return SheetViewModel(context: context, id: id)
     }
 }
 
+public protocol ISheetViewModelContext: IContext, ISheetStoreFactory {
+}
+
+extension DefaultContext: ISheetViewModelContext {
+}
+
 public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
+    public let id: String
     public let name: Observable<String?>
     public let value: Observable<String?>
+
+    public let onTapValue: AnyObserver<Void>
     
-    public override init(context: IContext) {
+    public init(context: IContext, id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) {
+        self.id = id
         name = Observable.just("項目名")
         value = Observable.just("12345.6")
+        
+        onTapValue = onChangeEditingItemId
+            .mapObserver { _ in
+                return id
+            }
         
         super.init(context: context)
     }
@@ -62,9 +80,32 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>
     
-    public override init(context: IContext) {
-        title = Observable.just("シート名")
-        itemList = Observable.just([SheetElementViewModel(context: context), SheetElementViewModel(context: context)])
+    private var _context: ISheetViewModelContext { get { return context as! ISheetViewModelContext } }
+    private let _sheetStore: ISheetStore
+    private let _editingItemIdSubject = BehaviorSubject<String?>(value: nil)
+    
+    public init(context: IContext, id: String) {
+        let context = context as! ISheetViewModelContext
+        
+        _sheetStore = context.newSheetStore(context: context, id: id)
+
+        title = _sheetStore.update
+            .map { sheet in
+                return sheet?.name ?? ""
+            }
+        
+        let editingItemId = _editingItemIdSubject.asObservable()
+        let onChangeEditingItemId: AnyObserver<String?> = _editingItemIdSubject.asObserver()
+        itemList = _sheetStore.update
+            .map { sheet in
+                guard let sheet = sheet else { return [] }
+                return sheet.items.map { item in
+                    return SheetElementViewModel(context: context,
+                                                 id: item.id,
+                                                 editingItemId: editingItemId,
+                                                 onChangeEditingItemId: onChangeEditingItemId)
+                }
+            }
         
         super.init(context: context)
     }

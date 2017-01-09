@@ -51,7 +51,7 @@ extension DefaultContext: ISheetListViewModelFactory {
     }
 }
 
-public protocol ISheetListViewModelContext: IContext, ISheetListStoreFactory {
+public protocol ISheetListViewModelContext: IContext, ISheetListStoreFactory, ISheetViewModelFactory {
 }
 
 extension DefaultContext: ISheetListViewModelContext {
@@ -76,7 +76,6 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     public private(set) var onSelect: AnyObserver<ISheetListElementViewModel>
     
     private var _context: ISheetListViewModelContext { get { return super.context as! ISheetListViewModelContext } }
-    private let _disposeBag = DisposeBag()
     private let _sheetListStore: ISheetListStore
     private let _onNew = ActionObserver<Void>()
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
@@ -103,7 +102,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
         super.init(context: context)
         
         _onNew.handler = { [weak self] in self?.handleOnNew() }
-        _onSelect.handler = { item in print("onSelect - \((item as! SheetListElementViewModel).id)") }
+        _onSelect.handler = { [weak self] item in self?.handleOnSelect(item) }
         _onDelete.handler = { [weak self] item in self?.handleOnDelete(item) }
     }
     
@@ -129,6 +128,12 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
             self?._sheetListStore.onCreateNewSheet.onNext(name)
         }
         sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
+    }
+    
+    private func handleOnSelect(_ item: ISheetListElementViewModel) {
+        let id = item.id
+        let sheetViewModel = _context.newSheetViewModel(context: context, id: id)
+        sendMessage(TransitionMessage(viewModel: sheetViewModel, type: .push, animated: true))
     }
     
     private func handleOnDelete(_ item: ISheetListElementViewModel) {

@@ -29,6 +29,7 @@ import RxSwift
 private typealias R = Resource
 
 public protocol ISheetListElementViewModel: IViewModel {
+    var id: String { get }
     var title: Observable<String?> { get }
 }
 
@@ -103,7 +104,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
         
         _onNew.handler = { [weak self] in self?.handleOnNew() }
         _onSelect.handler = { item in print("onSelect - \((item as! SheetListElementViewModel).id)") }
-        _onDelete.handler = { item in print("onDelete - \((item as! SheetListElementViewModel).id)") }
+        _onDelete.handler = { [weak self] item in self?.handleOnDelete(item) }
     }
     
     private func handleOnNew() {
@@ -128,5 +129,9 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
             self?._sheetListStore.onCreateNewSheet.onNext(name)
         }
         sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
+    }
+    
+    private func handleOnDelete(_ item: ISheetListElementViewModel) {
+        _sheetListStore.onDeleteSheet.onNext(item.id)
     }
 }

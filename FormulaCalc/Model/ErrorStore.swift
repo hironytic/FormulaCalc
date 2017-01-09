@@ -1,8 +1,8 @@
 //
-// ItemNameViewModel.swift
+// ErrorStore.swift
 // FormulaCalc
 //
-// Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
+// Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,34 +26,34 @@
 import Foundation
 import RxSwift
 
-public protocol IItemNameViewModel: IViewModel {
-    var name: Observable<String?> { get }
+public protocol IErrorStore {
+    var error: Observable<Error> { get }
     
-    var onNameChanged: AnyObserver<String?> { get }
+    var onPostError: AnyObserver<Error> { get }
 }
 
-public protocol IItemNameViewModelFactory {
-    func newItemNameViewModel(context: IContext) -> IItemNameViewModel
+public protocol IErrorStoreGetter {
+    var errorStore: IErrorStore { get }
 }
 
-extension DefaultContext: IItemNameViewModelFactory {
-    public func newItemNameViewModel(context: IContext) -> IItemNameViewModel {
-        return ItemNameViewModel(context: context)
+extension DefaultContext: IErrorStoreGetter {
+    public var errorStore: IErrorStore {
+        get {
+            return ErrorStore.sharedInstance
+        }
     }
 }
 
-public class ItemNameViewModel: ViewModel, IItemNameViewModel {
-    public let name: Observable<String?>
-    public let onNameChanged: AnyObserver<String?>
+public class ErrorStore: IErrorStore {
+    public static let sharedInstance = ErrorStore()
     
-    private let _onNameChanged = ActionObserver<String?>()
-    
-    public override init(context: IContext) {
-        self.name = Observable
-            .just("なまえ")
-        
-        self.onNameChanged = _onNameChanged.asObserver()
-        
-        super.init(context: context)
+    public let error: Observable<Error>
+    public let onPostError: AnyObserver<Error>
+
+    private let _errorSubject = PublishSubject<Error>()
+
+    public init() {
+        error = _errorSubject.asObservable()
+        onPostError = _errorSubject.asObserver()
     }
 }

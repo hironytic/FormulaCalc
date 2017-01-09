@@ -41,6 +41,16 @@ public protocol IItemViewModel: IViewModel {
     var onSelectFormat: AnyObserver<Void> { get }
 }
 
+public protocol IItemViewModelFactory {
+    func newItemViewModel(context: IContext) -> IItemViewModel
+}
+
+extension DefaultContext: IItemViewModelFactory {
+    public func newItemViewModel(context: IContext) -> IItemViewModel {
+        return ItemViewModel(context: context)
+    }
+}
+
 public class ItemViewModel: ViewModel, IItemViewModel {
     public let title: Observable<String?>
     public let name: Observable<String?>

@@ -48,6 +48,16 @@ public protocol IItemFormatViewModel: IViewModel {
     var onSelectFractionDigits: AnyObserver<IFractionsDigitsElementViewModel> { get }
 }
 
+public protocol IItemFormatViewModelFactory {
+    func newItemFormatViewModel(context: IContext) -> IItemFormatViewModel
+}
+
+extension DefaultContext: IItemFormatViewModelFactory {
+    public func newItemFormatViewModel(context: IContext) -> IItemFormatViewModel {
+        return ItemFormatViewModel(context: context)
+    }
+}
+
 class ThousandSeparatorElementViewModel: ViewModel, IThousandSeparatorElementViewModel {
     let thousandSeparator: Observable<Bool>
     let onChangeThousandSeparator: AnyObserver<Bool>

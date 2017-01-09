@@ -36,6 +36,16 @@ public protocol ISheetViewModel: IViewModel {
     var itemList: Observable<[ISheetElementViewModel]> { get }
 }
 
+public protocol ISheetViewModelFactory {
+    func newSheetViewModel(context: IContext) throws -> ISheetViewModel
+}
+
+extension DefaultContext: ISheetViewModelFactory {
+    public func newSheetViewModel(context: IContext) throws -> ISheetViewModel {
+        return SheetViewModel(context: context)
+    }
+}
+
 public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     public let name: Observable<String?>
     public let value: Observable<String?>

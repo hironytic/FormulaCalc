@@ -1,8 +1,8 @@
 //
-// ItemNameViewModel.swift
+// ResourceUtils.swift
 // FormulaCalc
 //
-// Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
+// Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,20 @@
 //
 
 import Foundation
-import RxSwift
 
-public protocol IItemNameViewModel: IViewModel {
-    var name: Observable<String?> { get }
-    
-    var onNameChanged: AnyObserver<String?> { get }
-}
+public struct ResourceUtils {
+    private init() { }
 
-public protocol IItemNameViewModelFactory {
-    func newItemNameViewModel(context: IContext) -> IItemNameViewModel
-}
-
-extension DefaultContext: IItemNameViewModelFactory {
-    public func newItemNameViewModel(context: IContext) -> IItemNameViewModel {
-        return ItemNameViewModel(context: context)
+    public static func getString(_ key: String) -> String {
+        return NSLocalizedString(key, comment: "")
     }
-}
-
-public class ItemNameViewModel: ViewModel, IItemNameViewModel {
-    public let name: Observable<String?>
-    public let onNameChanged: AnyObserver<String?>
     
-    private let _onNameChanged = ActionObserver<String?>()
+    public static func getString(format: String, _ arguments: CVarArg...) -> String {
+        return getString(format: format, arguments: arguments)
+    }
     
-    public override init(context: IContext) {
-        self.name = Observable
-            .just("なまえ")
-        
-        self.onNameChanged = _onNameChanged.asObserver()
-        
-        super.init(context: context)
+    public static func getString(format: String, arguments: [CVarArg]) -> String {
+        let formatString = NSLocalizedString(format, comment: "")
+        return String(format: formatString, arguments: arguments)
     }
 }

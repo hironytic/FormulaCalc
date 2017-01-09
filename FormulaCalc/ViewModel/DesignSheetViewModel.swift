@@ -41,6 +41,16 @@ public protocol IDesignSheetViewModel: IViewModel {
     var onDone: AnyObserver<Void> { get }
 }
 
+public protocol IDesignSheetViewModelFactory {
+    func newDesignSheetViewModel(context: IContext) -> IDesignSheetViewModel
+}
+
+extension DefaultContext: IDesignSheetViewModelFactory {
+    public func newDesignSheetViewModel(context: IContext) -> IDesignSheetViewModel {
+        return DesignSheetViewModel(context: context)
+    }
+}
+
 public class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
     public let name: Observable<String?>
     public let type: Observable<String?>

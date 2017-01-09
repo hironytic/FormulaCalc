@@ -1,8 +1,8 @@
 //
-// ItemNameViewModel.swift
+// Resource+String.swift
 // FormulaCalc
 //
-// Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
+// Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,15 @@
 //
 
 import Foundation
-import RxSwift
 
-public protocol IItemNameViewModel: IViewModel {
-    var name: Observable<String?> { get }
-    
-    var onNameChanged: AnyObserver<String?> { get }
-}
-
-public protocol IItemNameViewModelFactory {
-    func newItemNameViewModel(context: IContext) -> IItemNameViewModel
-}
-
-extension DefaultContext: IItemNameViewModelFactory {
-    public func newItemNameViewModel(context: IContext) -> IItemNameViewModel {
-        return ItemNameViewModel(context: context)
-    }
-}
-
-public class ItemNameViewModel: ViewModel, IItemNameViewModel {
-    public let name: Observable<String?>
-    public let onNameChanged: AnyObserver<String?>
-    
-    private let _onNameChanged = ActionObserver<String?>()
-    
-    public override init(context: IContext) {
-        self.name = Observable
-            .just("なまえ")
+public extension Resource {
+    public struct String {
+        private init() { }
         
-        self.onNameChanged = _onNameChanged.asObserver()
-        
-        super.init(context: context)
+        public static let ok = "FormulaCalc.ok"
+        public static let cancel = "FormulaCalc.cancel"
+        public static let newSheetTitle = "FormulaCalc.newSheetTitle"
+        public static let newSheetPlaceholder = "FormulaCalc.newSheetPlaceholder"
+        public static let newMessageDone = "FormulaCalc.newSheetDone"
     }
 }

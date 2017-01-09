@@ -32,6 +32,16 @@ public protocol IFormulaViewModel: IViewModel {
     var onFormulaChanged: AnyObserver<String?> { get }
 }
 
+public protocol IFormulaViewModelFactory {
+    func newFormulaViewModel(context: IContext) -> IFormulaViewModel
+}
+
+extension DefaultContext: IFormulaViewModelFactory {
+    public func newFormulaViewModel(context: IContext) -> IFormulaViewModel {
+        return FormulaViewModel(context: context)
+    }
+}
+
 public class FormulaViewModel: ViewModel, IFormulaViewModel {
     public let formula: Observable<String?>
     public let onFormulaChanged: AnyObserver<String?>

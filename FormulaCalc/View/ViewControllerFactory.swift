@@ -25,6 +25,8 @@
 
 import UIKit
 
+private typealias R = Resource
+
 public func createViewController(for viewModel: IViewModel) -> UIViewController {
     switch viewModel {
     case let viewModel as IDesignSheetViewModel:
@@ -85,8 +87,9 @@ private func instantiateFromStoryboard<View>(_ storyboardName: String, _ type: V
 }
 
 private func createInputOneTextViewController(viewModel: IInputOneTextViewModel) -> UIViewController {
-    let alertController = UIAlertController(title: viewModel.title, message: viewModel.messageText, preferredStyle: .alert)
+    let alertController = UIAlertController(title: viewModel.title, message: viewModel.detailMessage, preferredStyle: .alert)
     alertController.addTextField { textField in
+        textField.placeholder = viewModel.placeholder
         textField.text = viewModel.initialText
     }
     alertController.addAction(UIAlertAction(title: viewModel.cancelButtonTitle, style: .cancel, handler: { _ in

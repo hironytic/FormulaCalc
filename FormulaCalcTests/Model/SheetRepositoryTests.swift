@@ -31,6 +31,7 @@ import RealmSwift
 class SheetRepositoryTests: XCTestCase {
     class TestContext: ISheetRepositoryContext {
         let sheetDatabase: ISheetDatabase
+        var errorStore: IErrorStore { get { return ErrorStore.sharedInstance } }
         let testRealm: Realm? // to keep test data in In-Memory database
         init(sheetDatabase: ISheetDatabase) throws {
             self.sheetDatabase = sheetDatabase
@@ -73,7 +74,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testExistingSheet() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-2")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-2")
         
         let changeObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -87,7 +88,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testNonexistentSheet() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-x")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-x")
         
         let changeObserver = FulfillObserver(expectation(description: "It's not found that a sheet whose id is 'sheet-x'")) { (sheet: Sheet?) in
             return sheet == nil
@@ -100,7 +101,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testUpdateName() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-2")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-2")
         
         let changeObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -121,7 +122,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testUpdateNonexistentSheetName() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-x")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-x")
         
         let errorObserver = FulfillObserver(expectation(description: "Updating nonexistent sheet name causes an error"), nextChecker: { (error: Error) in
             if case SheetRepositoryError.sheetNotFound = error {
@@ -130,7 +131,7 @@ class SheetRepositoryTests: XCTestCase {
                 return false
             }
         })
-        sheetRepository.error
+        testContext.errorStore.error
             .bindTo(errorObserver)
             .addDisposableTo(disposeBag)
         
@@ -139,7 +140,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testNewItem() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-2")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-2")
         
         let changeObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -171,7 +172,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testNewItemOnNonexistentSheet() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-x")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-x")
         
         let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
             if case SheetRepositoryError.sheetNotFound = error {
@@ -180,7 +181,7 @@ class SheetRepositoryTests: XCTestCase {
                 return false
             }
         })
-        sheetRepository.error
+        testContext.errorStore.error
             .bindTo(errorObserver)
             .addDisposableTo(disposeBag)
         
@@ -189,7 +190,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testDeleteItem() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-4")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-4")
         
         let changeObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-4'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -212,7 +213,7 @@ class SheetRepositoryTests: XCTestCase {
     }
     
     func testDeleteNonexistentItem() {
-        let sheetRepository = try! SheetRepository(context: testContext, id: "sheet-4")
+        let sheetRepository = SheetRepository(context: testContext, id: "sheet-4")
         
         let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
             if case SheetRepositoryError.itemNotFound = error {
@@ -221,7 +222,7 @@ class SheetRepositoryTests: XCTestCase {
                 return false
             }
         })
-        sheetRepository.error
+        testContext.errorStore.error
             .bindTo(errorObserver)
             .addDisposableTo(disposeBag)
         

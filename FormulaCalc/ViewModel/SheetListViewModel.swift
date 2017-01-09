@@ -26,6 +26,8 @@
 import Foundation
 import RxSwift
 
+private typealias R = Resource
+
 public protocol ISheetListElementViewModel: IViewModel {
     var title: Observable<String?> { get }
 }
@@ -36,6 +38,22 @@ public protocol ISheetListViewModel: IViewModel {
     var onNew: AnyObserver<Void> { get }
     var onDelete: AnyObserver<ISheetListElementViewModel> { get }
     var onSelect: AnyObserver<ISheetListElementViewModel> { get }
+}
+
+public protocol ISheetListViewModelFactory {
+    func newSheetListViewModel(context: IContext) -> ISheetListViewModel
+}
+
+extension DefaultContext: ISheetListViewModelFactory {
+    public func newSheetListViewModel(context: IContext) -> ISheetListViewModel {
+        return SheetListViewModel(context: context)
+    }
+}
+
+public protocol ISheetListViewModelContext: IContext, ISheetListRepositoryFactory {
+}
+
+extension DefaultContext: ISheetListViewModelContext {
 }
 
 public class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
@@ -56,16 +74,26 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     public private(set) var onDelete: AnyObserver<ISheetListElementViewModel>
     public private(set) var onSelect: AnyObserver<ISheetListElementViewModel>
     
+    private var _context: ISheetListViewModelContext { get { return super.context as! ISheetListViewModelContext } }
     private let _disposeBag = DisposeBag()
+    private let _sheetListRepository: ISheetListRepository
     private let _onNew = ActionObserver<Void>()
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
     private let _onSelect = ActionObserver<ISheetListElementViewModel>()
-
+    
     public override init(context: IContext) {
-        sheetList = Observable.just([
-            SheetListElementViewModel(context: context, id: "test1", title: "Test1"),
-            SheetListElementViewModel(context: context, id: "test2", title: "Test2"),
-        ])
+        let context = context as! ISheetListViewModelContext
+
+        _sheetListRepository = context.newSheetListRepository(context: context)
+        sheetList = _sheetListRepository.change
+            .map { change in
+                return change.sheetList
+                    .map { sheet in
+                        return SheetListElementViewModel(context: context, id: sheet.id, title: sheet.name)
+                    }
+            }
+            .asDriver(onErrorJustReturn: [])
+            .asObservable()
         
         onNew = _onNew.asObserver()
         onDelete = _onDelete.asObserver()
@@ -80,35 +108,25 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     
     private func handleOnNew() {
         class InputNameViewModel: ViewModel, IInputOneTextViewModel {
-            let title = "あああ"
-            let messageText = "いいい"
-            let initialText = "ううう"
-            let cancelButtonTitle = "キャンセル"
-            let doneButtonTitle = "完了"
+            let title: String? = ResourceUtils.getString(R.String.newSheetTitle)
+            let detailMessage: String? = nil
+            let placeholder: String? = ResourceUtils.getString(R.String.newSheetPlaceholder)
+            let initialText = ""
+            let cancelButtonTitle = ResourceUtils.getString(R.String.cancel)
+            let doneButtonTitle = ResourceUtils.getString(R.String.newMessageDone)
             
             let onDone: AnyObserver<String>
             let onCancel = ActionObserver<Void>().asObserver()
 
             init(context: IContext, onDone: @escaping (String) -> Void) {
-                self.onDone = AnyObserver(eventHandler: { event in
-                    switch event {
-                    case .next(let element):
-                        onDone(element)
-                    case .error(_):
-                        break
-                    case .completed:
-                        break
-                    }
-                })
-
+                self.onDone = ActionObserver(handler: onDone).asObserver()
                 super.init(context: context)
             }
         }
         
-        let viewModel = InputNameViewModel(context: context) { name in
-            print("name = \(name)")
+        let viewModel = InputNameViewModel(context: context) { [weak self] name in
+            self?._sheetListRepository.onCreateNewSheet.onNext(name)
         }
         sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
     }
 }
-

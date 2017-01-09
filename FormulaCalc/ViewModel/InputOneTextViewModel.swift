@@ -27,8 +27,9 @@ import Foundation
 import RxSwift
 
 public protocol IInputOneTextViewModel: IViewModel {
-    var title: String { get }
-    var messageText: String { get }
+    var title: String? { get }
+    var detailMessage: String? { get }
+    var placeholder: String? { get }
     var initialText: String { get }
     var cancelButtonTitle: String { get }
     var doneButtonTitle: String { get }

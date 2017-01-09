@@ -33,7 +33,6 @@ public enum SheetRepositoryError: Error {
 }
 
 public protocol ISheetRepository: class {
-    var error: Observable<Error> { get }
     var change: Observable<Sheet?> { get }
     
     var onUpdateName: AnyObserver</* newName: */ String> { get }
@@ -41,42 +40,64 @@ public protocol ISheetRepository: class {
     var onDeleteItem: AnyObserver</* id: */ String> { get }
 }
 
+public protocol ISheetRepositoryFactory {
+    func newSheetRepository(context: IContext, id: String) -> ISheetRepository
+}
+
+extension DefaultContext: ISheetRepositoryFactory {
+    public func newSheetRepository(context: IContext, id: String) -> ISheetRepository {
+        return SheetRepository(context: context, id: id)
+    }
+}
+
+public protocol ISheetRepositoryContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {
+}
+
+extension DefaultContext: ISheetRepositoryContext {
+}
+
 public class SheetRepository: ISheetRepository {
-    public let error: Observable<Error>
     public let change: Observable<Sheet?>
 
     public let onUpdateName: AnyObserver</* newName: */ String>
     public let onNewItem: AnyObserver<Void>
     public let onDeleteItem: AnyObserver</* id: */ String>
     
+    private let _context: ISheetRepositoryContext
     private let _sheetDatabase: ISheetDatabase
-    private let _notificationToken: NotificationToken
+    private let _notificationToken: NotificationToken?
     private var _lastNewItemNumber = 0
-    private let _errorSubject = PublishSubject<Error>()
     private let _changeSubject: BehaviorSubject<Sheet?>
     
     private let _onUpdateName = ActionObserver</* newName: */ String>()
     private let _onNewItem = ActionObserver<Void>()
     private let _onDeleteItem = ActionObserver</* id: */ String>()
     
-    public init(context: IContext, id: String) throws {
-        _sheetDatabase = (context as! ISheetRepositoryContext).sheetDatabase
+    public init(context: IContext, id: String) {
+        _context = context as! ISheetRepositoryContext
+        _sheetDatabase = _context.sheetDatabase
         
-        let realm = try _sheetDatabase.createRealm()
-        let results = realm.objects(Sheet.self).filter("id = %@", id)
-        let changeSubject = BehaviorSubject<Sheet?>(value: results.first)
-        _changeSubject = changeSubject
+        do {
+            let realm = try _sheetDatabase.createRealm()
+            let results = realm.objects(Sheet.self).filter("id = %@", id)
+            let changeSubject = BehaviorSubject(value: results.first)
+            _changeSubject = changeSubject
 
-        _notificationToken = results.addNotificationBlock { changes in
-            switch changes {
-            case .update(let results, _, _, _):
-                changeSubject.onNext(results.first)
-            default:
-                break
+            _notificationToken = results.addNotificationBlock { changes in
+                switch changes {
+                case .update(let results, _, _, _):
+                    changeSubject.onNext(results.first)
+                default:
+                    break
+                }
             }
+        } catch let error {
+            _changeSubject = BehaviorSubject(value: nil)
+            _notificationToken = nil
+
+            _context.errorStore.onPostError.onNext(error)
         }
 
-        error = _errorSubject.asObservable()
         change = _changeSubject.asObservable()
         
         onUpdateName = _onUpdateName.asObserver()
@@ -89,7 +110,7 @@ public class SheetRepository: ISheetRepository {
     }
     
     deinit {
-        self._notificationToken.stop()
+        self._notificationToken?.stop()
     }
     
     private func updateName(_ newName: String) {
@@ -101,7 +122,7 @@ public class SheetRepository: ISheetRepository {
                 sheet.name = newName
             }
         } catch let error {
-            _errorSubject.onNext(error)
+            _context.errorStore.onPostError.onNext(error)
         }
     }
     
@@ -126,7 +147,7 @@ public class SheetRepository: ISheetRepository {
                 sheet.items.append(newItem)
             }
         } catch let error {
-            _errorSubject.onNext(error)
+            _context.errorStore.onPostError.onNext(error)
         }
     }
     
@@ -140,10 +161,7 @@ public class SheetRepository: ISheetRepository {
                 sheet.items.remove(objectAtIndex: index)
             }
         } catch let error {
-            _errorSubject.onNext(error)
+            _context.errorStore.onPostError.onNext(error)
         }
     }
-}
-
-public protocol ISheetRepositoryContext: IContext, ISheetDatabaseGetter {
 }

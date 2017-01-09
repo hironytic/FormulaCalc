@@ -28,8 +28,9 @@ import RxSwift
 @testable import FormulaCalc
 
 class SheetListRepositoryTests: XCTestCase {
-    class TestContext: IContext, ISheetListRepositoryContext {
+    class TestContext: ISheetListRepositoryContext {
         var sheetDatabase: ISheetDatabase
+        var errorStore: IErrorStore { get { return ErrorStore.sharedInstance } }
         init(sheetDatabase: ISheetDatabase) {
             self.sheetDatabase = sheetDatabase
         }
@@ -45,7 +46,7 @@ class SheetListRepositoryTests: XCTestCase {
         disposeBag = DisposeBag()
         let testSheetDatabase = TestSheetDatabase(inMemoryIdentifier: "SheetListRepositoryTests")
         testContext = TestContext(sheetDatabase: testSheetDatabase)
-        sheetListRepository = try! SheetListRepository(context: testContext)
+        sheetListRepository = SheetListRepository(context: testContext)
     }
     
     override func tearDown() {

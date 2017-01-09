@@ -1,5 +1,5 @@
 //
-// SheetListRepositoryTests.swift
+// SheetListStoreTests.swift
 // FormulaCalcTests
 //
 // Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -27,8 +27,8 @@ import XCTest
 import RxSwift
 @testable import FormulaCalc
 
-class SheetListRepositoryTests: XCTestCase {
-    class TestContext: ISheetListRepositoryContext {
+class SheetListStoreTests: XCTestCase {
+    class TestContext: ISheetListStoreContext {
         var sheetDatabase: ISheetDatabase
         var errorStore: IErrorStore { get { return ErrorStore.sharedInstance } }
         init(sheetDatabase: ISheetDatabase) {
@@ -38,19 +38,19 @@ class SheetListRepositoryTests: XCTestCase {
 
     var disposeBag: DisposeBag!
     var testContext: TestContext!
-    var sheetListRepository: SheetListRepository!
+    var sheetListStore: SheetListStore!
     
     override func setUp() {
         super.setUp()
 
         disposeBag = DisposeBag()
-        let testSheetDatabase = TestSheetDatabase(inMemoryIdentifier: "SheetListRepositoryTests")
+        let testSheetDatabase = TestSheetDatabase(inMemoryIdentifier: "SheetListStoreTests")
         testContext = TestContext(sheetDatabase: testSheetDatabase)
-        sheetListRepository = SheetListRepository(context: testContext)
+        sheetListStore = SheetListStore(context: testContext)
     }
     
     override func tearDown() {
-        sheetListRepository = nil
+        sheetListStore = nil
         testContext = nil
         disposeBag = nil
         
@@ -59,42 +59,42 @@ class SheetListRepositoryTests: XCTestCase {
     
     func testNewSheet() {
         // Initially there are no items
-        let changeObserver = FulfillObserver(expectation(description: "There are no items")) { (change: SheetListRepositoryChange) in
-            return change.sheetList.count == 0
+        let updateObserver = FulfillObserver(expectation(description: "There are no items")) { (update: SheetListStoreUpdate) in
+            return update.sheetList.count == 0
         }
-        sheetListRepository.change
-            .bindTo(changeObserver)
+        sheetListStore.update
+            .bindTo(updateObserver)
             .addDisposableTo(disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
         
         // Add one item
-        changeObserver.reset(expectation(description: "Came one item")) { (change: SheetListRepositoryChange) in
-            guard change.sheetList.count == 1 else { return false }
-            guard change.insertions.count == 1 else { return false }
-            guard change.deletions.count == 0 else { return false }
-            guard change.modifications.count == 0 else { return false }
+        updateObserver.reset(expectation(description: "Came one item")) { (update: SheetListStoreUpdate) in
+            guard update.sheetList.count == 1 else { return false }
+            guard update.insertions.count == 1 else { return false }
+            guard update.deletions.count == 0 else { return false }
+            guard update.modifications.count == 0 else { return false }
             
-            let insertedIndex = change.insertions.first!
-            let inserted = change.sheetList[change.sheetList.index(change.sheetList.startIndex, offsetBy: IntMax(insertedIndex))]
+            let insertedIndex = update.insertions.first!
+            let inserted = update.sheetList[update.sheetList.index(update.sheetList.startIndex, offsetBy: IntMax(insertedIndex))]
             return inserted.name == "First Sheet"
         }
-        sheetListRepository.onCreateNewSheet.onNext("First Sheet")
+        sheetListStore.onCreateNewSheet.onNext("First Sheet")
         waitForExpectations(timeout: 3.0, handler: nil)
     }
     
     func testNewSheet2() {
-        sheetListRepository.onCreateNewSheet.onNext("New Sheet")
+        sheetListStore.onCreateNewSheet.onNext("New Sheet")
 
         var newSheet: Sheet? = nil
-        let changeObserver = FulfillObserver(expectation(description: "There are no items")) { (change: SheetListRepositoryChange) in
-            if change.sheetList.count == 1 {
-                newSheet = change.sheetList.first!
+        let updateObserver = FulfillObserver(expectation(description: "There are no items")) { (update: SheetListStoreUpdate) in
+            if update.sheetList.count == 1 {
+                newSheet = update.sheetList.first!
                 return true
             }
             return false
         }
-        sheetListRepository.change
-            .bindTo(changeObserver)
+        sheetListStore.update
+            .bindTo(updateObserver)
             .addDisposableTo(disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 
@@ -108,35 +108,35 @@ class SheetListRepositoryTests: XCTestCase {
     }
     
     func testDeleteSheet() {
-        sheetListRepository.onCreateNewSheet.onNext("Sheet 1")
-        sheetListRepository.onCreateNewSheet.onNext("Sheet 2")
-        sheetListRepository.onCreateNewSheet.onNext("Sheet 3")
-        sheetListRepository.onCreateNewSheet.onNext("Sheet 4")
+        sheetListStore.onCreateNewSheet.onNext("Sheet 1")
+        sheetListStore.onCreateNewSheet.onNext("Sheet 2")
+        sheetListStore.onCreateNewSheet.onNext("Sheet 3")
+        sheetListStore.onCreateNewSheet.onNext("Sheet 4")
 
         var sheet2Id: String? = nil
-        let changeObserver = FulfillObserver(expectation(description: "There are four items")) { (change: SheetListRepositoryChange) in
-            if change.sheetList.count == 4 {
-                sheet2Id = change.sheetList.first(where: { $0.name == "Sheet 2" }).map({ $0.id })
+        let updateObserver = FulfillObserver(expectation(description: "There are four items")) { (update: SheetListStoreUpdate) in
+            if update.sheetList.count == 4 {
+                sheet2Id = update.sheetList.first(where: { $0.name == "Sheet 2" }).map({ $0.id })
                 return true
             }
             return false
         }
-        sheetListRepository.change
-            .bindTo(changeObserver)
+        sheetListStore.update
+            .bindTo(updateObserver)
             .addDisposableTo(disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 
         XCTAssertNotNil(sheet2Id, "'Sheet 2' should be found")
         if let sheet2Id = sheet2Id {
-            changeObserver.reset(expectation(description: "There are three items then")) { (change: SheetListRepositoryChange) in
-                if change.sheetList.count == 3 {
-                    if !change.sheetList.contains(where: { $0.name == "Sheet 2" }) {
+            updateObserver.reset(expectation(description: "There are three items then")) { (update: SheetListStoreUpdate) in
+                if update.sheetList.count == 3 {
+                    if !update.sheetList.contains(where: { $0.name == "Sheet 2" }) {
                         return true
                     }
                 }
                 return false
             }
-            sheetListRepository.onDeleteSheet.onNext(sheet2Id)
+            sheetListStore.onDeleteSheet.onNext(sheet2Id)
             waitForExpectations(timeout: 3.0, handler: nil)
         }
     }

@@ -1,5 +1,5 @@
 //
-// SheetRepository.swift
+// SheetStore.swift
 // FormulaCalc
 //
 // Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -27,61 +27,61 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-public enum SheetRepositoryError: Error {
+public enum SheetStoreError: Error {
     case sheetNotFound
     case itemNotFound
 }
 
-public protocol ISheetRepository: class {
-    var change: Observable<Sheet?> { get }
+public protocol ISheetStore: class {
+    var update: Observable<Sheet?> { get }
     
     var onUpdateName: AnyObserver</* newName: */ String> { get }
     var onNewItem: AnyObserver<Void> { get }
     var onDeleteItem: AnyObserver</* id: */ String> { get }
 }
 
-public protocol ISheetRepositoryFactory {
-    func newSheetRepository(context: IContext, id: String) -> ISheetRepository
+public protocol ISheetStoreFactory {
+    func newSheetStore(context: IContext, id: String) -> ISheetStore
 }
 
-extension DefaultContext: ISheetRepositoryFactory {
-    public func newSheetRepository(context: IContext, id: String) -> ISheetRepository {
-        return SheetRepository(context: context, id: id)
+extension DefaultContext: ISheetStoreFactory {
+    public func newSheetStore(context: IContext, id: String) -> ISheetStore {
+        return SheetStore(context: context, id: id)
     }
 }
 
-public protocol ISheetRepositoryContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {
+public protocol ISheetStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {
 }
 
-extension DefaultContext: ISheetRepositoryContext {
+extension DefaultContext: ISheetStoreContext {
 }
 
-public class SheetRepository: ISheetRepository {
-    public let change: Observable<Sheet?>
+public class SheetStore: ISheetStore {
+    public let update: Observable<Sheet?>
 
     public let onUpdateName: AnyObserver</* newName: */ String>
     public let onNewItem: AnyObserver<Void>
     public let onDeleteItem: AnyObserver</* id: */ String>
     
-    private let _context: ISheetRepositoryContext
+    private let _context: ISheetStoreContext
     private let _sheetDatabase: ISheetDatabase
     private let _notificationToken: NotificationToken?
     private var _lastNewItemNumber = 0
-    private let _changeSubject: BehaviorSubject<Sheet?>
+    private let _updateSubject: BehaviorSubject<Sheet?>
     
     private let _onUpdateName = ActionObserver</* newName: */ String>()
     private let _onNewItem = ActionObserver<Void>()
     private let _onDeleteItem = ActionObserver</* id: */ String>()
     
     public init(context: IContext, id: String) {
-        _context = context as! ISheetRepositoryContext
+        _context = context as! ISheetStoreContext
         _sheetDatabase = _context.sheetDatabase
         
         do {
             let realm = try _sheetDatabase.createRealm()
             let results = realm.objects(Sheet.self).filter("id = %@", id)
             let changeSubject = BehaviorSubject(value: results.first)
-            _changeSubject = changeSubject
+            _updateSubject = changeSubject
 
             _notificationToken = results.addNotificationBlock { changes in
                 switch changes {
@@ -92,13 +92,13 @@ public class SheetRepository: ISheetRepository {
                 }
             }
         } catch let error {
-            _changeSubject = BehaviorSubject(value: nil)
+            _updateSubject = BehaviorSubject(value: nil)
             _notificationToken = nil
 
             _context.errorStore.onPostError.onNext(error)
         }
 
-        change = _changeSubject.asObservable()
+        update = _updateSubject.asObservable()
         
         onUpdateName = _onUpdateName.asObserver()
         onNewItem = _onNewItem.asObserver()
@@ -115,7 +115,7 @@ public class SheetRepository: ISheetRepository {
     
     private func updateName(_ newName: String) {
         do {
-            guard let sheet = try _changeSubject.value() else { throw SheetRepositoryError.sheetNotFound }
+            guard let sheet = try _updateSubject.value() else { throw SheetStoreError.sheetNotFound }
             
             let realm = try _sheetDatabase.createRealm()
             try realm.write {
@@ -128,7 +128,7 @@ public class SheetRepository: ISheetRepository {
     
     private func newItem() {
         do {
-            guard let sheet = try _changeSubject.value() else { throw SheetRepositoryError.sheetNotFound }
+            guard let sheet = try _updateSubject.value() else { throw SheetStoreError.sheetNotFound }
             
             let newItem = SheetItem()
             newItem.id = UUID().uuidString
@@ -153,8 +153,8 @@ public class SheetRepository: ISheetRepository {
     
     private func deleteItem(id: String) {
         do {
-            guard let sheet = try _changeSubject.value() else { throw SheetRepositoryError.sheetNotFound }
-            guard let index = sheet.items.index(where: { $0.id == id }) else { throw SheetRepositoryError.itemNotFound }
+            guard let sheet = try _updateSubject.value() else { throw SheetStoreError.sheetNotFound }
+            guard let index = sheet.items.index(where: { $0.id == id }) else { throw SheetStoreError.itemNotFound }
 
             let realm = try _sheetDatabase.createRealm()
             try realm.write {

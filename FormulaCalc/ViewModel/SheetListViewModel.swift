@@ -50,7 +50,7 @@ extension DefaultContext: ISheetListViewModelFactory {
     }
 }
 
-public protocol ISheetListViewModelContext: IContext, ISheetListRepositoryFactory {
+public protocol ISheetListViewModelContext: IContext, ISheetListStoreFactory {
 }
 
 extension DefaultContext: ISheetListViewModelContext {
@@ -76,7 +76,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     
     private var _context: ISheetListViewModelContext { get { return super.context as! ISheetListViewModelContext } }
     private let _disposeBag = DisposeBag()
-    private let _sheetListRepository: ISheetListRepository
+    private let _sheetListStore: ISheetListStore
     private let _onNew = ActionObserver<Void>()
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
     private let _onSelect = ActionObserver<ISheetListElementViewModel>()
@@ -84,10 +84,10 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     public override init(context: IContext) {
         let context = context as! ISheetListViewModelContext
 
-        _sheetListRepository = context.newSheetListRepository(context: context)
-        sheetList = _sheetListRepository.change
-            .map { change in
-                return change.sheetList
+        _sheetListStore = context.newSheetListStore(context: context)
+        sheetList = _sheetListStore.update
+            .map { update in
+                return update.sheetList
                     .map { sheet in
                         return SheetListElementViewModel(context: context, id: sheet.id, title: sheet.name)
                     }
@@ -125,7 +125,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
         }
         
         let viewModel = InputNameViewModel(context: context) { [weak self] name in
-            self?._sheetListRepository.onCreateNewSheet.onNext(name)
+            self?._sheetListStore.onCreateNewSheet.onNext(name)
         }
         sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
     }

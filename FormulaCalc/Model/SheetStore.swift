@@ -32,8 +32,16 @@ public enum SheetStoreError: Error {
     case itemNotFound
 }
 
+public struct SheetStoreItemListUpdate {
+    let itemList: AnyRandomAccessCollection<SheetItem>
+    let deletions: [Int]
+    let insertions: [Int]
+    let modifications: [Int]
+}
+
 public protocol ISheetStore: class {
     var update: Observable<Sheet?> { get }
+    var itemListUpdate: Observable<SheetStoreItemListUpdate> { get }
     
     var onUpdateName: AnyObserver</* newName: */ String> { get }
     var onNewItem: AnyObserver<Void> { get }
@@ -58,6 +66,7 @@ extension DefaultContext: ISheetStoreContext {
 
 public class SheetStore: ISheetStore {
     public let update: Observable<Sheet?>
+    public let itemListUpdate: Observable<SheetStoreItemListUpdate>
 
     public let onUpdateName: AnyObserver</* newName: */ String>
     public let onNewItem: AnyObserver<Void>
@@ -66,8 +75,10 @@ public class SheetStore: ISheetStore {
     private let _context: ISheetStoreContext
     private let _sheetDatabase: ISheetDatabase
     private let _notificationToken: NotificationToken?
+    private let _notificationTokenItemList: NotificationToken?
     private var _lastNewItemNumber = 0
     private let _updateSubject: BehaviorSubject<Sheet?>
+    private let _itemListUpdateSubject: BehaviorSubject<SheetStoreItemListUpdate>
     
     private let _onUpdateName = ActionObserver</* newName: */ String>()
     private let _onNewItem = ActionObserver<Void>()
@@ -79,26 +90,55 @@ public class SheetStore: ISheetStore {
         
         do {
             let realm = try _sheetDatabase.createRealm()
+            
             let results = realm.objects(Sheet.self).filter("id = %@", id)
-            let changeSubject = BehaviorSubject(value: results.first)
-            _updateSubject = changeSubject
+            let sheet = results.first
+            let updateSubject = BehaviorSubject(value: sheet)
+            _updateSubject = updateSubject
 
             _notificationToken = results.addNotificationBlock { changes in
                 switch changes {
                 case .update(let results, _, _, _):
-                    changeSubject.onNext(results.first)
+                    updateSubject.onNext(results.first)
                 default:
                     break
                 }
             }
+
+            if let sheet = sheet {
+                let itemListResults = sheet.items
+                let itemListUpdateSubject = BehaviorSubject(value: SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection(itemListResults),
+                                                                                            deletions: [],
+                                                                                            insertions: (0 ..< results.count).map { $0 },
+                                                                                            modifications: []))
+                _itemListUpdateSubject = itemListUpdateSubject
+                
+                _notificationTokenItemList = itemListResults.addNotificationBlock { changes in
+                    switch changes {
+                    case .update(let results, let deletions, let insertions, let modifications):
+                        itemListUpdateSubject.onNext(SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection(results),
+                                                                              deletions: deletions,
+                                                                              insertions: insertions,
+                                                                              modifications: modifications))
+                    default:
+                        break
+                    }
+                }
+            } else {
+                _itemListUpdateSubject = BehaviorSubject(value: SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+                _notificationTokenItemList = nil
+            }
         } catch let error {
             _updateSubject = BehaviorSubject(value: nil)
             _notificationToken = nil
+            _itemListUpdateSubject = BehaviorSubject(value: SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+            _notificationTokenItemList = nil
 
             _context.errorStore.onPostError.onNext(error)
         }
 
         update = _updateSubject.asObservable()
+        itemListUpdate = _itemListUpdateSubject.asObservable()
         
         onUpdateName = _onUpdateName.asObserver()
         onNewItem = _onNewItem.asObserver()
@@ -111,6 +151,7 @@ public class SheetStore: ISheetStore {
     
     deinit {
         self._notificationToken?.stop()
+        self._notificationTokenItemList?.stop()
     }
     
     private func updateName(_ newName: String) {

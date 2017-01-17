@@ -63,6 +63,7 @@
 		50CE21B71DFD85D30042E103 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B61DFD85D30042E103 /* RxSwift.framework */; };
 		50CE21BA1DFD85F30042E103 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B81DFD85F30042E103 /* Realm.framework */; };
 		50CE21BB1DFD85F30042E103 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B91DFD85F30042E103 /* RealmSwift.framework */; };
+		50DFDFE61E2ED604008E67D5 /* SheetItemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DFDFE51E2ED604008E67D5 /* SheetItemStore.swift */; };
 		50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */; };
 		50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */; };
 		50F6FEC61E02BF8E002E849C /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEC01E02BF8E002E849C /* Message.swift */; };
@@ -140,6 +141,7 @@
 		50CE21B61DFD85D30042E103 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		50CE21B81DFD85F30042E103 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50CE21B91DFD85F30042E103 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		50DFDFE51E2ED604008E67D5 /* SheetItemStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetItemStore.swift; sourceTree = "<group>"; };
 		50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionObserver.swift; sourceTree = "<group>"; };
 		50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionMessage.swift; sourceTree = "<group>"; };
 		50F6FEC01E02BF8E002E849C /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			children = (
 				50C45E531E2378A700F72DD0 /* ErrorStore.swift */,
 				50C45E321E209B6200F72DD0 /* SheetDatabase.swift */,
+				50DFDFE51E2ED604008E67D5 /* SheetItemStore.swift */,
 				50C45E381E20C14300F72DD0 /* SheetListStore.swift */,
 				50C45E461E212C1300F72DD0 /* SheetStore.swift */,
 				50C45E361E20B7D200F72DD0 /* Storage.swift */,
@@ -502,6 +505,7 @@
 				50C45E501E230E6600F72DD0 /* Resource+String.swift in Sources */,
 				50CE21941DFD83140042E103 /* MainViewController.swift in Sources */,
 				50C45E521E230FAB00F72DD0 /* ResourceUtils.swift in Sources */,
+				50DFDFE61E2ED604008E67D5 /* SheetItemStore.swift in Sources */,
 				50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */,
 				50F6FECE1E035A1C002E849C /* DismissingMessage.swift in Sources */,
 				505BFC271E0E0C4000AAC3D2 /* ItemViewController.swift in Sources */,

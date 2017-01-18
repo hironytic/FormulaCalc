@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 //
 
-import Foundation
+import UIKit
 
 public enum TransitionType {
     case present
@@ -34,4 +34,12 @@ public struct TransitionMessage: Message {
     public let viewModel: IViewModel
     public let type: TransitionType
     public let animated: Bool
+    public let modalTransitionStyle: UIModalTransitionStyle
+    
+    public init(viewModel: IViewModel, type: TransitionType, animated: Bool, modalTransitionStyle: UIModalTransitionStyle = .coverVertical) {
+        self.viewModel = viewModel
+        self.type = type
+        self.animated = animated
+        self.modalTransitionStyle = modalTransitionStyle
+    }
 }

@@ -42,12 +42,12 @@ public protocol IDesignSheetViewModel: IViewModel {
 }
 
 public protocol IDesignSheetViewModelFactory {
-    func newDesignSheetViewModel(context: IContext) -> IDesignSheetViewModel
+    func newDesignSheetViewModel(context: IContext, id: String) -> IDesignSheetViewModel
 }
 
 extension DefaultContext: IDesignSheetViewModelFactory {
-    public func newDesignSheetViewModel(context: IContext) -> IDesignSheetViewModel {
-        return DesignSheetViewModel(context: context)
+    public func newDesignSheetViewModel(context: IContext, id: String) -> IDesignSheetViewModel {
+        return DesignSheetViewModel(context: context, id: id)
     }
 }
 
@@ -77,7 +77,7 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
     private let _onSelectItem = ActionObserver<IDesignSheetElementViewModel>()
     private let _onDone = ActionObserver<Void>()
     
-    public override init(context: IContext) {
+    public init(context: IContext, id: String) {
         title = Observable.just("シート名")
         itemList = Observable.just([DesignSheetElementViewModel(context: context), DesignSheetElementViewModel(context: context)])
         onNewItem = _onNewItem.asObserver()

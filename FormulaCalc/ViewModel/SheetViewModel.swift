@@ -37,6 +37,8 @@ public protocol ISheetElementViewModel: IViewModel {
 public protocol ISheetViewModel: IViewModel {
     var title: Observable<String?> { get }
     var itemList: Observable<[ISheetElementViewModel]> { get }
+    
+    var onTapDesignButton: AnyObserver<Void> { get }
 }
 
 public protocol ISheetViewModelFactory {
@@ -49,7 +51,7 @@ extension DefaultContext: ISheetViewModelFactory {
     }
 }
 
-public protocol ISheetViewModelContext: IContext, ISheetStoreFactory {
+public protocol ISheetViewModelContext: IContext, ISheetStoreFactory, IDesignSheetViewModelFactory {
 }
 
 extension DefaultContext: ISheetViewModelContext {
@@ -112,14 +114,18 @@ public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
 public class SheetViewModel: ViewModel, ISheetViewModel {
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>
+    public let onTapDesignButton: AnyObserver<Void>
     
     private var _context: ISheetViewModelContext { get { return context as! ISheetViewModelContext } }
+    private let _id: String
     private let _sheetStore: ISheetStore
     private let _editingItemIdSubject = BehaviorSubject<String?>(value: nil)
+    private let _onTapDesignButton = ActionObserver<Void>()
     
     public init(context: IContext, id: String) {
         let context = context as! ISheetViewModelContext
         
+        _id = id
         _sheetStore = context.newSheetStore(context: context, id: id)
 
         title = _sheetStore.update
@@ -142,7 +148,16 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
             }
             .asDriver(onErrorJustReturn: [])
             .asObservable()
+
+        onTapDesignButton = _onTapDesignButton.asObserver()
         
         super.init(context: context)
+        
+        _onTapDesignButton.handler = { [weak self] in self?.handleOnTapDesignButton() }
+    }
+    
+    private func handleOnTapDesignButton() {
+        let designSheetViewModel = _context.newDesignSheetViewModel(context: context, id: _id)
+        sendMessage(TransitionMessage(viewModel: designSheetViewModel, type: .present, animated: true, modalTransitionStyle: .flipHorizontal))
     }
 }

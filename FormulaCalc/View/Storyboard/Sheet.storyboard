@@ -35,10 +35,10 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="zJR-Kp-LM8" customClass="SheetElementCell" customModule="FormulaCalc" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="56" width="375" height="85"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="85"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zJR-Kp-LM8" id="4Ge-Dr-AFr">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="84.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="wlo-UK-mUb">
@@ -81,6 +81,9 @@
                         <barButtonItem key="backBarButtonItem" title="back" id="e04-Ka-tOR"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="8yw-HY-Zmq"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="designButton" destination="8yw-HY-Zmq" id="SXg-66-Mf6"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OVp-E5-6eY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

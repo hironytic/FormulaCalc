@@ -35,6 +35,7 @@ public extension UIViewController {
                     let viewController = createViewController(for: message.viewModel)
                     switch message.type {
                     case .present:
+                        viewController.modalTransitionStyle = message.modalTransitionStyle
                         self.present(viewController, animated: message.animated, completion: nil)
                     case .push:
                         var vc = viewController

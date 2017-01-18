@@ -65,6 +65,8 @@ public class SheetViewController: UITableViewController {
     private var _disposeBag: DisposeBag?
     public var viewModel: ISheetViewModel?
 
+    @IBOutlet weak var designButton: UIBarButtonItem!
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -76,6 +78,10 @@ public class SheetViewController: UITableViewController {
         guard let viewModel = viewModel else { return }
         
         let disposeBag = DisposeBag()
+
+        viewModel.message
+            .bindTo(transitioner)
+            .addDisposableTo(disposeBag)
         
         viewModel.itemList
             .bindTo(tableView.rx.items(cellIdentifier: R.Id.cell, cellType: SheetElementCell.self)) { (row, element, cell) in
@@ -85,6 +91,10 @@ public class SheetViewController: UITableViewController {
         
         viewModel.title
             .bindTo(navigationItem.rx.title)
+            .addDisposableTo(disposeBag)
+        
+        designButton.rx.tap
+            .bindTo(viewModel.onTapDesignButton)
             .addDisposableTo(disposeBag)
         
         _disposeBag = disposeBag

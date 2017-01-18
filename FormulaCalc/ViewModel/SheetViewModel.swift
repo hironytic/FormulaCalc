@@ -44,25 +44,14 @@ public protocol ISheetViewModel: IViewModel {
 public protocol ISheetViewModelFactory {
     func newSheetViewModel(context: IContext, id: String) -> ISheetViewModel
 }
-
-extension DefaultContext: ISheetViewModelFactory {
+extension ISheetViewModelFactory {
     public func newSheetViewModel(context: IContext, id: String) -> ISheetViewModel {
         return SheetViewModel(context: context, id: id)
     }
 }
 
-public protocol ISheetViewModelContext: IContext, ISheetStoreFactory, IDesignSheetViewModelFactory {
-}
-
-extension DefaultContext: ISheetViewModelContext {
-}
-
-public protocol ISheetElementViewModelContext: IContext, ISheetItemStoreFactory {
-}
-
-extension DefaultContext: ISheetElementViewModelContext {
-}
-
+public protocol ISheetElementViewModelContext: IContext, ISheetItemStoreFactory {}
+extension DefaultContext: ISheetElementViewModelContext {}
 public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     public let id: String
     public let name: Observable<String?>
@@ -111,6 +100,8 @@ public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     }
 }
 
+public protocol ISheetViewModelContext: IContext, ISheetStoreFactory, IDesignSheetViewModelFactory {}
+extension DefaultContext: ISheetViewModelContext {}
 public class SheetViewModel: ViewModel, ISheetViewModel {
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>

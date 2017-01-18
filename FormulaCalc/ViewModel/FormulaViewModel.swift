@@ -35,8 +35,7 @@ public protocol IFormulaViewModel: IViewModel {
 public protocol IFormulaViewModelFactory {
     func newFormulaViewModel(context: IContext) -> IFormulaViewModel
 }
-
-extension DefaultContext: IFormulaViewModelFactory {
+extension IFormulaViewModelFactory {
     public func newFormulaViewModel(context: IContext) -> IFormulaViewModel {
         return FormulaViewModel(context: context)
     }

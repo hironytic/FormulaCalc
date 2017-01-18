@@ -30,7 +30,6 @@ import RxSwift
 class SheetListStoreTests: XCTestCase {
     class TestContext: ISheetListStoreContext {
         var sheetDatabase: ISheetDatabase
-        var errorStore: IErrorStore { get { return ErrorStore.sharedInstance } }
         init(sheetDatabase: ISheetDatabase) {
             self.sheetDatabase = sheetDatabase
         }

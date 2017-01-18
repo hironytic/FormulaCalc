@@ -47,18 +47,14 @@ public protocol ISheetItemStoreFactory {
     func newSheetItemStore(context: IContext, id: String) -> ISheetItemStore
 }
 
-extension DefaultContext: ISheetItemStoreFactory {
+extension ISheetItemStoreFactory {
     public func newSheetItemStore(context: IContext, id: String) -> ISheetItemStore {
         return SheetItemStore(context: context, id: id)
     }
 }
 
-public protocol ISheetItemStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {
-}
-
-extension DefaultContext: ISheetItemStoreContext {
-}
-
+public protocol ISheetItemStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {}
+extension DefaultContext: ISheetItemStoreContext {}
 public class SheetItemStore: ISheetItemStore {
     public let update: Observable<SheetItem?>
     

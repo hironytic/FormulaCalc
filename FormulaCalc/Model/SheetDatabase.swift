@@ -33,6 +33,17 @@ public protocol ISheetDatabase {
     func createRealm() throws -> Realm
 }
 
+public protocol ISheetDatabaseGetter {
+    var sheetDatabase: ISheetDatabase { get }
+}
+extension ISheetDatabaseGetter {
+    public var sheetDatabase: ISheetDatabase {
+        get {
+            return SheetDatabase.sharedInstance
+        }
+    }
+}
+
 public class SheetDatabase: ISheetDatabase {
     public static let sharedInstance = SheetDatabase()
     
@@ -86,17 +97,5 @@ public class SheetItem: Object {
     
     public override static func primaryKey() -> String? {
         return "id"
-    }
-}
-
-public protocol ISheetDatabaseGetter {
-    var sheetDatabase: ISheetDatabase { get }
-}
-
-extension DefaultContext: ISheetDatabaseGetter {
-    public var sheetDatabase: ISheetDatabase {
-        get {
-            return SheetDatabase.sharedInstance
-        }
     }
 }

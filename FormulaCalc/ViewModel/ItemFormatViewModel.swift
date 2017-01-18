@@ -51,8 +51,7 @@ public protocol IItemFormatViewModel: IViewModel {
 public protocol IItemFormatViewModelFactory {
     func newItemFormatViewModel(context: IContext) -> IItemFormatViewModel
 }
-
-extension DefaultContext: IItemFormatViewModelFactory {
+extension IItemFormatViewModelFactory {
     public func newItemFormatViewModel(context: IContext) -> IItemFormatViewModel {
         return ItemFormatViewModel(context: context)
     }

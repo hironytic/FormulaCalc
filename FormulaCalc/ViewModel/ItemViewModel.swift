@@ -44,8 +44,7 @@ public protocol IItemViewModel: IViewModel {
 public protocol IItemViewModelFactory {
     func newItemViewModel(context: IContext) -> IItemViewModel
 }
-
-extension DefaultContext: IItemViewModelFactory {
+extension IItemViewModelFactory {
     public func newItemViewModel(context: IContext) -> IItemViewModel {
         return ItemViewModel(context: context)
     }

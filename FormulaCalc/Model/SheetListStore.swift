@@ -45,18 +45,14 @@ public protocol ISheetListStoreFactory {
     func newSheetListStore(context: IContext) -> ISheetListStore
 }
 
-extension DefaultContext: ISheetListStoreFactory {
+extension ISheetListStoreFactory {
     public func newSheetListStore(context: IContext) -> ISheetListStore {
         return SheetListStore(context: context)
     }
 }
 
-public protocol ISheetListStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {
-}
-
-extension DefaultContext: ISheetListStoreContext {
-}
-
+public protocol ISheetListStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {}
+extension DefaultContext: ISheetListStoreContext {}
 public class SheetListStore: ISheetListStore {
     public let update: Observable<SheetListStoreUpdate>
     

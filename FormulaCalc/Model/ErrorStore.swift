@@ -36,7 +36,7 @@ public protocol IErrorStoreGetter {
     var errorStore: IErrorStore { get }
 }
 
-extension DefaultContext: IErrorStoreGetter {
+extension IErrorStoreGetter {
     public var errorStore: IErrorStore {
         get {
             return ErrorStore.sharedInstance

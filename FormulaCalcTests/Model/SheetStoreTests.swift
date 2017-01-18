@@ -31,7 +31,6 @@ import RealmSwift
 class SheetStoreTests: XCTestCase {
     class TestContext: ISheetStoreContext {
         let sheetDatabase: ISheetDatabase
-        var errorStore: IErrorStore { get { return ErrorStore.sharedInstance } }
         let testRealm: Realm? // to keep test data in In-Memory database
         init(sheetDatabase: ISheetDatabase) throws {
             self.sheetDatabase = sheetDatabase

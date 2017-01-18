@@ -44,20 +44,13 @@ public protocol ISheetListViewModel: IViewModel {
 public protocol ISheetListViewModelFactory {
     func newSheetListViewModel(context: IContext) -> ISheetListViewModel
 }
-
-extension DefaultContext: ISheetListViewModelFactory {
+extension ISheetListViewModelFactory {
     public func newSheetListViewModel(context: IContext) -> ISheetListViewModel {
         return SheetListViewModel(context: context)
     }
 }
 
-public protocol ISheetListViewModelContext: IContext, ISheetListStoreFactory, ISheetViewModelFactory {
-}
-
-extension DefaultContext: ISheetListViewModelContext {
-}
-
-public class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
+class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
     public let id: String
     public let title: Observable<String?>
     
@@ -69,6 +62,8 @@ public class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
     }
 }
 
+public protocol ISheetListViewModelContext: IContext, ISheetListStoreFactory, ISheetViewModelFactory {}
+extension DefaultContext: ISheetListViewModelContext {}
 public class SheetListViewModel: ViewModel, ISheetListViewModel {
     public let sheetList: Observable<[ISheetListElementViewModel]>
     public private(set) var onNew: AnyObserver<Void>

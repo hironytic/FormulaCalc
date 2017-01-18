@@ -44,14 +44,13 @@ public protocol IDesignSheetViewModel: IViewModel {
 public protocol IDesignSheetViewModelFactory {
     func newDesignSheetViewModel(context: IContext, id: String) -> IDesignSheetViewModel
 }
-
-extension DefaultContext: IDesignSheetViewModelFactory {
+extension IDesignSheetViewModelFactory {
     public func newDesignSheetViewModel(context: IContext, id: String) -> IDesignSheetViewModel {
         return DesignSheetViewModel(context: context, id: id)
     }
 }
 
-public class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
+class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
     public let name: Observable<String?>
     public let type: Observable<String?>
     public let invisibleMarkHidden: Observable<Bool>

@@ -40,14 +40,13 @@ public protocol IItemTypeViewModel: IViewModel {
 public protocol IItemTypeViewModelFactory {
     func newItemTypeViewModel(context: IContext) -> IItemTypeViewModel
 }
-
-extension DefaultContext: IItemTypeViewModelFactory {
+extension IItemTypeViewModelFactory {
     public func newItemTypeViewModel(context: IContext) -> IItemTypeViewModel {
         return ItemTypeViewModel(context: context)
     }
 }
 
-public class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
+class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
     public let name: Observable<String?>
     public let accessoryType: Observable<UITableViewCellAccessoryType>
     

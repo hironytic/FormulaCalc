@@ -55,17 +55,50 @@ public protocol ISheetViewModelContext: IContext, ISheetStoreFactory {
 extension DefaultContext: ISheetViewModelContext {
 }
 
+public protocol ISheetElementViewModelContext: IContext, ISheetItemStoreFactory {
+}
+
+extension DefaultContext: ISheetElementViewModelContext {
+}
+
 public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     public let id: String
     public let name: Observable<String?>
     public let value: Observable<String?>
 
+    private var _context: ISheetElementViewModelContext { get { return context as! ISheetElementViewModelContext } }
+    private let _sheetItemStore: ISheetItemStore
+    
     public let onTapValue: AnyObserver<Void>
     
     public init(context: IContext, id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) {
+        let context = context as! ISheetElementViewModelContext
+        
         self.id = id
-        name = Observable.just("項目名")
-        value = Observable.just("12345.6")
+        _sheetItemStore = context.newSheetItemStore(context: context, id: id)
+        
+        name = _sheetItemStore.update
+            .map { sheetItem in
+                return sheetItem?.name ?? ""
+            }
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+        
+        value = _sheetItemStore.update
+            .map { sheetItem in
+                guard let sheetItem = sheetItem else { return "" }
+                
+                switch sheetItem.type {
+                case .numeric:
+                    return "\(sheetItem.numberValue)"   // FIXME: format
+                case .string:
+                    return sheetItem.stringValue
+                case .formula:
+                    return "数式の結果"  // FIXME: calculate
+                }
+            }
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
         
         onTapValue = onChangeEditingItemId
             .mapObserver { _ in

@@ -92,6 +92,7 @@ public class SheetItem: Object {
     public dynamic var formula: String = ""
     public dynamic var thousandSeparator: Bool = false
     public dynamic var fractionDigits: Int = -1
+    public dynamic var visible: Bool = true
     
     public override static func primaryKey() -> String? {
         return "id"

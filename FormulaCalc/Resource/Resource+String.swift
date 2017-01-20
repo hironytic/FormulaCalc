@@ -34,5 +34,8 @@ public extension Resource {
         public static let newSheetTitle = "FormulaCalc.newSheetTitle"
         public static let newSheetPlaceholder = "FormulaCalc.newSheetPlaceholder"
         public static let newMessageDone = "FormulaCalc.newSheetDone"
+        public static let sheetItemTypeNumeric = "FormulaCalc.sheetItemTypeNumeric"
+        public static let sheetItemTypeString = "FormulaCalc.sheetItemTypeString"
+        public static let sheetItemTypeFormula = "FormulaCalc.sheetItemTypeFormula"
     }
 }

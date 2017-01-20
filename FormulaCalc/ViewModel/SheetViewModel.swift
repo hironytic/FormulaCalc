@@ -33,14 +33,6 @@ public protocol ISheetElementViewModel: IViewModel {
     
     var onTapValue: AnyObserver<Void> { get }
 }
-public protocol ISheetElementViewModelLocator {
-    func resolveSheetElementViewModel(id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) -> ISheetElementViewModel
-}
-extension DefaultLocator: ISheetElementViewModelLocator {
-    public func resolveSheetElementViewModel(id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) -> ISheetElementViewModel {
-        return SheetElementViewModel(locator: self, id: id, editingItemId: editingItemId, onChangeEditingItemId: onChangeEditingItemId)
-    }
-}
 
 public protocol ISheetViewModel: IViewModel {
     var title: Observable<String?> { get }
@@ -58,7 +50,7 @@ extension DefaultLocator: ISheetViewModelLocator {
     }
 }
 
-public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
+class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     public typealias Locator = ISheetItemStoreLocator
     
     public let id: String
@@ -72,7 +64,6 @@ public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
     
     public init(locator: Locator, id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) {
         _locator = locator
-        
         self.id = id
         _sheetItemStore = _locator.resolveSheetItemStore(id: id)
         
@@ -109,7 +100,7 @@ public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
 }
 
 public class SheetViewModel: ViewModel, ISheetViewModel {
-    public typealias Locator = ISheetElementViewModelLocator & ISheetStoreLocator & IDesignSheetViewModelLocator
+    public typealias Locator =  ISheetStoreLocator & ISheetItemStoreLocator & IDesignSheetViewModelLocator
     
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>
@@ -137,11 +128,14 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
         let onChangeEditingItemId: AnyObserver<String?> = _editingItemIdSubject.asObserver()
         itemList = _sheetStore.itemListUpdate
             .map { update in
-                return update.itemList.map { item in
-                    locator.resolveSheetElementViewModel(id: item.id,
-                                                         editingItemId: editingItemId,
-                                                         onChangeEditingItemId: onChangeEditingItemId)
-                }
+                return update.itemList
+                    .filter { $0.visible }
+                    .map { item in
+                        SheetElementViewModel(locator: locator,
+                                              id: item.id,
+                                              editingItemId: editingItemId,
+                                              onChangeEditingItemId: onChangeEditingItemId)
+                    }
             }
             .asDriver(onErrorJustReturn: [])
             .asObservable()

@@ -26,7 +26,10 @@
 import Foundation
 import RxSwift
 
+private typealias R = Resource
+
 public protocol IDesignSheetElementViewModel: IViewModel {
+    var id: String { get }
     var name: Observable<String?> { get }
     var type: Observable<String?> { get }
     var invisibleMarkHidden: Observable<Bool> { get }
@@ -46,39 +49,99 @@ public protocol IDesignSheetViewModelLocator {
 }
 extension DefaultLocator: IDesignSheetViewModelLocator {
     public func resolveDesignSheetViewModel(id: String) -> IDesignSheetViewModel {
-        return DesignSheetViewModel(id: id)
+        return DesignSheetViewModel(locator: self, id: id)
     }
 }
 
 class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
+    public typealias Locator = ISheetItemStoreLocator
+
+    public let id: String
     public let name: Observable<String?>
     public let type: Observable<String?>
     public let invisibleMarkHidden: Observable<Bool>
     
-    public override init() {
-        name = Observable.just("項目名")
-        type = Observable.just("数値入力")
-        invisibleMarkHidden = Observable.just(false)
+    private let _locator: Locator
+    private let _sheetItemStore: ISheetItemStore
+    
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        self.id = id
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
+
+        name = _sheetItemStore.update
+            .map { sheetItem in
+                return sheetItem?.name ?? ""
+            }
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+
+        type = _sheetItemStore.update
+            .map { sheetItem in
+                guard let sheetItem = sheetItem else { return "" }
+                
+                switch sheetItem.type {
+                case .numeric:
+                    return ResourceUtils.getString(R.String.sheetItemTypeNumeric)
+                case .string:
+                    return ResourceUtils.getString(R.String.sheetItemTypeString)
+                case .formula:
+                    return ResourceUtils.getString(R.String.sheetItemTypeFormula)
+                    
+                }
+            }
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+        
+        invisibleMarkHidden = _sheetItemStore.update
+            .map { sheetItem in
+                return sheetItem?.visible ?? true
+            }
+            .asDriver(onErrorJustReturn: true)
+            .asObservable()
         
         super.init()
     }
 }
 
 public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
+    public typealias Locator = ISheetStoreLocator & ISheetItemStoreLocator
+    
     public let title: Observable<String?>
     public let itemList: Observable<[IDesignSheetElementViewModel]>
     
     public let onNewItem: AnyObserver<Void>
     public let onSelectItem: AnyObserver<IDesignSheetElementViewModel>
     public let onDone: AnyObserver<Void>
-    
+
+    private let _locator: Locator
+    private let _id: String
+    private let _sheetStore: ISheetStore
     private let _onNewItem = ActionObserver<Void>()
     private let _onSelectItem = ActionObserver<IDesignSheetElementViewModel>()
     private let _onDone = ActionObserver<Void>()
     
-    public init(id: String) {
-        title = Observable.just("シート名")
-        itemList = Observable.just([DesignSheetElementViewModel(), DesignSheetElementViewModel()])
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _id = id
+        _sheetStore = _locator.resolveSheetStore(id: id)
+        
+        title = _sheetStore.update
+            .map { sheet in
+                return sheet?.name ?? ""
+            }
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+        
+        itemList = _sheetStore.itemListUpdate
+            .map { update in
+                return update.itemList.map { item in
+                    return DesignSheetElementViewModel(locator: locator, id: item.id)
+                }
+            }
+            .asDriver(onErrorJustReturn: [])
+            .asObservable()
+        
         onNewItem = _onNewItem.asObserver()
         onSelectItem = _onSelectItem.asObserver()
         onDone = _onDone.asObserver()

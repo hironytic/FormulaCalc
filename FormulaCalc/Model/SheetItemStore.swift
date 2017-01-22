@@ -43,19 +43,19 @@ public protocol ISheetItemStore: class {
     var onUpdateFractionDigits: AnyObserver</* fractionDigits: */ Int> { get }
 }
 
-public protocol ISheetItemStoreFactory {
-    func newSheetItemStore(context: IContext, id: String) -> ISheetItemStore
+public protocol ISheetItemStoreLocator {
+    func resolveSheetItemStore(id: String) -> ISheetItemStore
 }
 
-extension ISheetItemStoreFactory {
-    public func newSheetItemStore(context: IContext, id: String) -> ISheetItemStore {
-        return SheetItemStore(context: context, id: id)
+extension DefaultLocator: ISheetItemStoreLocator {
+    public func resolveSheetItemStore(id: String) -> ISheetItemStore {
+        return SheetItemStore(locator: self, id: id)
     }
 }
 
-public protocol ISheetItemStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {}
-extension DefaultContext: ISheetItemStoreContext {}
 public class SheetItemStore: ISheetItemStore {
+    public typealias Locator = IErrorStoreLocator & ISheetDatabaseLocator
+    
     public let update: Observable<SheetItem?>
     
     public let onUpdateName: AnyObserver</* name: */ String>
@@ -66,7 +66,7 @@ public class SheetItemStore: ISheetItemStore {
     public let onUpdateThousandSeparator: AnyObserver</* thousandSeparator: */ Bool>
     public let onUpdateFractionDigits: AnyObserver</* fractionDigits: */ Int>
     
-    private let _context: ISheetItemStoreContext
+    private let _locator: Locator
     private let _sheetDatabase: ISheetDatabase
     private let _notificationToken: NotificationToken?
     private var _lastNewItemNumber = 0
@@ -80,9 +80,9 @@ public class SheetItemStore: ISheetItemStore {
     private let _onUpdateThousandSeparator = ActionObserver</* thousandSeparator: */ Bool>()
     private let _onUpdateFractionDigits = ActionObserver</* fractionDigits: */ Int>()
     
-    public init(context: IContext, id: String) {
-        _context = context as! ISheetItemStoreContext
-        _sheetDatabase = _context.sheetDatabase
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _sheetDatabase = _locator.resolveSheetDatabase()
         
         do {
             let realm = try _sheetDatabase.createRealm()
@@ -104,7 +104,7 @@ public class SheetItemStore: ISheetItemStore {
             _updateSubject = BehaviorSubject(value: nil)
             _notificationToken = nil
             
-            _context.errorStore.onPostError.onNext(error)
+            _locator.resolveErrorStore().onPostError.onNext(error)
         }
         
         update = _updateSubject.asObservable()
@@ -139,7 +139,7 @@ public class SheetItemStore: ISheetItemStore {
                 updater(sheetItem)
             }
         } catch let error {
-            _context.errorStore.onPostError.onNext(error)
+            _locator.resolveErrorStore().onPostError.onNext(error)
         }
     }
 }

@@ -32,15 +32,12 @@ public protocol IErrorStore {
     var onPostError: AnyObserver<Error> { get }
 }
 
-public protocol IErrorStoreGetter {
-    var errorStore: IErrorStore { get }
+public protocol IErrorStoreLocator {
+    func resolveErrorStore() -> IErrorStore
 }
-
-extension IErrorStoreGetter {
-    public var errorStore: IErrorStore {
-        get {
-            return ErrorStore.sharedInstance
-        }
+extension DefaultLocator: IErrorStoreLocator {
+    public func resolveErrorStore() -> IErrorStore {
+        return ErrorStore.sharedInstance
     }
 }
 

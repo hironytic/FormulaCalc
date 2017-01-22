@@ -29,24 +29,33 @@ import RealmSwift
 @testable import FormulaCalc
 
 class SheetStoreTests: XCTestCase {
-    class TestContext: ISheetStoreContext {
-        let sheetDatabase: ISheetDatabase
+    class TestLocator: SheetStore.Locator {
+        var sheetDatabase: ISheetDatabase
         let testRealm: Realm? // to keep test data in In-Memory database
         init(sheetDatabase: ISheetDatabase) throws {
             self.sheetDatabase = sheetDatabase
             testRealm = try sheetDatabase.createRealm()
         }
+        
+        func resolveErrorStore() -> IErrorStore {
+            return ErrorStore.sharedInstance
+        }
+        
+        func resolveSheetDatabase() -> ISheetDatabase {
+            return sheetDatabase
+        }
+        
     }
     
     var disposeBag: DisposeBag!
-    var testContext: TestContext!
+    var testLocator: TestLocator!
     
     override func setUp() {
         super.setUp()
         
         disposeBag = DisposeBag()
         let testSheetDatabase = TestSheetDatabase(inMemoryIdentifier: "SheetStoreTests")
-        testContext = try! TestContext(sheetDatabase: testSheetDatabase)
+        testLocator = try! TestLocator(sheetDatabase: testSheetDatabase)
         
         // test data
         let testData = [
@@ -66,14 +75,14 @@ class SheetStoreTests: XCTestCase {
     }
     
     override func tearDown() {
-        testContext = nil
+        testLocator = nil
         disposeBag = nil
         
         super.tearDown()
     }
     
     func testExistingSheet() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-2")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-2")
         
         let updateObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -87,7 +96,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testNonexistentSheet() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-x")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-x")
         
         let updateObserver = FulfillObserver(expectation(description: "It's not found that a sheet whose id is 'sheet-x'")) { (sheet: Sheet?) in
             return sheet == nil
@@ -100,7 +109,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testUpdateName() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-2")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-2")
         
         let updateObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -121,7 +130,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testUpdateNonexistentSheetName() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-x")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-x")
         
         let errorObserver = FulfillObserver(expectation(description: "Updating nonexistent sheet name causes an error"), nextChecker: { (error: Error) in
             if case SheetStoreError.sheetNotFound = error {
@@ -130,7 +139,7 @@ class SheetStoreTests: XCTestCase {
                 return false
             }
         })
-        testContext.errorStore.error
+        testLocator.resolveErrorStore().error
             .bindTo(errorObserver)
             .addDisposableTo(disposeBag)
         
@@ -139,7 +148,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testNewItem() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-2")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-2")
         
         let updateObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-2'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -171,7 +180,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testNewItemOnNonexistentSheet() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-x")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-x")
         
         let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
             if case SheetStoreError.sheetNotFound = error {
@@ -180,7 +189,7 @@ class SheetStoreTests: XCTestCase {
                 return false
             }
         })
-        testContext.errorStore.error
+        testLocator.resolveErrorStore().error
             .bindTo(errorObserver)
             .addDisposableTo(disposeBag)
         
@@ -189,7 +198,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testDeleteItem() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-4")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-4")
         
         let updateObserver = FulfillObserver(expectation(description: "There is a sheet whose id is 'sheet-4'")) { (sheet: Sheet?) in
             guard let sheet = sheet else { return false }
@@ -212,7 +221,7 @@ class SheetStoreTests: XCTestCase {
     }
     
     func testDeleteNonexistentItem() {
-        let sheetStore = SheetStore(context: testContext, id: "sheet-4")
+        let sheetStore = SheetStore(locator: testLocator, id: "sheet-4")
         
         let errorObserver = FulfillObserver(expectation(description: "Creating new item on nonexistent sheet causes an error"), nextChecker: { (error: Error) in
             if case SheetStoreError.itemNotFound = error {
@@ -221,7 +230,7 @@ class SheetStoreTests: XCTestCase {
                 return false
             }
         })
-        testContext.errorStore.error
+        testLocator.resolveErrorStore().error
             .bindTo(errorObserver)
             .addDisposableTo(disposeBag)
         

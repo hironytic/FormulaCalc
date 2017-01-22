@@ -31,22 +31,26 @@ public protocol IMainViewModel: IViewModel {
 }
 
 public class MainViewModel: ViewModel, IMainViewModel {
+    public typealias Locator = ISheetListViewModelLocator
+    
     public let onViewDidAppear: AnyObserver<[Any]>
     
+    private let _locator: Locator
     private var _startupDidEnd: Bool = false
     private let _onViewDidAppear = ActionObserver<[Any]>()
     
-    public override init(context: IContext) {
+    public init(locator: Locator) {
+        _locator = locator
         onViewDidAppear = _onViewDidAppear.asObserver()
         
-        super.init(context: context)
+        super.init()
         
         _onViewDidAppear.handler = { [weak self] _ in self?.handleViewDidAppear() }
     }
     
     private func handleViewDidAppear() {
         if !_startupDidEnd {
-            let sheetListViewModel = SheetListViewModel(context: context)
+            let sheetListViewModel = _locator.resolveSheetListViewModel()
             sendMessage(TransitionMessage(viewModel: sheetListViewModel, type: .present, animated: false))
             _startupDidEnd = true
         }

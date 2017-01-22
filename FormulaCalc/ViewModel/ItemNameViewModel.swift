@@ -32,12 +32,12 @@ public protocol IItemNameViewModel: IViewModel {
     var onNameChanged: AnyObserver<String?> { get }
 }
 
-public protocol IItemNameViewModelFactory {
-    func newItemNameViewModel(context: IContext) -> IItemNameViewModel
+public protocol IItemNameViewModelLocator {
+    func resolveItemNameViewModel() -> IItemNameViewModel
 }
-extension IItemNameViewModelFactory {
-    public func newItemNameViewModel(context: IContext) -> IItemNameViewModel {
-        return ItemNameViewModel(context: context)
+extension DefaultLocator: IItemNameViewModelLocator {
+    public func resolveItemNameViewModel() -> IItemNameViewModel {
+        return ItemNameViewModel()
     }
 }
 
@@ -47,12 +47,12 @@ public class ItemNameViewModel: ViewModel, IItemNameViewModel {
     
     private let _onNameChanged = ActionObserver<String?>()
     
-    public override init(context: IContext) {
+    public override init() {
         self.name = Observable
             .just("なまえ")
         
         self.onNameChanged = _onNameChanged.asObserver()
         
-        super.init(context: context)
+        super.init()
     }
 }

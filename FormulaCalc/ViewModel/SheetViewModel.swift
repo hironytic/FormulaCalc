@@ -33,6 +33,14 @@ public protocol ISheetElementViewModel: IViewModel {
     
     var onTapValue: AnyObserver<Void> { get }
 }
+public protocol ISheetElementViewModelLocator {
+    func resolveSheetElementViewModel(id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) -> ISheetElementViewModel
+}
+extension DefaultLocator: ISheetElementViewModelLocator {
+    public func resolveSheetElementViewModel(id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) -> ISheetElementViewModel {
+        return SheetElementViewModel(locator: self, id: id, editingItemId: editingItemId, onChangeEditingItemId: onChangeEditingItemId)
+    }
+}
 
 public protocol ISheetViewModel: IViewModel {
     var title: Observable<String?> { get }
@@ -41,32 +49,32 @@ public protocol ISheetViewModel: IViewModel {
     var onTapDesignButton: AnyObserver<Void> { get }
 }
 
-public protocol ISheetViewModelFactory {
-    func newSheetViewModel(context: IContext, id: String) -> ISheetViewModel
+public protocol ISheetViewModelLocator {
+    func resolveSheetViewModel(id: String) -> ISheetViewModel
 }
-extension ISheetViewModelFactory {
-    public func newSheetViewModel(context: IContext, id: String) -> ISheetViewModel {
-        return SheetViewModel(context: context, id: id)
+extension DefaultLocator: ISheetViewModelLocator {
+    public func resolveSheetViewModel(id: String) -> ISheetViewModel {
+        return SheetViewModel(locator: self, id: id)
     }
 }
 
-public protocol ISheetElementViewModelContext: IContext, ISheetItemStoreFactory {}
-extension DefaultContext: ISheetElementViewModelContext {}
 public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
+    public typealias Locator = ISheetItemStoreLocator
+    
     public let id: String
     public let name: Observable<String?>
     public let value: Observable<String?>
 
-    private var _context: ISheetElementViewModelContext { get { return context as! ISheetElementViewModelContext } }
+    private let _locator: Locator
     private let _sheetItemStore: ISheetItemStore
     
     public let onTapValue: AnyObserver<Void>
     
-    public init(context: IContext, id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) {
-        let context = context as! ISheetElementViewModelContext
+    public init(locator: Locator, id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) {
+        _locator = locator
         
         self.id = id
-        _sheetItemStore = context.newSheetItemStore(context: context, id: id)
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
         
         name = _sheetItemStore.update
             .map { sheetItem in
@@ -96,28 +104,27 @@ public class SheetElementViewModel: ViewModel, ISheetElementViewModel {
                 return id
             }
         
-        super.init(context: context)
+        super.init()
     }
 }
 
-public protocol ISheetViewModelContext: IContext, ISheetStoreFactory, IDesignSheetViewModelFactory {}
-extension DefaultContext: ISheetViewModelContext {}
 public class SheetViewModel: ViewModel, ISheetViewModel {
+    public typealias Locator = ISheetElementViewModelLocator & ISheetStoreLocator & IDesignSheetViewModelLocator
+    
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>
     public let onTapDesignButton: AnyObserver<Void>
     
-    private var _context: ISheetViewModelContext { get { return context as! ISheetViewModelContext } }
+    private let _locator: Locator
     private let _id: String
     private let _sheetStore: ISheetStore
     private let _editingItemIdSubject = BehaviorSubject<String?>(value: nil)
     private let _onTapDesignButton = ActionObserver<Void>()
     
-    public init(context: IContext, id: String) {
-        let context = context as! ISheetViewModelContext
-        
+    public init(locator: Locator, id: String) {
+        _locator = locator
         _id = id
-        _sheetStore = context.newSheetStore(context: context, id: id)
+        _sheetStore = locator.resolveSheetStore(id: id)
 
         title = _sheetStore.update
             .map { sheet in
@@ -131,10 +138,9 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
         itemList = _sheetStore.itemListUpdate
             .map { update in
                 return update.itemList.map { item in
-                    return SheetElementViewModel(context: context,
-                                                 id: item.id,
-                                                 editingItemId: editingItemId,
-                                                 onChangeEditingItemId: onChangeEditingItemId)
+                    locator.resolveSheetElementViewModel(id: item.id,
+                                                         editingItemId: editingItemId,
+                                                         onChangeEditingItemId: onChangeEditingItemId)
                 }
             }
             .asDriver(onErrorJustReturn: [])
@@ -142,13 +148,13 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
 
         onTapDesignButton = _onTapDesignButton.asObserver()
         
-        super.init(context: context)
+        super.init()
         
         _onTapDesignButton.handler = { [weak self] in self?.handleOnTapDesignButton() }
     }
     
     private func handleOnTapDesignButton() {
-        let designSheetViewModel = _context.newDesignSheetViewModel(context: context, id: _id)
+        let designSheetViewModel = _locator.resolveDesignSheetViewModel(id: _id)
         sendMessage(TransitionMessage(viewModel: designSheetViewModel, type: .present, animated: true, modalTransitionStyle: .flipHorizontal))
     }
 }

@@ -28,15 +28,23 @@ import RxSwift
 @testable import FormulaCalc
 
 class SheetListStoreTests: XCTestCase {
-    class TestContext: ISheetListStoreContext {
+    class TestLocator: SheetListStore.Locator {
         var sheetDatabase: ISheetDatabase
         init(sheetDatabase: ISheetDatabase) {
             self.sheetDatabase = sheetDatabase
         }
-    }
 
+        func resolveErrorStore() -> IErrorStore {
+            return ErrorStore.sharedInstance
+        }
+
+        func resolveSheetDatabase() -> ISheetDatabase {
+            return sheetDatabase
+        }
+    }
+    
     var disposeBag: DisposeBag!
-    var testContext: TestContext!
+    var testLocator: TestLocator!
     var sheetListStore: SheetListStore!
     
     override func setUp() {
@@ -44,13 +52,13 @@ class SheetListStoreTests: XCTestCase {
 
         disposeBag = DisposeBag()
         let testSheetDatabase = TestSheetDatabase(inMemoryIdentifier: "SheetListStoreTests")
-        testContext = TestContext(sheetDatabase: testSheetDatabase)
-        sheetListStore = SheetListStore(context: testContext)
+        testLocator = TestLocator(sheetDatabase: testSheetDatabase)
+        sheetListStore = SheetListStore(locator: testLocator)
     }
     
     override func tearDown() {
         sheetListStore = nil
-        testContext = nil
+        testLocator = nil
         disposeBag = nil
         
         super.tearDown()

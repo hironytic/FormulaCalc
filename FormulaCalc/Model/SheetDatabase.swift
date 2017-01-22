@@ -33,14 +33,12 @@ public protocol ISheetDatabase {
     func createRealm() throws -> Realm
 }
 
-public protocol ISheetDatabaseGetter {
-    var sheetDatabase: ISheetDatabase { get }
+public protocol ISheetDatabaseLocator {
+    func resolveSheetDatabase() -> ISheetDatabase
 }
-extension ISheetDatabaseGetter {
-    public var sheetDatabase: ISheetDatabase {
-        get {
-            return SheetDatabase.sharedInstance
-        }
+extension DefaultLocator: ISheetDatabaseLocator {
+    public func resolveSheetDatabase() -> ISheetDatabase {
+        return SheetDatabase.sharedInstance
     }
 }
 

@@ -48,19 +48,19 @@ public protocol ISheetStore: class {
     var onDeleteItem: AnyObserver</* id: */ String> { get }
 }
 
-public protocol ISheetStoreFactory {
-    func newSheetStore(context: IContext, id: String) -> ISheetStore
+public protocol ISheetStoreLocator {
+    func resolveSheetStore(id: String) -> ISheetStore
 }
 
-extension ISheetStoreFactory {
-    public func newSheetStore(context: IContext, id: String) -> ISheetStore {
-        return SheetStore(context: context, id: id)
+extension DefaultLocator: ISheetStoreLocator {
+    public func resolveSheetStore(id: String) -> ISheetStore {
+        return SheetStore(locator: self, id: id)
     }
 }
 
-public protocol ISheetStoreContext: IContext, IErrorStoreGetter, ISheetDatabaseGetter {}
-extension DefaultContext: ISheetStoreContext {}
 public class SheetStore: ISheetStore {
+    public typealias Locator = IErrorStoreLocator & ISheetDatabaseLocator
+    
     public let update: Observable<Sheet?>
     public let itemListUpdate: Observable<SheetStoreItemListUpdate>
 
@@ -68,7 +68,7 @@ public class SheetStore: ISheetStore {
     public let onNewItem: AnyObserver<Void>
     public let onDeleteItem: AnyObserver</* id: */ String>
     
-    private let _context: ISheetStoreContext
+    private let _locator: Locator
     private let _sheetDatabase: ISheetDatabase
     private let _notificationToken: NotificationToken?
     private let _notificationTokenItemList: NotificationToken?
@@ -80,9 +80,9 @@ public class SheetStore: ISheetStore {
     private let _onNewItem = ActionObserver<Void>()
     private let _onDeleteItem = ActionObserver</* id: */ String>()
     
-    public init(context: IContext, id: String) {
-        _context = context as! ISheetStoreContext
-        _sheetDatabase = _context.sheetDatabase
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _sheetDatabase = _locator.resolveSheetDatabase()
         
         do {
             let realm = try _sheetDatabase.createRealm()
@@ -130,7 +130,7 @@ public class SheetStore: ISheetStore {
             _itemListUpdateSubject = BehaviorSubject(value: SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
             _notificationTokenItemList = nil
 
-            _context.errorStore.onPostError.onNext(error)
+            _locator.resolveErrorStore().onPostError.onNext(error)
         }
 
         update = _updateSubject.asObservable()
@@ -159,7 +159,7 @@ public class SheetStore: ISheetStore {
                 sheet.name = newName
             }
         } catch let error {
-            _context.errorStore.onPostError.onNext(error)
+            _locator.resolveErrorStore().onPostError.onNext(error)
         }
     }
     
@@ -184,7 +184,7 @@ public class SheetStore: ISheetStore {
                 sheet.items.append(newItem)
             }
         } catch let error {
-            _context.errorStore.onPostError.onNext(error)
+            _locator.resolveErrorStore().onPostError.onNext(error)
         }
     }
     
@@ -198,7 +198,7 @@ public class SheetStore: ISheetStore {
                 sheet.items.remove(objectAtIndex: index)
             }
         } catch let error {
-            _context.errorStore.onPostError.onNext(error)
+            _locator.resolveErrorStore().onPostError.onNext(error)
         }
     }
 }

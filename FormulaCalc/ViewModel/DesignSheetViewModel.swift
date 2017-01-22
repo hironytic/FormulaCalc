@@ -41,12 +41,12 @@ public protocol IDesignSheetViewModel: IViewModel {
     var onDone: AnyObserver<Void> { get }
 }
 
-public protocol IDesignSheetViewModelFactory {
-    func newDesignSheetViewModel(context: IContext, id: String) -> IDesignSheetViewModel
+public protocol IDesignSheetViewModelLocator {
+    func resolveDesignSheetViewModel(id: String) -> IDesignSheetViewModel
 }
-extension IDesignSheetViewModelFactory {
-    public func newDesignSheetViewModel(context: IContext, id: String) -> IDesignSheetViewModel {
-        return DesignSheetViewModel(context: context, id: id)
+extension DefaultLocator: IDesignSheetViewModelLocator {
+    public func resolveDesignSheetViewModel(id: String) -> IDesignSheetViewModel {
+        return DesignSheetViewModel(id: id)
     }
 }
 
@@ -55,12 +55,12 @@ class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
     public let type: Observable<String?>
     public let invisibleMarkHidden: Observable<Bool>
     
-    public override init(context: IContext) {
+    public override init() {
         name = Observable.just("項目名")
         type = Observable.just("数値入力")
         invisibleMarkHidden = Observable.just(false)
         
-        super.init(context: context)
+        super.init()
     }
 }
 
@@ -76,13 +76,13 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
     private let _onSelectItem = ActionObserver<IDesignSheetElementViewModel>()
     private let _onDone = ActionObserver<Void>()
     
-    public init(context: IContext, id: String) {
+    public init(id: String) {
         title = Observable.just("シート名")
-        itemList = Observable.just([DesignSheetElementViewModel(context: context), DesignSheetElementViewModel(context: context)])
+        itemList = Observable.just([DesignSheetElementViewModel(), DesignSheetElementViewModel()])
         onNewItem = _onNewItem.asObserver()
         onSelectItem = _onSelectItem.asObserver()
         onDone = _onDone.asObserver()
         
-        super.init(context: context)
+        super.init()
     }
 }

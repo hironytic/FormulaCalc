@@ -48,12 +48,12 @@ public protocol IItemFormatViewModel: IViewModel {
     var onSelectFractionDigits: AnyObserver<IFractionsDigitsElementViewModel> { get }
 }
 
-public protocol IItemFormatViewModelFactory {
-    func newItemFormatViewModel(context: IContext) -> IItemFormatViewModel
+public protocol IItemFormatViewModelLocator {
+    func resolveItemFormatViewModel() -> IItemFormatViewModel
 }
-extension IItemFormatViewModelFactory {
-    public func newItemFormatViewModel(context: IContext) -> IItemFormatViewModel {
-        return ItemFormatViewModel(context: context)
+extension DefaultLocator: IItemFormatViewModelLocator {
+    public func resolveItemFormatViewModel() -> IItemFormatViewModel {
+        return ItemFormatViewModel()
     }
 }
 
@@ -61,10 +61,10 @@ class ThousandSeparatorElementViewModel: ViewModel, IThousandSeparatorElementVie
     let thousandSeparator: Observable<Bool>
     let onChangeThousandSeparator: AnyObserver<Bool>
     
-    init(context: IContext, thousandSeparator: Observable<Bool>, onChangeThousandSeparator: AnyObserver<Bool>) {
+    init(thousandSeparator: Observable<Bool>, onChangeThousandSeparator: AnyObserver<Bool>) {
         self.thousandSeparator = thousandSeparator
         self.onChangeThousandSeparator = onChangeThousandSeparator
-        super.init(context: context)
+        super.init()
     }
 }
 
@@ -72,11 +72,11 @@ class FractionDigitsElementViewModel: ViewModel, IFractionsDigitsElementViewMode
     let name: Observable<String?>
     let accessoryType: Observable<UITableViewCellAccessoryType>
     
-    override init(context: IContext) {
+    override init() {
         name = Observable.just("自動")
         accessoryType = Observable.just(.checkmark)
         
-        super.init(context: context)
+        super.init()
     }
 }
 
@@ -91,16 +91,16 @@ public class ItemFormatViewModel: ViewModel, IItemFormatViewModel {
     private let _onChangeThousandSeparator = ActionObserver<Bool>()
     private let _onSelectFractionDigits = ActionObserver<IFractionsDigitsElementViewModel>()
     
-    public override init(context: IContext) {
+    public override init() {
         _thousandSeparator = Observable.just(true)
-        _fractionDigits = [FractionDigitsElementViewModel(context: context), FractionDigitsElementViewModel(context: context)]
+        _fractionDigits = [FractionDigitsElementViewModel(), FractionDigitsElementViewModel()]
         
         onSelectFractionDigits = _onSelectFractionDigits.asObserver()
 
-        let thousandSeparatorElementViewModel = ThousandSeparatorElementViewModel(context: context, thousandSeparator: _thousandSeparator, onChangeThousandSeparator: _onChangeThousandSeparator.asObserver())
+        let thousandSeparatorElementViewModel = ThousandSeparatorElementViewModel(thousandSeparator: _thousandSeparator, onChangeThousandSeparator: _onChangeThousandSeparator.asObserver())
         
         items = Observable.just(ItemFormatElementViewModels(thousandSeparator: [thousandSeparatorElementViewModel], fractionDigits: _fractionDigits))
         
-        super.init(context: context)
+        super.init()
     }
 }

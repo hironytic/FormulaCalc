@@ -41,12 +41,12 @@ public protocol IItemViewModel: IViewModel {
     var onSelectFormat: AnyObserver<Void> { get }
 }
 
-public protocol IItemViewModelFactory {
-    func newItemViewModel(context: IContext) -> IItemViewModel
+public protocol IItemViewModelLocator {
+    func resolveItemViewModel() -> IItemViewModel
 }
-extension IItemViewModelFactory {
-    public func newItemViewModel(context: IContext) -> IItemViewModel {
-        return ItemViewModel(context: context)
+extension DefaultLocator: IItemViewModelLocator {
+    public func resolveItemViewModel() -> IItemViewModel {
+        return ItemViewModel()
     }
 }
 
@@ -70,7 +70,7 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     private let _onChangeVisible = ActionObserver<Bool>()
     private let _onSelectFormat = ActionObserver<Void>()
     
-    public override init(context: IContext) {
+    public override init() {
         title = Observable.just("タイトル")
         name = Observable.just("項目名")
         type = Observable.just("計算式")
@@ -84,7 +84,7 @@ public class ItemViewModel: ViewModel, IItemViewModel {
         onChangeVisible = _onChangeVisible.asObserver()
         onSelectFormat = _onSelectFormat.asObserver()
         
-        super.init(context: context)
+        super.init()
         
         _onSelectName.handler = { print("onSelectName") }
         _onSelectType.handler = { print("onSelectType") }

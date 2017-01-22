@@ -1,5 +1,5 @@
 //
-// Context.swift
+// DefaultLocator.swift
 // FormulaCalc
 //
 // Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,8 +25,5 @@
 
 import Foundation
 
-public protocol IContext {
-}
-
-public class DefaultContext: IContext {
+public class DefaultLocator {
 }

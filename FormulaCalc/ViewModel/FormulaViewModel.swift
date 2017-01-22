@@ -32,12 +32,12 @@ public protocol IFormulaViewModel: IViewModel {
     var onFormulaChanged: AnyObserver<String?> { get }
 }
 
-public protocol IFormulaViewModelFactory {
-    func newFormulaViewModel(context: IContext) -> IFormulaViewModel
+public protocol IFormulaViewModelLocator {
+    func resolveFormulaViewModel() -> IFormulaViewModel
 }
-extension IFormulaViewModelFactory {
-    public func newFormulaViewModel(context: IContext) -> IFormulaViewModel {
-        return FormulaViewModel(context: context)
+extension DefaultLocator: IFormulaViewModelLocator {
+    public func resolveFormulaViewModel() -> IFormulaViewModel {
+        return FormulaViewModel()
     }
 }
 
@@ -47,12 +47,12 @@ public class FormulaViewModel: ViewModel, IFormulaViewModel {
     
     private let _onFormulaChanged = ActionObserver<String?>()
     
-    public override init(context: IContext) {
+    public override init() {
         self.formula = Observable
             .just("{身長(cm)}/100")
         
         self.onFormulaChanged = _onFormulaChanged.asObserver()
         
-        super.init(context: context)
+        super.init()
     }
 }

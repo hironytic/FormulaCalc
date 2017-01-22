@@ -41,12 +41,12 @@ public protocol ISheetListViewModel: IViewModel {
     var onSelect: AnyObserver<ISheetListElementViewModel> { get }
 }
 
-public protocol ISheetListViewModelFactory {
-    func newSheetListViewModel(context: IContext) -> ISheetListViewModel
+public protocol ISheetListViewModelLocator {
+    func resolveSheetListViewModel() -> ISheetListViewModel
 }
-extension ISheetListViewModelFactory {
-    public func newSheetListViewModel(context: IContext) -> ISheetListViewModel {
-        return SheetListViewModel(context: context)
+extension DefaultLocator: ISheetListViewModelLocator {
+    public func resolveSheetListViewModel() -> ISheetListViewModel {
+        return SheetListViewModel(locator: self)
     }
 }
 
@@ -54,37 +54,37 @@ class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
     public let id: String
     public let title: Observable<String?>
     
-    public init(context: IContext, id: String, title: String) {
+    public init(id: String, title: String) {
         self.id = id
         self.title = Observable.just(title)
         
-        super.init(context: context)
+        super.init()
     }
 }
 
-public protocol ISheetListViewModelContext: IContext, ISheetListStoreFactory, ISheetViewModelFactory {}
-extension DefaultContext: ISheetListViewModelContext {}
 public class SheetListViewModel: ViewModel, ISheetListViewModel {
+    public typealias Locator = ISheetListStoreLocator & ISheetViewModelLocator
+    
     public let sheetList: Observable<[ISheetListElementViewModel]>
     public private(set) var onNew: AnyObserver<Void>
     public private(set) var onDelete: AnyObserver<ISheetListElementViewModel>
     public private(set) var onSelect: AnyObserver<ISheetListElementViewModel>
     
-    private var _context: ISheetListViewModelContext { get { return super.context as! ISheetListViewModelContext } }
+    private let _locator: Locator
     private let _sheetListStore: ISheetListStore
     private let _onNew = ActionObserver<Void>()
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
     private let _onSelect = ActionObserver<ISheetListElementViewModel>()
     
-    public override init(context: IContext) {
-        let context = context as! ISheetListViewModelContext
+    public init(locator: Locator) {
+        _locator = locator
 
-        _sheetListStore = context.newSheetListStore(context: context)
+        _sheetListStore = _locator.resolveSheetListStore()
         sheetList = _sheetListStore.update
             .map { update in
                 return update.sheetList
                     .map { sheet in
-                        return SheetListElementViewModel(context: context, id: sheet.id, title: sheet.name)
+                        return SheetListElementViewModel(id: sheet.id, title: sheet.name)
                     }
             }
             .asDriver(onErrorJustReturn: [])
@@ -94,7 +94,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
         onDelete = _onDelete.asObserver()
         onSelect = _onSelect.asObserver()
         
-        super.init(context: context)
+        super.init()
         
         _onNew.handler = { [weak self] in self?.handleOnNew() }
         _onSelect.handler = { [weak self] item in self?.handleOnSelect(item) }
@@ -113,13 +113,13 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
             let onDone: AnyObserver<String>
             let onCancel = ActionObserver<Void>().asObserver()
 
-            init(context: IContext, onDone: @escaping (String) -> Void) {
+            init(onDone: @escaping (String) -> Void) {
                 self.onDone = ActionObserver(handler: onDone).asObserver()
-                super.init(context: context)
+                super.init()
             }
         }
         
-        let viewModel = InputNameViewModel(context: context) { [weak self] name in
+        let viewModel = InputNameViewModel() { [weak self] name in
             self?._sheetListStore.onCreateNewSheet.onNext(name)
         }
         sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
@@ -127,7 +127,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     
     private func handleOnSelect(_ item: ISheetListElementViewModel) {
         let id = item.id
-        let sheetViewModel = _context.newSheetViewModel(context: context, id: id)
+        let sheetViewModel = _locator.resolveSheetViewModel(id: id)
         sendMessage(TransitionMessage(viewModel: sheetViewModel, type: .push, animated: true))
     }
     

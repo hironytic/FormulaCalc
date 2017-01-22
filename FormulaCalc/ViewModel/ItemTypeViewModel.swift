@@ -37,12 +37,12 @@ public protocol IItemTypeViewModel: IViewModel {
     var onSelect: AnyObserver<IItemTypeElementViewModel> { get }
 }
 
-public protocol IItemTypeViewModelFactory {
-    func newItemTypeViewModel(context: IContext) -> IItemTypeViewModel
+public protocol IItemTypeViewModelLocator {
+    func resolveItemTypeViewModel() -> IItemTypeViewModel
 }
-extension IItemTypeViewModelFactory {
-    public func newItemTypeViewModel(context: IContext) -> IItemTypeViewModel {
-        return ItemTypeViewModel(context: context)
+extension DefaultLocator: IItemTypeViewModelLocator {
+    public func resolveItemTypeViewModel() -> IItemTypeViewModel {
+        return ItemTypeViewModel()
     }
 }
 
@@ -50,11 +50,11 @@ class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
     public let name: Observable<String?>
     public let accessoryType: Observable<UITableViewCellAccessoryType>
     
-    public override init(context: IContext) {
+    public override init() {
         name = Observable.just("数値入力")
         accessoryType = Observable.just(UITableViewCellAccessoryType.checkmark)
         
-        super.init(context: context)
+        super.init()
     }
 }
 
@@ -65,10 +65,10 @@ public class ItemTypeViewModel: ViewModel, IItemTypeViewModel {
     
     public let _onSelect = ActionObserver<IItemTypeElementViewModel>()
     
-    public override init(context: IContext) {
-        typeList = Observable.just([ItemTypeElementViewModel(context: context), ItemTypeElementViewModel(context: context)])
+    public override init() {
+        typeList = Observable.just([ItemTypeElementViewModel(), ItemTypeElementViewModel()])
         onSelect = _onSelect.asObserver()
         
-        super.init(context: context)
+        super.init()
     }
 }

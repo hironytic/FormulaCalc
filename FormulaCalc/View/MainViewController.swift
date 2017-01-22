@@ -28,7 +28,7 @@ import RxSwift
 import RxCocoa
 
 public class MainViewController: UIViewController {
-    public let viewModel = MainViewModel(context: DefaultContext())
+    public let viewModel = MainViewModel(locator: DefaultLocator())
     
     private var _disposeBag: DisposeBag?
     

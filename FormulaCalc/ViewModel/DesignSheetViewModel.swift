@@ -147,5 +147,11 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
         onDone = _onDone.asObserver()
         
         super.init()
+        
+        _onDone.handler = { [weak self] in self?.handleOnDone() }
+    }
+    
+    private func handleOnDone() {
+        sendMessage(DismissingMessage(type: .dismiss, animated: true))
     }
 }

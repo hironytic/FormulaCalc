@@ -86,6 +86,10 @@ public class DesignSheetViewController: UITableViewController {
         guard let viewModel = viewModel else { return }
         
         let disposeBag = DisposeBag()
+
+        viewModel.message
+            .bindTo(transitioner)
+            .addDisposableTo(disposeBag)
         
         viewModel.itemList
             .bindTo(tableView.rx.items(cellIdentifier:R.Id.cell, cellType: DesignSheetElementCell.self)) { (row, element, cell) in

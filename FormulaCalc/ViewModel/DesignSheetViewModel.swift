@@ -41,6 +41,7 @@ public protocol IDesignSheetViewModel: IViewModel {
     
     var onNewItem: AnyObserver<Void> { get }
     var onSelectItem: AnyObserver<IDesignSheetElementViewModel> { get }
+    var onDeleteItem: AnyObserver<IDesignSheetElementViewModel> { get }
     var onDone: AnyObserver<Void> { get }
 }
 
@@ -105,19 +106,19 @@ class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
 }
 
 public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
-    public typealias Locator = ISheetStoreLocator & ISheetItemStoreLocator
+    public typealias Locator = ISheetStoreLocator & ISheetItemStoreLocator & IItemViewModelLocator
     
     public let title: Observable<String?>
     public let itemList: Observable<[IDesignSheetElementViewModel]>
     
     public let onNewItem: AnyObserver<Void>
     public let onSelectItem: AnyObserver<IDesignSheetElementViewModel>
+    public let onDeleteItem: AnyObserver<IDesignSheetElementViewModel>
     public let onDone: AnyObserver<Void>
 
     private let _locator: Locator
     private let _id: String
     private let _sheetStore: ISheetStore
-    private let _onNewItem = ActionObserver<Void>()
     private let _onSelectItem = ActionObserver<IDesignSheetElementViewModel>()
     private let _onDone = ActionObserver<Void>()
     
@@ -141,17 +142,28 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
             }
             .asDriver(onErrorJustReturn: [])
             .asObservable()
-        
-        onNewItem = _onNewItem.asObserver()
+
+        onNewItem = _sheetStore.onNewItem
+        onDeleteItem = _sheetStore.onDeleteItem
+            .mapObserver { sheetElementViewModel in
+                return sheetElementViewModel.id
+            }
         onSelectItem = _onSelectItem.asObserver()
         onDone = _onDone.asObserver()
         
         super.init()
         
         _onDone.handler = { [weak self] in self?.handleOnDone() }
+        _onSelectItem.handler = { [weak self] in self?.handleOnSelect($0) }
     }
     
     private func handleOnDone() {
         sendMessage(DismissingMessage(type: .dismiss, animated: true))
+    }
+    
+    private func handleOnSelect(_ sheetElementViewModel: IDesignSheetElementViewModel) {
+        let itemViewModel = _locator.resolveItemViewModel()
+        //itemViewModel.id = sheetElementViewModel.id
+        sendMessage(TransitionMessage(viewModel: itemViewModel, type: .push, animated: true))
     }
 }

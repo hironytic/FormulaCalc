@@ -113,6 +113,10 @@ public class DesignSheetViewController: UITableViewController {
             .bindTo(viewModel.onSelectItem)
             .addDisposableTo(disposeBag)
         
+        tableView.rx.modelDeleted(IDesignSheetElementViewModel.self)
+            .bindTo(viewModel.onDeleteItem)
+            .addDisposableTo(disposeBag)
+        
         _disposeBag = disposeBag
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		501563F81E46C80600129964 /* SheetListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501563F71E46C80600129964 /* SheetListViewModelTests.swift */; };
 		505BFC111E09741E00AAC3D2 /* Sheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505BFC101E09741E00AAC3D2 /* Sheet.storyboard */; };
 		505BFC171E0ABE7100AAC3D2 /* SheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC161E0ABE7100AAC3D2 /* SheetViewController.swift */; };
 		505BFC191E0ABE9600AAC3D2 /* DesignSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */; };
@@ -86,6 +87,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		501563F71E46C80600129964 /* SheetListViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListViewModelTests.swift; sourceTree = "<group>"; };
 		505BFC101E09741E00AAC3D2 /* Sheet.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Sheet.storyboard; sourceTree = "<group>"; };
 		505BFC161E0ABE7100AAC3D2 /* SheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetViewController.swift; sourceTree = "<group>"; };
 		505BFC181E0ABE9600AAC3D2 /* DesignSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignSheetViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +183,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		501563F61E46C7BB00129964 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				501563F71E46C80600129964 /* SheetListViewModelTests.swift */,
+			);
+			name = ViewModel;
+			path = FormulaCalcTests/ViewModel;
+			sourceTree = SOURCE_ROOT;
+		};
 		50AE03521E0642A600739B0B /* Utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				50C45E3A1E21031C00F72DD0 /* Model */,
+				501563F61E46C7BB00129964 /* ViewModel */,
 				50C45E441E210E1500F72DD0 /* FulfillObserver.swift */,
 				50CE21A81DFD83140042E103 /* Info.plist */,
 			);
@@ -549,6 +561,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C45E3E1E2103CF00F72DD0 /* TestSheetDatabase.swift in Sources */,
+				501563F81E46C80600129964 /* SheetListViewModelTests.swift in Sources */,
 				50C45E491E2202A400F72DD0 /* SheetStoreTests.swift in Sources */,
 				50C45E451E210E1500F72DD0 /* FulfillObserver.swift in Sources */,
 				50C45E3C1E21034800F72DD0 /* SheetListStoreTests.swift in Sources */,

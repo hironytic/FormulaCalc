@@ -29,78 +29,6 @@ import RealmSwift
 @testable import FormulaCalc
 
 class SheetViewModelTests: XCTestCase {
-    
-    class MockSheetStore: ISheetStore {
-        let update: Observable<Sheet?>
-        let itemListUpdate: Observable<SheetStoreItemListUpdate>
-        
-        let onUpdateName = ActionObserver</* newName: */ String>().asObserver()
-        var onNewItem = ActionObserver<Void>().asObserver()
-        var onDeleteItem = ActionObserver</* id: */ String>().asObserver()
-        
-        init(id: String) {
-            let sheet = Sheet()
-            sheet.id = id
-            sheet.name = "The sheet"
-            
-            let sheetItem0 = SheetItem()
-            sheetItem0.id = "sheet_item_zero"
-            sheetItem0.name = "Item 0"
-            
-            let sheetItem1 = SheetItem()
-            sheetItem1.id = "sheet_item_one"
-            sheetItem1.name = "Item 1"
-            
-            let sheetItems = [sheetItem0, sheetItem1]
-            
-            sheet.items.append(objectsIn: sheetItems)
-            
-            update = Observable.just(sheet)
-            itemListUpdate = Observable.just(SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection(sheetItems),
-                                                                      deletions: [],
-                                                                      insertions: [0, 1],
-                                                                      modifications: []))
-        }
-    }
-    
-    class MockSheetItemStore: ISheetItemStore {
-        var update: Observable<SheetItem?>
-        
-        var onUpdateName: AnyObserver</* name: */ String>
-        var onUpdateType: AnyObserver</* type: */ SheetItemType>
-        var onUpdateNumberValue: AnyObserver</* numberValue: */ Double>
-        var onUpdateStringValue: AnyObserver</* stringValue: */ String>
-        var onUpdateFormula: AnyObserver</* formula: */ String>
-        var onUpdateThousandSeparator: AnyObserver</* thousandSeparator: */ Bool>
-        var onUpdateFractionDigits: AnyObserver</* fractionDigits: */ Int>
-
-        var _update: Variable<SheetItem?>
-        var _onUpdateName = ActionObserver</* name: */ String>()
-        var _onUpdateType = ActionObserver</* type: */ SheetItemType>()
-        var _onUpdateNumberValue = ActionObserver</* numberValue: */ Double>()
-        var _onUpdateStringValue = ActionObserver</* stringValue: */ String>()
-        var _onUpdateFormula = ActionObserver</* formula: */ String>()
-        var _onUpdateThousandSeparator = ActionObserver</* thousandSeparator: */ Bool>()
-        var _onUpdateFractionDigits = ActionObserver</* fractionDigits: */ Int>()
-        
-        init(item: SheetItem?) {
-            _update = Variable(item)
-            update = _update.asObservable()
-            
-            onUpdateName = _onUpdateName.asObserver()
-            onUpdateType = _onUpdateType.asObserver()
-            onUpdateNumberValue = _onUpdateNumberValue.asObserver()
-            onUpdateStringValue = _onUpdateStringValue.asObserver()
-            onUpdateFormula = _onUpdateFormula.asObserver()
-            onUpdateThousandSeparator = _onUpdateThousandSeparator.asObserver()
-            onUpdateFractionDigits = _onUpdateFractionDigits.asObserver()
-        }
-        
-        func notify(item: SheetItem?) {
-            _update.value = item
-        }
-    }
-    
     class MockDesignSheetViewModel: ViewModel, IDesignSheetViewModel {
         let id: String
         
@@ -118,35 +46,28 @@ class SheetViewModelTests: XCTestCase {
     }
     
     class MockLocator: SheetViewModel.Locator {
+        var _sheetStores: [String: ISheetStore] = [:]
+        var _sheetItemStores: [String: ISheetItemStore] = [:]
+        
         func resolveSheetStore(id: String) -> ISheetStore {
-            return MockSheetStore(id: id)
+            if let sheetStore = _sheetStores[id] {
+                return sheetStore
+            }
+
+            
+            let result = MockSheetStore(sheet: nil)
+            _sheetStores[id] = result
+            return result
         }
         
         func resolveSheetItemStore(id: String) -> ISheetItemStore {
-            let item = SheetItem()
-            item.id = id
-            switch id {
-            case "sheet_item_zero":
-                item.name = "Item 0"
-                item.type = .string
-                item.numberValue = 0
-                item.stringValue = "foobar"
-                item.formula = ""
-                item.thousandSeparator = true
-                item.fractionDigits = 2
-            case "sheet_item_one":
-                item.name = "Item 1"
-                item.type = .numeric
-                item.numberValue = 100
-                item.stringValue = ""
-                item.formula = ""
-                item.thousandSeparator = false
-                item.fractionDigits = 0
-            default:
-                break
+            if let sheetItemStore = _sheetItemStores[id] {
+                return sheetItemStore
             }
             
-            return MockSheetItemStore(item: item)
+            let result = MockSheetItemStore(item: nil)
+            _sheetItemStores[id] = result
+            return result
         }
         
         func resolveDesignSheetViewModel(id: String) -> IDesignSheetViewModel {
@@ -155,14 +76,59 @@ class SheetViewModelTests: XCTestCase {
     }
     
     var disposeBag: DisposeBag!
+    var mockLocator: MockLocator!
     
     override func setUp() {
         super.setUp()
 
         disposeBag = DisposeBag()
+        mockLocator = MockLocator()
+        
+        let sheet1 = Sheet()
+        sheet1.id = "id1"
+        sheet1.name = "The sheet"
+        
+        let sheetItem0 = SheetItem()
+        sheetItem0.id = "sheet_item_zero"
+        sheetItem0.name = "Item 0"
+        sheetItem0.type = .string
+        sheetItem0.numberValue = 0
+        sheetItem0.stringValue = "foobar"
+        sheetItem0.formula = ""
+        sheetItem0.thousandSeparator = true
+        sheetItem0.fractionDigits = 2
+        sheetItem0.visible = true
+        
+        let sheetItem1 = SheetItem()
+        sheetItem1.id = "sheet_item_one"
+        sheetItem1.name = "Item 1"
+        sheetItem1.type = .numeric
+        sheetItem1.numberValue = 100
+        sheetItem1.stringValue = ""
+        sheetItem1.formula = ""
+        sheetItem1.thousandSeparator = false
+        sheetItem1.fractionDigits = 0
+        sheetItem1.visible = true
+        
+        let sheetItems = [sheetItem0, sheetItem1]
+        sheet1.items.append(objectsIn: sheetItems)
+        
+        let sheetStore1 = mockLocator.resolveSheetStore(id: "id1") as! MockSheetStore
+        sheetStore1.update(sheet: sheet1)
+        sheetStore1.updateItemList(sheetStoreItemListUpdate: SheetStoreItemListUpdate(itemList: AnyRandomAccessCollection(sheet1.items),
+                                                                                      deletions: [],
+                                                                                      insertions: Array(0 ..< sheet1.items.count),
+                                                                                      modifications: []))
+        
+        let sheetItemStore0 = mockLocator.resolveSheetItemStore(id: "sheet_item_zero") as! MockSheetItemStore
+        sheetItemStore0.update(item: sheetItem0)
+        
+        let sheetItemStore1 = mockLocator.resolveSheetItemStore(id: "sheet_item_one") as! MockSheetItemStore
+        sheetItemStore1.update(item: sheetItem1)
     }
     
     override func tearDown() {
+        mockLocator = nil
         disposeBag = nil
         
         super.tearDown()
@@ -172,7 +138,7 @@ class SheetViewModelTests: XCTestCase {
         // SCENARIO:
         // (1) Check the title of the sheet.
         
-        let sheetViewModel = SheetViewModel(locator: MockLocator(), id: "id1")
+        let sheetViewModel = SheetViewModel(locator: mockLocator, id: "id1")
 
         let titleObserver = FulfillObserver(expectation(description: "The sheet title becomes 'The sheet'")) { (title: String?) in
             guard let title = title else { return false }
@@ -192,7 +158,7 @@ class SheetViewModelTests: XCTestCase {
         // (2) The name of the first item is 'Item 0'.
         // (3) The value of the first item is 'foobar'.
         
-        let sheetViewModel = SheetViewModel(locator: MockLocator(), id: "id1")
+        let sheetViewModel = SheetViewModel(locator: mockLocator, id: "id1")
 
         let itemListObserver = FulfillObserver(expectation(description: "There are two items")) { (elementViewModels: [ISheetElementViewModel]) in
             // (1) Two items are shown on list.
@@ -234,7 +200,7 @@ class SheetViewModelTests: XCTestCase {
         // (1) User taps design button.
         // (2) The design view is shown with same sheet ID.
         
-        let sheetViewModel = SheetViewModel(locator: MockLocator(), id: "id1")
+        let sheetViewModel = SheetViewModel(locator: mockLocator, id: "id1")
 
         let messageObserver = FulfillObserver(expectation(description: "Scene transition")) { (message: Message) in
             // (2) The design view is shown with same sheet ID.

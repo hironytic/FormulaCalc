@@ -71,7 +71,7 @@ class SheetListStoreTests: XCTestCase {
         }
         sheetListStore.update
             .bindTo(updateObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
         
         // Add one item
@@ -102,7 +102,7 @@ class SheetListStoreTests: XCTestCase {
         }
         sheetListStore.update
             .bindTo(updateObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 
         if let newSheet = newSheet {
@@ -130,7 +130,7 @@ class SheetListStoreTests: XCTestCase {
         }
         sheetListStore.update
             .bindTo(updateObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 
         XCTAssertNotNil(sheet2Id, "'Sheet 2' should be found")

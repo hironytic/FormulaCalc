@@ -45,11 +45,11 @@ public class MainViewController: UIViewController {
         
         viewModel.message
             .bindTo(transitioner)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         rx.sentMessage(#selector(viewDidAppear(_:)))
             .bindTo(viewModel.onViewDidAppear)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

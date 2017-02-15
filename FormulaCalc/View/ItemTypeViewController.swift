@@ -42,12 +42,12 @@ public class ItemTypeElementCell: UITableViewCell {
             if let textLabel = textLabel {
                 viewModel.name
                     .bindTo(textLabel.rx.text)
-                    .addDisposableTo(disposeBag)
+                    .disposed(by: disposeBag)
             }
 
             viewModel.accessoryType
                 .bindTo(self.rx.accessoryType)
-                .addDisposableTo(disposeBag)
+                .disposed(by: disposeBag)
             
             _disposeBag = disposeBag
         }
@@ -81,11 +81,11 @@ public class ItemTypeViewController: UITableViewController {
             .bindTo(tableView.rx.items(cellIdentifier: R.Id.cell, cellType: ItemTypeElementCell.self)) { (row, element, cell) in
                 cell.viewModel = element
             }
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         tableView.rx.modelSelected(IItemTypeElementViewModel.self)
             .bindTo(viewModel.onSelect)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

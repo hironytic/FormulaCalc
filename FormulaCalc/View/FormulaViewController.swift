@@ -47,7 +47,7 @@ public class FormulaViewController: UITableViewController {
         
         viewModel.formula
             .bindTo(formulaField.rx.text)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

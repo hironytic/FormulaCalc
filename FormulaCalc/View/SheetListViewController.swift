@@ -42,7 +42,7 @@ public class SheetListElementCell: UITableViewCell {
             if let textLabel = textLabel {
                 viewModel.title
                     .bindTo(textLabel.rx.text)
-                    .addDisposableTo(disposeBag)
+                    .disposed(by: disposeBag)
             }
             
             _disposeBag = disposeBag
@@ -79,23 +79,23 @@ public class SheetListViewController: UITableViewController {
         let dataSource = SheetListDataSource()
         viewModel.sheetList
             .bindTo(tableView.rx.items(dataSource: dataSource))
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
 
         viewModel.message
             .bindTo(transitioner)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         newButton.rx.tap
             .bindTo(viewModel.onNew)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         tableView.rx.modelSelected(ISheetListElementViewModel.self)
             .bindTo(viewModel.onSelect)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         tableView.rx.modelDeleted(ISheetListElementViewModel.self)
             .bindTo(viewModel.onDelete)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

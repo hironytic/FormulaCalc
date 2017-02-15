@@ -74,7 +74,7 @@ public class SheetListStore: ISheetListStore {
 
         do {
             let realm = try _sheetDatabase.createRealm()
-            let results = realm.objects(Sheet.self).sorted(byProperty: "name")
+            let results = realm.objects(Sheet.self).sorted(byKeyPath: "name")
             let updateSubject = BehaviorSubject(value: SheetListStoreUpdate(sheetList: AnyRandomAccessCollection(results),
                                                                               deletions: [],
                                                                               insertions: (0 ..< results.count).map { $0 },

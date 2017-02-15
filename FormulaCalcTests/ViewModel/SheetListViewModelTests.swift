@@ -142,13 +142,13 @@ class SheetListViewModelTests: XCTestCase {
             
             elementViewModel0.title
                 .bindTo(sheetTitleObserver)
-                .addDisposableTo(self.disposeBag)
+                .disposed(by: self.disposeBag)
             return true
         }
         
         sheetListViewModel.sheetList
             .bindTo(sheetListObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
     }
@@ -177,7 +177,7 @@ class SheetListViewModelTests: XCTestCase {
                 default:
                     break
                 }
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
         
         var sheetListDisposeBag: DisposeBag!
         let expectNewSheet = expectation(description: "The new sheet name is 'New Name'")
@@ -194,12 +194,12 @@ class SheetListViewModelTests: XCTestCase {
                                 }
                             }
                         })
-                        .addDisposableTo(sheetListDisposeBag)
+                        .disposed(by: sheetListDisposeBag)
                 }
             }, onDisposed: {
                 sheetListDisposeBag = nil
             })
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         // (1) New sheet button is tapped.
         sheetListViewModel.onNew.onNext(())
@@ -230,7 +230,7 @@ class SheetListViewModelTests: XCTestCase {
         
         sheetListViewModel.sheetList
             .bindTo(sheetListObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
         
@@ -274,7 +274,7 @@ class SheetListViewModelTests: XCTestCase {
         
         sheetListViewModel.sheetList
             .bindTo(sheetListObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
         
@@ -287,7 +287,7 @@ class SheetListViewModelTests: XCTestCase {
         
         sheetListViewModel.message
             .bindTo(messageObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         // (2) User selects the first sheet.
         guard let toBeSelected = sheetToBeSelected else { XCTFail(); return }

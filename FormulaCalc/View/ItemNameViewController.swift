@@ -47,7 +47,7 @@ public class ItemNameViewController: UITableViewController {
     
         viewModel.name
             .bindTo(nameField.rx.text)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

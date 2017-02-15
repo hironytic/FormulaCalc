@@ -44,11 +44,11 @@ public class SheetElementCell: UITableViewCell {
             
             viewModel.name
                 .bindTo(nameLabel.rx.text)
-                .addDisposableTo(disposeBag)
+                .disposed(by: disposeBag)
             
             viewModel.value
                 .bindTo(valueLabel.rx.text)
-                .addDisposableTo(disposeBag)
+                .disposed(by: disposeBag)
             
             _disposeBag = disposeBag
         }
@@ -81,21 +81,21 @@ public class SheetViewController: UITableViewController {
 
         viewModel.message
             .bindTo(transitioner)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.itemList
             .bindTo(tableView.rx.items(cellIdentifier: R.Id.cell, cellType: SheetElementCell.self)) { (row, element, cell) in
                 cell.viewModel = element
             }
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.title
             .bindTo(navigationItem.rx.title)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         designButton.rx.tap
             .bindTo(viewModel.onTapDesignButton)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

@@ -147,7 +147,7 @@ class SheetViewModelTests: XCTestCase {
         
         sheetViewModel.title
             .bindTo(titleObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
 
         waitForExpectations(timeout: 3.0)
     }
@@ -174,7 +174,7 @@ class SheetViewModelTests: XCTestCase {
             }
             elementViewModel0.name
                 .bindTo(itemNameObserver)
-                .addDisposableTo(self.disposeBag)
+                .disposed(by: self.disposeBag)
             
             // (3) The value of the first item is 'foobar'.
             let itemValueObserver = FulfillObserver(self.expectation(description: "The first value is foobar.")) { (value: String?) in
@@ -183,14 +183,14 @@ class SheetViewModelTests: XCTestCase {
             }
             elementViewModel0.value
                 .bindTo(itemValueObserver)
-                .addDisposableTo(self.disposeBag)
+                .disposed(by: self.disposeBag)
             
             return true
         }
         
         sheetViewModel.itemList
             .bindTo(itemListObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
     }
@@ -211,7 +211,7 @@ class SheetViewModelTests: XCTestCase {
         
         sheetViewModel.message
             .bindTo(messageObserver)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         // (1) User taps design button.
         sheetViewModel.onTapDesignButton.onNext(())

@@ -45,15 +45,15 @@ public class DesignSheetElementCell: UITableViewCell {
             
             viewModel.name
                 .bindTo(nameLabel.rx.text)
-                .addDisposableTo(disposeBag)
+                .disposed(by: disposeBag)
             
             viewModel.type
                 .bindTo(typeLabel.rx.text)
-                .addDisposableTo(disposeBag)
+                .disposed(by: disposeBag)
             
             viewModel.invisibleMarkHidden
                 .bindTo(invisibleMark.rx.isHidden)
-                .addDisposableTo(disposeBag)
+                .disposed(by: disposeBag)
             
             _disposeBag = disposeBag
         }
@@ -89,33 +89,33 @@ public class DesignSheetViewController: UITableViewController {
 
         viewModel.message
             .bindTo(transitioner)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.itemList
             .bindTo(tableView.rx.items(cellIdentifier:R.Id.cell, cellType: DesignSheetElementCell.self)) { (row, element, cell) in
                 cell.viewModel = element
             }
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.title
             .bindTo(navigationItem.rx.title)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         newItemButton.rx.tap
             .bindTo(viewModel.onNewItem)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         doneButton.rx.tap
             .bindTo(viewModel.onDone)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         tableView.rx.modelSelected(IDesignSheetElementViewModel.self)
             .bindTo(viewModel.onSelectItem)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         tableView.rx.modelDeleted(IDesignSheetElementViewModel.self)
             .bindTo(viewModel.onDeleteItem)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

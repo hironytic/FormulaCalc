@@ -51,43 +51,43 @@ public class ItemViewController: UITableViewController {
         
         viewModel.name
             .bindTo(nameLabel.rx.text)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.type
             .bindTo(typeLabel.rx.text)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.formula
             .bindTo(formulaLabel.rx.text)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.visible
             .bindTo(visibleSwitch.rx.value)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         viewModel.format
             .bindTo(formatLabel.rx.text)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
 
         itemSelectedAt(section: 0, row: 0)
             .bindTo(viewModel.onSelectName)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
 
         itemSelectedAt(section: 0, row: 1)
             .bindTo(viewModel.onSelectType)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
 
         itemSelectedAt(section: 1, row: 0)
             .bindTo(viewModel.onSelectFormula)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
 
         visibleSwitch.rx.value
             .bindTo(viewModel.onChangeVisible)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         itemSelectedAt(section: 2, row: 1)
             .bindTo(viewModel.onSelectFormat)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
     }

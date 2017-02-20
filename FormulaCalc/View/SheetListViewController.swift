@@ -66,8 +66,14 @@ public class SheetListViewController: UITableViewController {
         super.viewDidLoad()
 
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
         bindViewModel()
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        _disposeBag = nil
     }
     
     private func bindViewModel() {

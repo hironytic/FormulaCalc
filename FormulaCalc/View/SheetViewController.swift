@@ -67,12 +67,14 @@ public class SheetViewController: UITableViewController {
 
     @IBOutlet weak var designButton: UIBarButtonItem!
     
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-
+    public override func viewWillAppear(_ animated: Bool) {
         bindViewModel()
     }
-
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        _disposeBag = nil
+    }
+    
     private func bindViewModel() {
         _disposeBag = nil
         guard let viewModel = viewModel else { return }

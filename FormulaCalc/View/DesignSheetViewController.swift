@@ -77,8 +77,14 @@ public class DesignSheetViewController: UITableViewController {
         super.viewDidLoad()
 
         tableView.isEditing = true
-        
+    }
+
+    public override func viewWillAppear(_ animated: Bool) {
         bindViewModel()
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        _disposeBag = nil
     }
     
     private func bindViewModel() {

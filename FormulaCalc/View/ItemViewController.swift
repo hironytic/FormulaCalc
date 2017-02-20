@@ -37,10 +37,12 @@ public class ItemViewController: UITableViewController {
     @IBOutlet weak var visibleSwitch: UISwitch!
     @IBOutlet weak var formatLabel: UILabel!
     
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-
+    public override func viewWillAppear(_ animated: Bool) {
         bindViewModel()
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        _disposeBag = nil
     }
     
     private func bindViewModel() {

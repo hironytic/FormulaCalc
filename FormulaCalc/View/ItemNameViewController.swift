@@ -33,10 +33,12 @@ public class ItemNameViewController: UITableViewController {
     
     @IBOutlet weak var nameField: UITextField!
     
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    public override func viewWillAppear(_ animated: Bool) {
         bindViewModel()
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        _disposeBag = nil
     }
     
     private func bindViewModel() {

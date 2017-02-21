@@ -1,0 +1,288 @@
+//
+// ItemViewModelTests.swift
+// FormulaCalcTests
+//
+// Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+import XCTest
+import RxSwift
+@testable import FormulaCalc
+
+private typealias R = Resource
+
+class ItemViewModelTests: XCTestCase {
+    
+    class MockItemNameViewModel: ViewModel, IItemNameViewModel {
+        let name = Observable<String?>.never()
+        let onNameChanged = ActionObserver<String?>().asObserver()
+    }
+
+    class MockItemTypeViewModel: ViewModel, IItemTypeViewModel {
+        let typeList = Observable<[IItemTypeElementViewModel]>.never()
+        let onSelect = ActionObserver<IItemTypeElementViewModel>().asObserver()
+    }
+    
+    class MockFormulaViewModel: ViewModel, IFormulaViewModel {
+        let formula = Observable<String?>.never()
+        let onFormulaChanged = ActionObserver<String?>().asObserver()
+    }
+    
+    class MockItemFormatViewModel: ViewModel, IItemFormatViewModel {
+        let items = Observable<ItemFormatElementViewModels>.never()
+        let onSelectFractionDigits = ActionObserver<IFractionsDigitsElementViewModel>().asObserver()
+    }
+    
+    class MockLocator: ItemViewModel.Locator {
+        var _sheetItemStores: [String: ISheetItemStore] = [:]
+        
+        func resolveSheetItemStore(id: String) -> ISheetItemStore {
+            if let sheetItemStore = _sheetItemStores[id] {
+                return sheetItemStore
+            }
+            
+            let result = MockSheetItemStore(item: nil)
+            _sheetItemStores[id] = result
+            return result            
+        }
+        
+        func resolveItemNameViewModel() -> IItemNameViewModel {
+            return MockItemNameViewModel()
+        }
+        
+        func resolveItemTypeViewModel() -> IItemTypeViewModel {
+            return MockItemTypeViewModel()
+        }
+        
+        func resolveFormulaViewModel() -> IFormulaViewModel  {
+            return MockFormulaViewModel()
+        }
+        
+        func resolveItemFormatViewModel() -> IItemFormatViewModel {
+            return MockItemFormatViewModel()
+        }
+    }
+
+    var disposeBag: DisposeBag!
+    var mockLocator: MockLocator!
+    
+    override func setUp() {
+        super.setUp()
+
+        disposeBag = DisposeBag()
+        mockLocator = MockLocator()
+        
+        let sheetItem0 = SheetItem()
+        sheetItem0.id = "sheet_item_zero"
+        sheetItem0.name = "Item 0"
+        sheetItem0.type = .string
+        sheetItem0.numberValue = 0
+        sheetItem0.stringValue = "foobar"
+        sheetItem0.formula = ""
+        sheetItem0.thousandSeparator = true
+        sheetItem0.fractionDigits = 2
+        sheetItem0.visible = true
+        
+        let sheetItemStore0 = mockLocator.resolveSheetItemStore(id: sheetItem0.id) as! MockSheetItemStore
+        sheetItemStore0.update(item: sheetItem0)
+
+        let sheetItem1 = SheetItem()
+        sheetItem1.id = "sheet_item_one"
+        sheetItem1.name = "Item 1"
+        sheetItem1.type = .formula
+        sheetItem1.numberValue = 0
+        sheetItem1.stringValue = ""
+        sheetItem1.formula = "10+20"
+        sheetItem1.thousandSeparator = false
+        sheetItem1.fractionDigits = -1
+        sheetItem1.visible = false
+        
+        let sheetItemStore1 = mockLocator.resolveSheetItemStore(id: sheetItem1.id) as! MockSheetItemStore
+        sheetItemStore1.update(item: sheetItem1)
+    }
+    
+    override func tearDown() {
+        mockLocator = nil
+        disposeBag = nil
+        
+        super.tearDown()
+    }
+
+    func testTitle() {
+        // SCENARIO:
+        // (1) Check the title of the view.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let titleObserver = FulfillObserver(expectation(description: "The item title becomes 'Item 0'")) { (title: String?) in
+            guard let title = title else { return false }
+            return title == "Item 0"
+        }
+        
+        viewModel.title
+            .bindTo(titleObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+
+    func testName() {
+        // SCENARIO:
+        // (1) Check the name of the item.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let nameObserver = FulfillObserver(expectation(description: "The item name becomes 'Item 0'")) { (name: String?) in
+            guard let name = name else { return false }
+            return name == "Item 0"
+        }
+        
+        viewModel.name
+            .bindTo(nameObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+    
+    func testType() {
+        // SCENARIO:
+        // (1) Check the type of the item.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let typeObserver = FulfillObserver(expectation(description: "The item type becomes string")) { (type: String?) in
+            guard let type = type else { return false }
+            return type == ResourceUtils.getString(R.String.sheetItemTypeString)
+        }
+        
+        viewModel.type
+            .bindTo(typeObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+
+    func testFormulaEmpty() {
+        // SCENARIO:
+        // (1) Check the formula of the item. (Empty)
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let formulaObserver = FulfillObserver(expectation(description: "The item has no formula")) { (formula: String?) in
+            guard let formula = formula else { return false }
+            return formula == ""
+        }
+        
+        viewModel.formula
+            .bindTo(formulaObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+
+    func testFormula() {
+        // SCENARIO:
+        // (1) Check the formula of the item.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let formulaObserver = FulfillObserver(expectation(description: "The formula of item becomes 10+20")) { (formula: String?) in
+            guard let formula = formula else { return false }
+            return formula == "10+20"
+        }
+        
+        viewModel.formula
+            .bindTo(formulaObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+
+    func testVisible() {
+        // SCENARIO:
+        // (1) Check the visibility of the item.
+
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let visibleObserver = FulfillObserver(expectation(description: "The item is visible")) { (visible: Bool) in
+            return visible
+        }
+        
+        viewModel.visible
+            .bindTo(visibleObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+    
+    func testHidden() {
+        // SCENARIO:
+        // (1) Check the visibility of the item.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let visibleObserver = FulfillObserver(expectation(description: "The item is not visible")) { (visible: Bool) in
+            return !visible
+        }
+        
+        viewModel.visible
+            .bindTo(visibleObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+    
+    func testFormat0() {
+        // SCENARIO:
+        // (1) Check the format of the item.
+
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let formatObserver = FulfillObserver(expectation(description: "The format is 3桁区切り,2桁")) { (format: String?) in
+            guard let format = format else { return false }
+            return format == ResourceUtils.getString(R.String.thousandSeparatorOn) + ", " + ResourceUtils.getString(format: R.String.fractionDigitsFormat, 2)
+        }
+        
+        viewModel.format
+            .bindTo(formatObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+
+    func testFormat1() {
+        // SCENARIO:
+        // (1) Check the format of the item.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let formatObserver = FulfillObserver(expectation(description: "The format is 自動")) { (format: String?) in
+            guard let format = format else { return false }
+            return format == ResourceUtils.getString(R.String.fractionDigitsAuto)
+        }
+        
+        viewModel.format
+            .bindTo(formatObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+    }
+}

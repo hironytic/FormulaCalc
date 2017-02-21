@@ -32,3 +32,6 @@
 "FormulaCalc.sheetItemTypeNumeric" = "数値入力";
 "FormulaCalc.sheetItemTypeString" = "文字列入力";
 "FormulaCalc.sheetItemTypeFormula" = "計算式";
+"FormulaCalc.thousandSeparatorOn" = "3桁区切り";
+"FormulaCalc.fractionDigitsAuto" = "自動";
+"FormulaCalc.fractionDigitsFormat" = "%d桁";

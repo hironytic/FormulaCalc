@@ -101,6 +101,7 @@ class MockSheetItemStore: ISheetItemStore {
     var onUpdateFormula: AnyObserver</* formula: */ String>
     var onUpdateThousandSeparator: AnyObserver</* thousandSeparator: */ Bool>
     var onUpdateFractionDigits: AnyObserver</* fractionDigits: */ Int>
+    var onUpdateVisible: AnyObserver</* visible: */ Bool>
     
     let _update: Variable<SheetItem?>
     private let _onUpdateName = ActionObserver</* name: */ String>()
@@ -110,6 +111,7 @@ class MockSheetItemStore: ISheetItemStore {
     private let _onUpdateFormula = ActionObserver</* formula: */ String>()
     private let _onUpdateThousandSeparator = ActionObserver</* thousandSeparator: */ Bool>()
     private let _onUpdateFractionDigits = ActionObserver</* fractionDigits: */ Int>()
+    private let _onUpdateVisible = ActionObserver</* visible: */ Bool>()
     
     var item: SheetItem? {
         get { return _update.value }
@@ -142,6 +144,10 @@ class MockSheetItemStore: ISheetItemStore {
         get { return _onUpdateFractionDigits.handler }
         set { _onUpdateFractionDigits.handler = newValue }
     }
+    var updateVisibleHandler: ActionObserver</* visible: */ Bool>.Handler {
+        get { return _onUpdateVisible.handler }
+        set { _onUpdateVisible.handler = newValue }
+    }
     
     init(item: SheetItem?) {
         _update = Variable(item)
@@ -154,6 +160,7 @@ class MockSheetItemStore: ISheetItemStore {
         onUpdateFormula = _onUpdateFormula.asObserver()
         onUpdateThousandSeparator = _onUpdateThousandSeparator.asObserver()
         onUpdateFractionDigits = _onUpdateFractionDigits.asObserver()
+        onUpdateVisible = _onUpdateVisible.asObserver()
     }
     
     func update(item: SheetItem?) {

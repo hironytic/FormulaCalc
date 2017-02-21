@@ -26,6 +26,8 @@
 import Foundation
 import RxSwift
 
+private typealias R = Resource
+
 public protocol IItemViewModel: IViewModel {
     var title: Observable<String?> { get }
     var name: Observable<String?> { get }
@@ -42,15 +44,19 @@ public protocol IItemViewModel: IViewModel {
 }
 
 public protocol IItemViewModelLocator {
-    func resolveItemViewModel() -> IItemViewModel
+    func resolveItemViewModel(id: String) -> IItemViewModel
 }
 extension DefaultLocator: IItemViewModelLocator {
-    public func resolveItemViewModel() -> IItemViewModel {
-        return ItemViewModel()
+    public func resolveItemViewModel(id: String) -> IItemViewModel {
+        return ItemViewModel(locator: self, id: id)
     }
 }
 
 public class ItemViewModel: ViewModel, IItemViewModel {
+    public typealias Locator = ISheetItemStoreLocator & IItemNameViewModelLocator
+                                & IItemTypeViewModelLocator & IFormulaViewModelLocator
+                                & IItemFormatViewModelLocator
+    
     public let title: Observable<String?>
     public let name: Observable<String?>
     public let type: Observable<String?>
@@ -64,32 +70,122 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     public let onChangeVisible: AnyObserver<Bool>
     public let onSelectFormat: AnyObserver<Void>
 
+    private let _locator: Locator
+    private let _id: String
+    private let _sheetItemStore: ISheetItemStore
     private let _onSelectName = ActionObserver<Void>()
     private let _onSelectType = ActionObserver<Void>()
     private let _onSelectFormula = ActionObserver<Void>()
     private let _onChangeVisible = ActionObserver<Bool>()
     private let _onSelectFormat = ActionObserver<Void>()
     
-    public override init() {
-        title = Observable.just("タイトル")
-        name = Observable.just("項目名")
-        type = Observable.just("計算式")
-        formula = Observable.just("{身長(cm)}/100")
-        visible = Observable.just(true)
-        format = Observable.just("自動")
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _id = id
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
+
+        name = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                return sheetItem?.name ?? ""
+            }
+            .startWith("")
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+        
+        title = name
+
+        type = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.type }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                guard let sheetItem = sheetItem else { return "" }
+                
+                let type: String
+                switch sheetItem.type {
+                case .numeric:
+                    type = ResourceUtils.getString(R.String.sheetItemTypeNumeric)
+                case .string:
+                    type = ResourceUtils.getString(R.String.sheetItemTypeString)
+                case .formula:
+                    type = ResourceUtils.getString(R.String.sheetItemTypeFormula)
+                }
+                return type
+            }
+            .startWith("")
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+
+        formula = _sheetItemStore.update
+            .filter { $0?.type == .formula }
+            .distinctUntilChanged({ $0?.formula }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                return sheetItem?.formula ?? ""
+            }
+            .startWith("")
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+
+        visible = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.visible }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                return sheetItem?.visible ?? true
+            }
+            .startWith(true)
+            .asDriver(onErrorJustReturn: true)
+            .asObservable()
+        
+        format = _sheetItemStore.update
+            .distinctUntilChanged({ ($0?.thousandSeparator, $0?.fractionDigits) }, comparer: { $0.0 == $1.0 && $0.1 == $1.1 })
+            .map { sheetItem in
+                guard let sheetItem = sheetItem else { return "" }
+                
+                var values: [String] = []
+                if sheetItem.thousandSeparator {
+                    values.append(ResourceUtils.getString(R.String.thousandSeparatorOn))
+                }
+                switch sheetItem.fractionDigits {
+                case -1:
+                    values.append(ResourceUtils.getString(R.String.fractionDigitsAuto))
+                default:
+                    values.append(ResourceUtils.getString(format: R.String.fractionDigitsFormat, sheetItem.fractionDigits))
+                }
+                return values.joined(separator: ", ")
+            }
+            .startWith("")
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
         
         onSelectName = _onSelectName.asObserver()
         onSelectType = _onSelectType.asObserver()
         onSelectFormula = _onSelectFormula.asObserver()
-        onChangeVisible = _onChangeVisible.asObserver()
+        onChangeVisible = _sheetItemStore.onUpdateVisible
         onSelectFormat = _onSelectFormat.asObserver()
         
         super.init()
         
-        _onSelectName.handler = { print("onSelectName") }
-        _onSelectType.handler = { print("onSelectType") }
-        _onSelectFormula.handler = { print("onSelectFormula") }
-        _onChangeVisible.handler = { _ in print("onChangeVisible") }
-        _onSelectFormat.handler = { print("onSelectFormat") }
+        _onSelectName.handler = { [weak self] in self?.handleSelectName() }
+        _onSelectType.handler = { [weak self] in self?.handleSelectType() }
+        _onSelectFormula.handler = { [weak self] in self?.handleSelectFormula() }
+        _onSelectFormat.handler = { [weak self] in self?.handleSelectFormat() }
+    }
+    
+    private func handleSelectName() {
+        let itemNameViewModel = _locator.resolveItemNameViewModel()
+        sendMessage(TransitionMessage(viewModel: itemNameViewModel, type: .push, animated: true))
+    }
+    
+    private func handleSelectType() {
+        let itemTypeViewModel = _locator.resolveItemTypeViewModel()
+        sendMessage(TransitionMessage(viewModel: itemTypeViewModel, type: .push, animated: true))
+    }
+    
+    private func handleSelectFormula() {
+        let formulaViewModel = _locator.resolveFormulaViewModel()
+        sendMessage(TransitionMessage(viewModel: formulaViewModel, type: .push, animated: true))
+    }
+
+    private func handleSelectFormat() {
+        let itemFormatViewModel = _locator.resolveItemFormatViewModel()
+        sendMessage(TransitionMessage(viewModel: itemFormatViewModel, type: .push, animated: true))
     }
 }

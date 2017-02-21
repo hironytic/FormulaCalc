@@ -41,6 +41,7 @@ public protocol ISheetItemStore: class {
     var onUpdateFormula: AnyObserver</* formula: */ String> { get }
     var onUpdateThousandSeparator: AnyObserver</* thousandSeparator: */ Bool> { get }
     var onUpdateFractionDigits: AnyObserver</* fractionDigits: */ Int> { get }
+    var onUpdateVisible: AnyObserver</* visible: */ Bool> { get }
 }
 
 public protocol ISheetItemStoreLocator {
@@ -65,6 +66,7 @@ public class SheetItemStore: ISheetItemStore {
     public let onUpdateFormula: AnyObserver</* formula: */ String>
     public let onUpdateThousandSeparator: AnyObserver</* thousandSeparator: */ Bool>
     public let onUpdateFractionDigits: AnyObserver</* fractionDigits: */ Int>
+    public let onUpdateVisible: AnyObserver</* visible: */ Bool>
     
     private let _locator: Locator
     private let _sheetDatabase: ISheetDatabase
@@ -79,6 +81,7 @@ public class SheetItemStore: ISheetItemStore {
     private let _onUpdateFormula = ActionObserver</* formula: */ String>()
     private let _onUpdateThousandSeparator = ActionObserver</* thousandSeparator: */ Bool>()
     private let _onUpdateFractionDigits = ActionObserver</* fractionDigits: */ Int>()
+    private let _onUpdateVisible = ActionObserver</* visible: */ Bool>()
     
     public init(locator: Locator, id: String) {
         _locator = locator
@@ -116,6 +119,7 @@ public class SheetItemStore: ISheetItemStore {
         onUpdateFormula = _onUpdateFormula.asObserver()
         onUpdateThousandSeparator = _onUpdateThousandSeparator.asObserver()
         onUpdateFractionDigits = _onUpdateFractionDigits.asObserver()
+        onUpdateVisible = _onUpdateVisible.asObserver()
 
         _onUpdateName.handler = { [weak self] name in self?.updateValue({ $0.name = name }) }
         _onUpdateType.handler = { [weak self] type in self?.updateValue({ $0.type = type }) }
@@ -124,6 +128,7 @@ public class SheetItemStore: ISheetItemStore {
         _onUpdateFormula.handler = { [weak self] formula in self?.updateValue({ $0.formula = formula }) }
         _onUpdateThousandSeparator.handler = { [weak self] thousandSeparator in self?.updateValue({ $0.thousandSeparator = thousandSeparator }) }
         _onUpdateFractionDigits.handler = { [weak self] fractionDigits in self?.updateValue({ $0.fractionDigits = fractionDigits }) }
+        _onUpdateVisible.handler = { [weak self] visible in self?.updateValue({ $0.visible = visible }) }
     }
     
     deinit {

@@ -31,6 +31,7 @@ public class FulfillObserver<Element>: ObserverType {
     private var expectation: XCTestExpectation
     private var nextChecker: (Element) -> Bool
     private var errorChecker: (Error) -> Bool
+    private var isFulfilled = false
     
     public init(_ expectation: XCTestExpectation, nextChecker: @escaping (Element) -> Bool) {
         self.expectation = expectation
@@ -54,29 +55,34 @@ public class FulfillObserver<Element>: ObserverType {
         self.expectation = expectation
         self.nextChecker = nextChecker
         self.errorChecker = { _ in false }
+        isFulfilled = false
     }
     
     public func reset(_ expectation: XCTestExpectation, errorChecker: @escaping (Error) -> Bool) {
         self.expectation = expectation
         self.nextChecker = { _ in false }
         self.errorChecker = errorChecker
+        isFulfilled = false
     }
     
     public func reset(_ expectation: XCTestExpectation, nextChecker: @escaping (Element) -> Bool, errorChecker: @escaping (Error) -> Bool) {
         self.expectation = expectation
         self.nextChecker = nextChecker
         self.errorChecker = errorChecker
+        isFulfilled = false
     }
     
     public func on(_ event: Event<Element>) {
         switch event {
         case .next(let element):
-            if nextChecker(element) {
+            if !isFulfilled && nextChecker(element) {
                 expectation.fulfill()
+                isFulfilled = true
             }
         case .error(let error):
-            if errorChecker(error) {
+            if !isFulfilled &&  errorChecker(error) {
                 expectation.fulfill()
+                isFulfilled = true
             }
         case .completed:
             break

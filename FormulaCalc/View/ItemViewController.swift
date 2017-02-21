@@ -51,6 +51,10 @@ public class ItemViewController: UITableViewController {
         
         let disposeBag = DisposeBag()
         
+        viewModel.message
+            .bindTo(transitioner)
+            .disposed(by: disposeBag)
+        
         viewModel.name
             .bindTo(nameLabel.rx.text)
             .disposed(by: disposeBag)
@@ -64,7 +68,7 @@ public class ItemViewController: UITableViewController {
             .disposed(by: disposeBag)
         
         viewModel.visible
-            .bindTo(visibleSwitch.rx.value)
+            .bindTo(visibleSwitch.rx.isOn)
             .disposed(by: disposeBag)
         
         viewModel.format
@@ -83,7 +87,7 @@ public class ItemViewController: UITableViewController {
             .bindTo(viewModel.onSelectFormula)
             .disposed(by: disposeBag)
 
-        visibleSwitch.rx.value
+        visibleSwitch.rx.isOn
             .bindTo(viewModel.onChangeVisible)
             .disposed(by: disposeBag)
         

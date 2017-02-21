@@ -27,7 +27,7 @@ import XCTest
 import RxSwift
 @testable import FormulaCalc
 
-typealias R = Resource
+private typealias R = Resource
 
 class DesignSheetViewModelTests: XCTestCase {
     class MockItemViewModel: ViewModel, IItemViewModel {
@@ -75,8 +75,8 @@ class DesignSheetViewModelTests: XCTestCase {
             return result
         }
         
-        func resolveItemViewModel() -> IItemViewModel {
-            return MockItemViewModel(id: "sheet_item_zero")  // TODO: pass the id
+        func resolveItemViewModel(id: String) -> IItemViewModel {
+            return MockItemViewModel(id: id)
         }
     }
 

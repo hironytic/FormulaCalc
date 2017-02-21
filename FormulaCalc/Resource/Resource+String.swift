@@ -38,5 +38,8 @@ public extension Resource {
         public static let sheetItemTypeNumeric = "FormulaCalc.sheetItemTypeNumeric"
         public static let sheetItemTypeString = "FormulaCalc.sheetItemTypeString"
         public static let sheetItemTypeFormula = "FormulaCalc.sheetItemTypeFormula"
+        public static let thousandSeparatorOn = "FormulaCalc.thousandSeparatorOn"
+        public static let fractionDigitsAuto = "FormulaCalc.fractionDigitsAuto"
+        public static let fractionDigitsFormat = "FormulaCalc.fractionDigitsFormat"
     }
 }

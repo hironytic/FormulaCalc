@@ -42,10 +42,10 @@ public class ThousandSeparatorElementCell: UITableViewCell {
             let disposeBag = DisposeBag()
             
             viewModel.thousandSeparator
-                .bindTo(thousandSeparatorSwitch.rx.value)
+                .bindTo(thousandSeparatorSwitch.rx.isOn)
                 .disposed(by: disposeBag)
 
-            thousandSeparatorSwitch.rx.value
+            thousandSeparatorSwitch.rx.isOn
                 .bindTo(viewModel.onChangeThousandSeparator)
                 .disposed(by: disposeBag)
             

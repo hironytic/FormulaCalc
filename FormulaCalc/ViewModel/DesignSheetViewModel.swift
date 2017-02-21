@@ -166,8 +166,7 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
     }
     
     private func handleOnSelect(_ sheetElementViewModel: IDesignSheetElementViewModel) {
-        let itemViewModel = _locator.resolveItemViewModel()
-        //itemViewModel.id = sheetElementViewModel.id
+        let itemViewModel = _locator.resolveItemViewModel(id: sheetElementViewModel.id)
         sendMessage(TransitionMessage(viewModel: itemViewModel, type: .push, animated: true))
     }
 }

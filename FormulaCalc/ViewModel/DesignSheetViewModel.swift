@@ -71,6 +71,7 @@ class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
         _sheetItemStore = _locator.resolveSheetItemStore(id: id)
 
         name = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
             .map { sheetItem in
                 return sheetItem?.name ?? ""
             }
@@ -78,6 +79,7 @@ class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
             .asObservable()
 
         type = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.type }, comparer: { $0 == $1 })
             .map { sheetItem in
                 guard let sheetItem = sheetItem else { return "" }
                 
@@ -95,6 +97,7 @@ class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
             .asObservable()
         
         invisibleMarkHidden = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.visible }, comparer: { $0 == $1 })
             .map { sheetItem in
                 return sheetItem?.visible ?? true
             }
@@ -128,6 +131,7 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
         _sheetStore = _locator.resolveSheetStore(id: id)
         
         title = _sheetStore.update
+            .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
             .map { sheet in
                 return sheet?.name ?? ""
             }

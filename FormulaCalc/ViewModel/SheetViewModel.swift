@@ -68,6 +68,7 @@ class SheetElementViewModel: ViewModel, ISheetElementViewModel {
         _sheetItemStore = _locator.resolveSheetItemStore(id: id)
         
         name = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
             .map { sheetItem in
                 return sheetItem?.name ?? ""
             }
@@ -75,6 +76,7 @@ class SheetElementViewModel: ViewModel, ISheetElementViewModel {
             .asObservable()
         
         value = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.type }, comparer: { $0 == $1 })
             .map { sheetItem in
                 guard let sheetItem = sheetItem else { return "" }
                 
@@ -118,6 +120,7 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
         _sheetStore = locator.resolveSheetStore(id: id)
 
         title = _sheetStore.update
+            .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
             .map { sheet in
                 return sheet?.name ?? ""
             }

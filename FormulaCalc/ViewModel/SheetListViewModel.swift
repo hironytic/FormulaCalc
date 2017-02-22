@@ -108,7 +108,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
             let placeholder: String? = ResourceUtils.getString(R.String.newSheetPlaceholder)
             let initialText = ""
             let cancelButtonTitle = ResourceUtils.getString(R.String.cancel)
-            let doneButtonTitle = ResourceUtils.getString(R.String.newMessageDone)
+            let doneButtonTitle = ResourceUtils.getString(R.String.newSheetDone)
             
             let onDone: AnyObserver<String>
             let onCancel = ActionObserver<Void>().asObserver()

@@ -28,6 +28,7 @@
 "FormulaCalc.newSheetTitle" = "計算シートを作成";
 "FormulaCalc.newSheetPlaceholder" = "タイトル";
 "FormulaCalc.newSheetDone" = "作成";
+"FormulaCalc.newItemNameFormat" = "項目 %d";
 "FormulaCalc.sheetItemTypeNumeric" = "数値入力";
 "FormulaCalc.sheetItemTypeString" = "文字列入力";
 "FormulaCalc.sheetItemTypeFormula" = "計算式";

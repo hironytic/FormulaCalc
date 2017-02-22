@@ -27,6 +27,8 @@ import Foundation
 import RxSwift
 import RealmSwift
 
+private typealias R = Resource
+
 public enum SheetStoreError: Error {
     case sheetNotFound
     case itemNotFound
@@ -173,7 +175,7 @@ public class SheetStore: ISheetStore {
             var newName: String
             repeat {
                 _lastNewItemNumber += 1
-                newName = "項目 \(_lastNewItemNumber)"
+                newName = ResourceUtils.getString(format: R.String.newItemNameFormat, _lastNewItemNumber)
             } while sheet.items.contains(where: { $0.name == newName })
             newItem.name = newName
             

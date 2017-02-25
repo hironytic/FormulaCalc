@@ -285,4 +285,118 @@ class ItemViewModelTests: XCTestCase {
         
         waitForExpectations(timeout: 3.0)
     }
+    
+    func testSelectName() {
+        // SCENARIO:
+        // (1) User selects the name.
+        // (2) It transit to the scene whose view model is IItemNameViewModel.
+
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let messageObserver = FulfillObserver(expectation(description: "Scene transition")) { (message: Message) in
+            // (2) It transit to the scene whose view model is IItemNameViewModel.
+            guard let transitionMessage = message as? TransitionMessage else { return false }
+            return transitionMessage.viewModel is IItemNameViewModel
+        }
+        
+        viewModel.message
+            .bindTo(messageObserver)
+            .disposed(by: disposeBag)
+        
+        // (1) User selects the name.
+        viewModel.onSelectName.onNext(())
+        
+        waitForExpectations(timeout: 3.0)
+    }
+    
+    func testSelectType() {
+        // SCENARIO:
+        // (1) User selects the type.
+        // (2) It transit to the scene whose view model is IItemTypeViewModel.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let messageObserver = FulfillObserver(expectation(description: "Scene transition")) { (message: Message) in
+            // (2) It transit to the scene whose view model is IItemTypeViewModel.
+            guard let transitionMessage = message as? TransitionMessage else { return false }
+            return transitionMessage.viewModel is IItemTypeViewModel
+        }
+        
+        viewModel.message
+            .bindTo(messageObserver)
+            .disposed(by: disposeBag)
+        
+        // (1) User selects the type.
+        viewModel.onSelectType.onNext(())
+        
+        waitForExpectations(timeout: 3.0)
+    }
+    
+    func testSelectFormula() {
+        // SCENARIO:
+        // (1) User selects the formula.
+        // (2) It transit to the scene whose view model is IFormulaViewModel.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let messageObserver = FulfillObserver(expectation(description: "Scene transition")) { (message: Message) in
+            // (2) It transit to the scene whose view model is IFormulaViewModel.
+            guard let transitionMessage = message as? TransitionMessage else { return false }
+            return transitionMessage.viewModel is IFormulaViewModel
+        }
+        
+        viewModel.message
+            .bindTo(messageObserver)
+            .disposed(by: disposeBag)
+        
+        // (1) User selects the formula.
+        viewModel.onSelectFormula.onNext(())
+        
+        waitForExpectations(timeout: 3.0)
+    }
+
+    func testChangeVisible() {
+        // SCENARIO:
+        // (1) User changes the visibility.
+        // (2) The item store is notified.
+
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_zero")
+        
+        let exp = expectation(description: "Visibility changed to false")
+        let sheetItemStore0 = mockLocator.resolveSheetItemStore(id: "sheet_item_zero") as! MockSheetItemStore
+        sheetItemStore0.updateVisibleHandler = { (visible) in
+            // (2) The item store is notified.
+            if (!visible) {
+                exp.fulfill()
+            }
+        }
+        
+        // (1) User changes the visibility.
+        viewModel.onChangeVisible.onNext(false)
+
+        waitForExpectations(timeout: 3.0)
+    }
+    
+    func testSelectFormat() {
+        // SCENARIO:
+        // (1) User selects the format.
+        // (2) It transit to the scene whose view model is IItemFormatViewModel.
+        
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+        
+        let messageObserver = FulfillObserver(expectation(description: "Scene transition")) { (message: Message) in
+            // (2) It transit to the scene whose view model is IItemFormatViewModel.
+            guard let transitionMessage = message as? TransitionMessage else { return false }
+            return transitionMessage.viewModel is IItemFormatViewModel
+        }
+        
+        viewModel.message
+            .bindTo(messageObserver)
+            .disposed(by: disposeBag)
+        
+        // (1) User selects the format.
+        viewModel.onSelectFormat.onNext(())
+        
+        waitForExpectations(timeout: 3.0)
+    }
 }

@@ -32,23 +32,47 @@ private typealias R = Resource
 class ItemViewModelTests: XCTestCase {
     
     class MockItemNameViewModel: ViewModel, IItemNameViewModel {
+        let id: String
+        
         let name = Observable<String?>.never()
         let onNameChanged = ActionObserver<String?>().asObserver()
+
+        init(id: String) {
+            self.id = id
+        }
     }
 
     class MockItemTypeViewModel: ViewModel, IItemTypeViewModel {
+        let id: String
+        
         let typeList = Observable<[IItemTypeElementViewModel]>.never()
         let onSelect = ActionObserver<IItemTypeElementViewModel>().asObserver()
+        
+        init(id: String) {
+            self.id = id
+        }
     }
     
     class MockFormulaViewModel: ViewModel, IFormulaViewModel {
+        let id: String
+        
         let formula = Observable<String?>.never()
         let onFormulaChanged = ActionObserver<String?>().asObserver()
+        
+        init(id: String) {
+            self.id = id
+        }
     }
     
     class MockItemFormatViewModel: ViewModel, IItemFormatViewModel {
+        let id: String
+        
         let items = Observable<ItemFormatElementViewModels>.never()
         let onSelectFractionDigits = ActionObserver<IFractionsDigitsElementViewModel>().asObserver()
+        
+        init(id: String) {
+            self.id = id
+        }
     }
     
     class MockLocator: ItemViewModel.Locator {
@@ -64,20 +88,20 @@ class ItemViewModelTests: XCTestCase {
             return result            
         }
         
-        func resolveItemNameViewModel() -> IItemNameViewModel {
-            return MockItemNameViewModel()
+        func resolveItemNameViewModel(id: String) -> IItemNameViewModel {
+            return MockItemNameViewModel(id: id)
         }
         
-        func resolveItemTypeViewModel() -> IItemTypeViewModel {
-            return MockItemTypeViewModel()
+        func resolveItemTypeViewModel(id: String) -> IItemTypeViewModel {
+            return MockItemTypeViewModel(id: id)
         }
         
-        func resolveFormulaViewModel() -> IFormulaViewModel  {
-            return MockFormulaViewModel()
+        func resolveFormulaViewModel(id: String) -> IFormulaViewModel  {
+            return MockFormulaViewModel(id: id)
         }
         
-        func resolveItemFormatViewModel() -> IItemFormatViewModel {
-            return MockItemFormatViewModel()
+        func resolveItemFormatViewModel(id: String) -> IItemFormatViewModel {
+            return MockItemFormatViewModel(id: id)
         }
     }
 

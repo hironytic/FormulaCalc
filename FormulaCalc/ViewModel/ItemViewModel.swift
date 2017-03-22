@@ -170,22 +170,22 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     }
     
     private func handleSelectName() {
-        let itemNameViewModel = _locator.resolveItemNameViewModel()
+        let itemNameViewModel = _locator.resolveItemNameViewModel(id: _id)
         sendMessage(TransitionMessage(viewModel: itemNameViewModel, type: .push, animated: true))
     }
     
     private func handleSelectType() {
-        let itemTypeViewModel = _locator.resolveItemTypeViewModel()
+        let itemTypeViewModel = _locator.resolveItemTypeViewModel(id: _id)
         sendMessage(TransitionMessage(viewModel: itemTypeViewModel, type: .push, animated: true))
     }
     
     private func handleSelectFormula() {
-        let formulaViewModel = _locator.resolveFormulaViewModel()
+        let formulaViewModel = _locator.resolveFormulaViewModel(id: _id)
         sendMessage(TransitionMessage(viewModel: formulaViewModel, type: .push, animated: true))
     }
 
     private func handleSelectFormat() {
-        let itemFormatViewModel = _locator.resolveItemFormatViewModel()
+        let itemFormatViewModel = _locator.resolveItemFormatViewModel(id: _id)
         sendMessage(TransitionMessage(viewModel: itemFormatViewModel, type: .push, animated: true))
     }
 }

@@ -49,11 +49,11 @@ public protocol IItemFormatViewModel: IViewModel {
 }
 
 public protocol IItemFormatViewModelLocator {
-    func resolveItemFormatViewModel() -> IItemFormatViewModel
+    func resolveItemFormatViewModel(id: String) -> IItemFormatViewModel
 }
 extension DefaultLocator: IItemFormatViewModelLocator {
-    public func resolveItemFormatViewModel() -> IItemFormatViewModel {
-        return ItemFormatViewModel()
+    public func resolveItemFormatViewModel(id: String) -> IItemFormatViewModel {
+        return ItemFormatViewModel(id: id)
     }
 }
 
@@ -91,7 +91,7 @@ public class ItemFormatViewModel: ViewModel, IItemFormatViewModel {
     private let _onChangeThousandSeparator = ActionObserver<Bool>()
     private let _onSelectFractionDigits = ActionObserver<IFractionsDigitsElementViewModel>()
     
-    public override init() {
+    public init(id: String) {
         _thousandSeparator = Observable.just(true)
         _fractionDigits = [FractionDigitsElementViewModel(), FractionDigitsElementViewModel()]
         

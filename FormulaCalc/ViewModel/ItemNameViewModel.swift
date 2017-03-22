@@ -33,11 +33,11 @@ public protocol IItemNameViewModel: IViewModel {
 }
 
 public protocol IItemNameViewModelLocator {
-    func resolveItemNameViewModel() -> IItemNameViewModel
+    func resolveItemNameViewModel(id: String) -> IItemNameViewModel
 }
 extension DefaultLocator: IItemNameViewModelLocator {
-    public func resolveItemNameViewModel() -> IItemNameViewModel {
-        return ItemNameViewModel()
+    public func resolveItemNameViewModel(id: String) -> IItemNameViewModel {
+        return ItemNameViewModel(id: id)
     }
 }
 
@@ -47,7 +47,7 @@ public class ItemNameViewModel: ViewModel, IItemNameViewModel {
     
     private let _onNameChanged = ActionObserver<String?>()
     
-    public override init() {
+    public init(id: String) {
         self.name = Observable
             .just("なまえ")
         

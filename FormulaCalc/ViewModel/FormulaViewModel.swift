@@ -33,11 +33,11 @@ public protocol IFormulaViewModel: IViewModel {
 }
 
 public protocol IFormulaViewModelLocator {
-    func resolveFormulaViewModel() -> IFormulaViewModel
+    func resolveFormulaViewModel(id: String) -> IFormulaViewModel
 }
 extension DefaultLocator: IFormulaViewModelLocator {
-    public func resolveFormulaViewModel() -> IFormulaViewModel {
-        return FormulaViewModel()
+    public func resolveFormulaViewModel(id: String) -> IFormulaViewModel {
+        return FormulaViewModel(id: id)
     }
 }
 
@@ -47,7 +47,7 @@ public class FormulaViewModel: ViewModel, IFormulaViewModel {
     
     private let _onFormulaChanged = ActionObserver<String?>()
     
-    public override init() {
+    public init(id: String) {
         self.formula = Observable
             .just("{身長(cm)}/100")
         

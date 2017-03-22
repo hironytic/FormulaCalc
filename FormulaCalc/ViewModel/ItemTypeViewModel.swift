@@ -38,11 +38,11 @@ public protocol IItemTypeViewModel: IViewModel {
 }
 
 public protocol IItemTypeViewModelLocator {
-    func resolveItemTypeViewModel() -> IItemTypeViewModel
+    func resolveItemTypeViewModel(id: String) -> IItemTypeViewModel
 }
 extension DefaultLocator: IItemTypeViewModelLocator {
-    public func resolveItemTypeViewModel() -> IItemTypeViewModel {
-        return ItemTypeViewModel()
+    public func resolveItemTypeViewModel(id: String) -> IItemTypeViewModel {
+        return ItemTypeViewModel(id: id)
     }
 }
 
@@ -65,7 +65,7 @@ public class ItemTypeViewModel: ViewModel, IItemTypeViewModel {
     
     public let _onSelect = ActionObserver<IItemTypeElementViewModel>()
     
-    public override init() {
+    public init(id: String) {
         typeList = Observable.just([ItemTypeElementViewModel(), ItemTypeElementViewModel()])
         onSelect = _onSelect.asObserver()
         

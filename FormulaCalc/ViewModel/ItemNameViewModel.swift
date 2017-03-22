@@ -30,6 +30,7 @@ public protocol IItemNameViewModel: IViewModel {
     var name: Observable<String?> { get }
     
     var onNameChanged: AnyObserver<String?> { get }
+    var onNameEditingDidEnd: AnyObserver<Void> { get }
 }
 
 public protocol IItemNameViewModelLocator {
@@ -37,22 +38,53 @@ public protocol IItemNameViewModelLocator {
 }
 extension DefaultLocator: IItemNameViewModelLocator {
     public func resolveItemNameViewModel(id: String) -> IItemNameViewModel {
-        return ItemNameViewModel(id: id)
+        return ItemNameViewModel(locator: self, id: id)
     }
 }
 
 public class ItemNameViewModel: ViewModel, IItemNameViewModel {
+    public typealias Locator = ISheetItemStoreLocator
+    
     public let name: Observable<String?>
     public let onNameChanged: AnyObserver<String?>
+    public let onNameEditingDidEnd: AnyObserver<Void>
     
     private let _onNameChanged = ActionObserver<String?>()
+    private let _onNameEditingDidEnd = ActionObserver<Void>()
     
-    public init(id: String) {
-        self.name = Observable
-            .just("なまえ")
-        
-        self.onNameChanged = _onNameChanged.asObserver()
-        
+    private let _locator: Locator
+    private let _id: String
+    private let _sheetItemStore: ISheetItemStore
+    private var _editingName: String = ""
+
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _id = id
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
+
+        name = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                return sheetItem?.name ?? ""
+            }
+            .startWith("")
+            .asDriver(onErrorJustReturn: "")
+            .asObservable()
+
+        onNameChanged = _onNameChanged.asObserver()
+        onNameEditingDidEnd = _onNameEditingDidEnd.asObserver()
+
         super.init()
+        
+        _onNameChanged.handler = { [weak self] (name: String?) in self?.handleOnNameChanged(name) }
+        _onNameEditingDidEnd.handler = { [weak self] in self?.handleOnNameEditingDidEnd() }
+    }
+    
+    private func handleOnNameChanged(_ name: String?) {
+        _editingName = name ?? ""
+    }
+    
+    private func handleOnNameEditingDidEnd() {
+        _sheetItemStore.onUpdateName.onNext(_editingName)
     }
 }

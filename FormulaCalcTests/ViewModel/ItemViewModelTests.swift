@@ -36,6 +36,7 @@ class ItemViewModelTests: XCTestCase {
         
         let name = Observable<String?>.never()
         let onNameChanged = ActionObserver<String?>().asObserver()
+        let onNameEditingDidEnd = ActionObserver<Void>().asObserver()
 
         init(id: String) {
             self.id = id

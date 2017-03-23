@@ -55,20 +55,24 @@ public class ItemNameViewModel: ViewModel, IItemNameViewModel {
     private let _locator: Locator
     private let _id: String
     private let _sheetItemStore: ISheetItemStore
-    private var _editingName: String = ""
+    private let _disposeBag = DisposeBag()
+    private let _name = Variable<String?>("")
 
     public init(locator: Locator, id: String) {
         _locator = locator
         _id = id
         _sheetItemStore = _locator.resolveSheetItemStore(id: id)
 
-        name = _sheetItemStore.update
+        _sheetItemStore.update
             .distinctUntilChanged({ $0?.name }, comparer: { $0 == $1 })
             .map { sheetItem in
                 return sheetItem?.name ?? ""
             }
-            .startWith("")
-            .asDriver(onErrorJustReturn: "")
+            .bindTo(_name)
+            .disposed(by: _disposeBag)
+        
+        name = _name
+            .asDriver()
             .asObservable()
 
         onNameChanged = _onNameChanged.asObserver()
@@ -81,10 +85,10 @@ public class ItemNameViewModel: ViewModel, IItemNameViewModel {
     }
     
     private func handleOnNameChanged(_ name: String?) {
-        _editingName = name ?? ""
+        _name.value = name
     }
     
     private func handleOnNameEditingDidEnd() {
-        _sheetItemStore.onUpdateName.onNext(_editingName)
+        _sheetItemStore.onUpdateName.onNext(_name.value ?? "")
     }
 }

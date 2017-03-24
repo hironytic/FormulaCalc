@@ -26,6 +26,8 @@
 import UIKit
 import RxSwift
 
+fileprivate typealias R = Resource
+
 public protocol IItemTypeElementViewModel: IViewModel {
     var name: Observable<String?> { get }
     var accessoryType: Observable<UITableViewCellAccessoryType> { get }
@@ -42,7 +44,7 @@ public protocol IItemTypeViewModelLocator {
 }
 extension DefaultLocator: IItemTypeViewModelLocator {
     public func resolveItemTypeViewModel(id: String) -> IItemTypeViewModel {
-        return ItemTypeViewModel(id: id)
+        return ItemTypeViewModel(locator: self, id: id)
     }
 }
 
@@ -50,24 +52,66 @@ class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
     public let name: Observable<String?>
     public let accessoryType: Observable<UITableViewCellAccessoryType>
     
-    public override init() {
-        name = Observable.just("数値入力")
-        accessoryType = Observable.just(UITableViewCellAccessoryType.checkmark)
+    public let sheetItemType: SheetItemType
+    
+    public init(sheetItemType: SheetItemType, currentItemType: Observable<SheetItemType?>) {
+        self.sheetItemType = sheetItemType
+        
+        let nameKey: String
+        switch sheetItemType {
+        case .numeric:
+            nameKey = R.String.sheetItemTypeNumeric
+        case .string:
+            nameKey = R.String.sheetItemTypeString
+        case .formula:
+            nameKey = R.String.sheetItemTypeFormula
+        }
+        
+        name = Observable.just(ResourceUtils.getString(nameKey))
+        accessoryType = currentItemType
+            .map { type in
+                if let type = type {
+                    return (type == sheetItemType) ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+                } else {
+                    return UITableViewCellAccessoryType.none
+                }
+            }
+            .asDriver(onErrorJustReturn: UITableViewCellAccessoryType.none)
+            .asObservable()
         
         super.init()
     }
 }
 
 public class ItemTypeViewModel: ViewModel, IItemTypeViewModel {
+    public typealias Locator = ISheetItemStoreLocator
+    
     public let typeList: Observable<[IItemTypeElementViewModel]>
     
     public let onSelect: AnyObserver<IItemTypeElementViewModel>
     
-    public let _onSelect = ActionObserver<IItemTypeElementViewModel>()
+    private let _locator: Locator
+    private let _id: String
+    private let _sheetItemStore: ISheetItemStore
     
-    public init(id: String) {
-        typeList = Observable.just([ItemTypeElementViewModel(), ItemTypeElementViewModel()])
-        onSelect = _onSelect.asObserver()
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _id = id
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
+
+        let currentItemType = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.type }, comparer: { $0 == $1 })
+            .map { $0?.type }
+        
+        typeList = Observable.just([
+            ItemTypeElementViewModel(sheetItemType: .numeric, currentItemType: currentItemType),
+            ItemTypeElementViewModel(sheetItemType: .string, currentItemType: currentItemType),
+            ItemTypeElementViewModel(sheetItemType: .formula, currentItemType: currentItemType)
+        ])
+        onSelect = _sheetItemStore.onUpdateType
+            .mapObserver { (elementViewModel: IItemTypeElementViewModel) in
+                return (elementViewModel as! ItemTypeElementViewModel).sheetItemType
+            }
         
         super.init()
     }

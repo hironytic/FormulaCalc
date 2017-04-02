@@ -26,6 +26,8 @@
 import UIKit
 import RxSwift
 
+fileprivate typealias R = Resource
+
 public protocol IThousandSeparatorElementViewModel: IViewModel {
     var thousandSeparator: Observable<Bool> { get }
     
@@ -53,7 +55,7 @@ public protocol IItemFormatViewModelLocator {
 }
 extension DefaultLocator: IItemFormatViewModelLocator {
     public func resolveItemFormatViewModel(id: String) -> IItemFormatViewModel {
-        return ItemFormatViewModel(id: id)
+        return ItemFormatViewModel(locator: self, id: id)
     }
 }
 
@@ -69,37 +71,68 @@ class ThousandSeparatorElementViewModel: ViewModel, IThousandSeparatorElementVie
 }
 
 class FractionDigitsElementViewModel: ViewModel, IFractionsDigitsElementViewModel {
-    let name: Observable<String?>
-    let accessoryType: Observable<UITableViewCellAccessoryType>
+    public let name: Observable<String?>
+    public let accessoryType: Observable<UITableViewCellAccessoryType>
+
+    public let value: Int
     
-    override init() {
-        name = Observable.just("自動")
-        accessoryType = Observable.just(.checkmark)
+    init(value: Int, name: String, fractionDigits: Observable<Int?>) {
+        self.value = value
+        self.name = Observable.just(name)
+        accessoryType = fractionDigits
+            .map { fdOrNil in
+                guard let fd = fdOrNil else { return .none }
+                return (fd == value) ? .checkmark : .none
+            }
         
         super.init()
     }
 }
 
 public class ItemFormatViewModel: ViewModel, IItemFormatViewModel {
-    private let _thousandSeparator: Observable<Bool>
-    private let _fractionDigits: [IFractionsDigitsElementViewModel]
-    
-    public let onSelectFractionDigits: AnyObserver<IFractionsDigitsElementViewModel>
+    public typealias Locator = ISheetItemStoreLocator
 
     public let items: Observable<ItemFormatElementViewModels>
-    
-    private let _onChangeThousandSeparator = ActionObserver<Bool>()
-    private let _onSelectFractionDigits = ActionObserver<IFractionsDigitsElementViewModel>()
-    
-    public init(id: String) {
-        _thousandSeparator = Observable.just(true)
-        _fractionDigits = [FractionDigitsElementViewModel(), FractionDigitsElementViewModel()]
-        
-        onSelectFractionDigits = _onSelectFractionDigits.asObserver()
 
-        let thousandSeparatorElementViewModel = ThousandSeparatorElementViewModel(thousandSeparator: _thousandSeparator, onChangeThousandSeparator: _onChangeThousandSeparator.asObserver())
+    public let onSelectFractionDigits: AnyObserver<IFractionsDigitsElementViewModel>
+    
+    private let _locator: Locator
+    private let _id: String
+    private let _sheetItemStore: ISheetItemStore
+    
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _id = id
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
+
+        let thousandSeparator = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.thousandSeparator }, comparer: { $0 == $1 })
+            .map { $0?.thousandSeparator ?? false }
+            .asDriver(onErrorJustReturn: false)
+            .asObservable()
+
+        let onChangeThousandSeparator = _sheetItemStore.onUpdateThousandSeparator
         
-        items = Observable.just(ItemFormatElementViewModels(thousandSeparator: [thousandSeparatorElementViewModel], fractionDigits: _fractionDigits))
+        let fractionDigits = _sheetItemStore.update
+            .distinctUntilChanged({ $0?.fractionDigits }, comparer: { $0 == $1 })
+            .map { $0?.fractionDigits }
+        
+        let fractionDigitsList = [
+            FractionDigitsElementViewModel(value: -1, name: ResourceUtils.getString(R.String.fractionDigitsAuto), fractionDigits: fractionDigits),
+            FractionDigitsElementViewModel(value: 0, name: "0", fractionDigits: fractionDigits),
+            FractionDigitsElementViewModel(value: 1, name: "1", fractionDigits: fractionDigits),
+            FractionDigitsElementViewModel(value: 2, name: "2", fractionDigits: fractionDigits),
+            FractionDigitsElementViewModel(value: 3, name: "3", fractionDigits: fractionDigits),
+            FractionDigitsElementViewModel(value: 4, name: "4", fractionDigits: fractionDigits),
+            FractionDigitsElementViewModel(value: 5, name: "5", fractionDigits: fractionDigits),
+        ]
+        
+        onSelectFractionDigits = _sheetItemStore.onUpdateFractionDigits
+            .mapObserver { ($0 as! FractionDigitsElementViewModel).value }
+
+        let thousandSeparatorElementViewModel = ThousandSeparatorElementViewModel(thousandSeparator: thousandSeparator, onChangeThousandSeparator: onChangeThousandSeparator)
+        
+        items = Observable.just(ItemFormatElementViewModels(thousandSeparator: [thousandSeparatorElementViewModel], fractionDigits: fractionDigitsList))
         
         super.init()
     }

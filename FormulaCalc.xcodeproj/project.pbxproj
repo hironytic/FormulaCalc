@@ -70,6 +70,7 @@
 		50CE21B71DFD85D30042E103 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B61DFD85D30042E103 /* RxSwift.framework */; };
 		50CE21BA1DFD85F30042E103 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B81DFD85F30042E103 /* Realm.framework */; };
 		50CE21BB1DFD85F30042E103 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE21B91DFD85F30042E103 /* RealmSwift.framework */; };
+		50DC84B21E90D40500089B8E /* ItemFormatViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DC84B11E90D40500089B8E /* ItemFormatViewModelTests.swift */; };
 		50DFDFE61E2ED604008E67D5 /* SheetItemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DFDFE51E2ED604008E67D5 /* SheetItemStore.swift */; };
 		50F6FEC31E02BF8E002E849C /* ActionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */; };
 		50F6FEC51E02BF8E002E849C /* TransitionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */; };
@@ -155,6 +156,7 @@
 		50CE21B61DFD85D30042E103 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		50CE21B81DFD85F30042E103 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50CE21B91DFD85F30042E103 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		50DC84B11E90D40500089B8E /* ItemFormatViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemFormatViewModelTests.swift; sourceTree = "<group>"; };
 		50DFDFE51E2ED604008E67D5 /* SheetItemStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetItemStore.swift; sourceTree = "<group>"; };
 		50F6FEBC1E02BF8E002E849C /* ActionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionObserver.swift; sourceTree = "<group>"; };
 		50F6FEBF1E02BF8E002E849C /* TransitionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionMessage.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 			children = (
 				501563FE1E4CB22100129964 /* DesignSheetViewModelTests.swift */,
 				506948741E606FB600131138 /* ItemViewModelTests.swift */,
+				50DC84B11E90D40500089B8E /* ItemFormatViewModelTests.swift */,
 				506D111E1E82BB3C00738238 /* ItemNameViewModelTests.swift */,
 				506D11201E8BEEE300738238 /* ItemTypeViewModelTests.swift */,
 				501563F71E46C80600129964 /* SheetListViewModelTests.swift */,
@@ -586,6 +589,7 @@
 				506D111F1E82BB3C00738238 /* ItemNameViewModelTests.swift in Sources */,
 				501563FF1E4CB22100129964 /* DesignSheetViewModelTests.swift in Sources */,
 				50C45E491E2202A400F72DD0 /* SheetStoreTests.swift in Sources */,
+				50DC84B21E90D40500089B8E /* ItemFormatViewModelTests.swift in Sources */,
 				50C45E451E210E1500F72DD0 /* FulfillObserver.swift in Sources */,
 				50C45E3C1E21034800F72DD0 /* SheetListStoreTests.swift in Sources */,
 				506948751E606FB600131138 /* ItemViewModelTests.swift in Sources */,

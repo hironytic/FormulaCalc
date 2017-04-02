@@ -31,7 +31,7 @@ private typealias R = Resource
 
 class ItemTypeViewModelTests: XCTestCase {
 
-    class MockLocator: ItemNameViewModel.Locator {
+    class MockLocator: ItemTypeViewModel.Locator {
         var _sheetItemStores: [String: ISheetItemStore] = [:]
         
         func resolveSheetItemStore(id: String) -> ISheetItemStore {
@@ -190,6 +190,8 @@ class ItemTypeViewModelTests: XCTestCase {
         
         // (2) User taps "Numeric"
         viewModel.typeList
+            .filter { $0.count == 3 }
+            .take(1)
             .subscribe (onNext: { list in
                 viewModel.onSelect.onNext(list[0])
             })

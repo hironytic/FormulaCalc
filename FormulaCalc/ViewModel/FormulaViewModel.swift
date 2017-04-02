@@ -41,7 +41,7 @@ extension DefaultLocator: IFormulaViewModelLocator {
     }
 }
 
-public class FormulaViewModel: ViewModel, IFormulaViewModel {
+public class FormulaViewModel: IFormulaViewModel {
     public let formula: Observable<String?>
     public let onFormulaChanged: AnyObserver<String?>
     
@@ -52,7 +52,5 @@ public class FormulaViewModel: ViewModel, IFormulaViewModel {
             .just("{身長(cm)}/100")
         
         self.onFormulaChanged = _onFormulaChanged.asObserver()
-        
-        super.init()
     }
 }

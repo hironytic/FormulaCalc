@@ -37,6 +37,7 @@ public protocol ISheetElementViewModel: IViewModel {
 public protocol ISheetViewModel: IViewModel {
     var title: Observable<String?> { get }
     var itemList: Observable<[ISheetElementViewModel]> { get }
+    var message: Observable<Message> { get }
     
     var onTapDesignButton: AnyObserver<Void> { get }
 }
@@ -50,7 +51,7 @@ extension DefaultLocator: ISheetViewModelLocator {
     }
 }
 
-class SheetElementViewModel: ViewModel, ISheetElementViewModel {
+class SheetElementViewModel: ISheetElementViewModel {
     public typealias Locator = ISheetItemStoreLocator
     
     public let id: String
@@ -96,23 +97,23 @@ class SheetElementViewModel: ViewModel, ISheetElementViewModel {
             .mapObserver { _ in
                 return id
             }
-        
-        super.init()
     }
 }
 
-public class SheetViewModel: ViewModel, ISheetViewModel {
+public class SheetViewModel: ISheetViewModel {
     public typealias Locator =  ISheetStoreLocator & ISheetItemStoreLocator & IDesignSheetViewModelLocator
     
     public let title: Observable<String?>
     public let itemList: Observable<[ISheetElementViewModel]>
     public let onTapDesignButton: AnyObserver<Void>
+    public let message: Observable<Message>
     
     private let _locator: Locator
     private let _id: String
     private let _sheetStore: ISheetStore
     private let _editingItemIdSubject = BehaviorSubject<String?>(value: nil)
     private let _onTapDesignButton = ActionObserver<Void>()
+    private let _messageSlot = MessageSlot()
     
     public init(locator: Locator, id: String) {
         _locator = locator
@@ -144,14 +145,14 @@ public class SheetViewModel: ViewModel, ISheetViewModel {
             .asObservable()
 
         onTapDesignButton = _onTapDesignButton.asObserver()
-        
-        super.init()
+
+        message = _messageSlot.message
         
         _onTapDesignButton.handler = { [weak self] in self?.handleOnTapDesignButton() }
     }
     
     private func handleOnTapDesignButton() {
         let designSheetViewModel = _locator.resolveDesignSheetViewModel(id: _id)
-        sendMessage(TransitionMessage(viewModel: designSheetViewModel, type: .present, animated: true, modalTransitionStyle: .flipHorizontal))
+        _messageSlot.send(TransitionMessage(viewModel: designSheetViewModel, type: .present, animated: true, modalTransitionStyle: .flipHorizontal))
     }
 }

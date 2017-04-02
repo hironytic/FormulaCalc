@@ -33,6 +33,7 @@ public protocol IItemViewModel: IViewModel {
     var formula: Observable<String?> { get }
     var visible: Observable<Bool> { get }
     var format: Observable<String?> { get }
+    var message: Observable<Message> { get }
     
     var onSelectName: AnyObserver<Void> { get }
     var onSelectType: AnyObserver<Void> { get }
@@ -50,7 +51,7 @@ extension DefaultLocator: IItemViewModelLocator {
     }
 }
 
-public class ItemViewModel: ViewModel, IItemViewModel {
+public class ItemViewModel: IItemViewModel {
     public typealias Locator = ISheetItemStoreLocator & IItemNameViewModelLocator
                                 & IItemTypeViewModelLocator & IFormulaViewModelLocator
                                 & IItemFormatViewModelLocator
@@ -61,6 +62,7 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     public let formula: Observable<String?>
     public let visible: Observable<Bool>
     public let format: Observable<String?>
+    public let message: Observable<Message>
 
     public let onSelectName: AnyObserver<Void>
     public let onSelectType: AnyObserver<Void>
@@ -76,6 +78,7 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     private let _onSelectFormula = ActionObserver<Void>()
     private let _onChangeVisible = ActionObserver<Bool>()
     private let _onSelectFormat = ActionObserver<Void>()
+    private let _messageSlot = MessageSlot()
     
     public init(locator: Locator, id: String) {
         _locator = locator
@@ -158,8 +161,8 @@ public class ItemViewModel: ViewModel, IItemViewModel {
         onSelectFormula = _onSelectFormula.asObserver()
         onChangeVisible = _sheetItemStore.onUpdateVisible
         onSelectFormat = _onSelectFormat.asObserver()
-        
-        super.init()
+
+        message = _messageSlot.message
         
         _onSelectName.handler = { [weak self] in self?.handleSelectName() }
         _onSelectType.handler = { [weak self] in self?.handleSelectType() }
@@ -169,21 +172,21 @@ public class ItemViewModel: ViewModel, IItemViewModel {
     
     private func handleSelectName() {
         let itemNameViewModel = _locator.resolveItemNameViewModel(id: _id)
-        sendMessage(TransitionMessage(viewModel: itemNameViewModel, type: .push, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: itemNameViewModel, type: .push, animated: true))
     }
     
     private func handleSelectType() {
         let itemTypeViewModel = _locator.resolveItemTypeViewModel(id: _id)
-        sendMessage(TransitionMessage(viewModel: itemTypeViewModel, type: .push, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: itemTypeViewModel, type: .push, animated: true))
     }
     
     private func handleSelectFormula() {
         let formulaViewModel = _locator.resolveFormulaViewModel(id: _id)
-        sendMessage(TransitionMessage(viewModel: formulaViewModel, type: .push, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: formulaViewModel, type: .push, animated: true))
     }
 
     private func handleSelectFormat() {
         let itemFormatViewModel = _locator.resolveItemFormatViewModel(id: _id)
-        sendMessage(TransitionMessage(viewModel: itemFormatViewModel, type: .push, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: itemFormatViewModel, type: .push, animated: true))
     }
 }

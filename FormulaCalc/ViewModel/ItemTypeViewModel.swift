@@ -46,7 +46,7 @@ extension DefaultLocator: IItemTypeViewModelLocator {
     }
 }
 
-class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
+class ItemTypeElementViewModel: IItemTypeElementViewModel {
     public let name: Observable<String?>
     public let accessoryType: Observable<UITableViewCellAccessoryType>
     
@@ -76,12 +76,10 @@ class ItemTypeElementViewModel: ViewModel, IItemTypeElementViewModel {
             }
             .asDriver(onErrorJustReturn: UITableViewCellAccessoryType.none)
             .asObservable()
-        
-        super.init()
     }
 }
 
-public class ItemTypeViewModel: ViewModel, IItemTypeViewModel {
+public class ItemTypeViewModel: IItemTypeViewModel {
     public typealias Locator = ISheetItemStoreLocator
     
     public let typeList: Observable<[IItemTypeElementViewModel]>
@@ -110,7 +108,5 @@ public class ItemTypeViewModel: ViewModel, IItemTypeViewModel {
             .mapObserver { (elementViewModel: IItemTypeElementViewModel) in
                 return (elementViewModel as! ItemTypeElementViewModel).sheetItemType
             }
-        
-        super.init()
     }
 }

@@ -28,7 +28,7 @@ import RxSwift
 @testable import FormulaCalc
 
 class DesignSheetViewModelTests: XCTestCase {
-    class MockItemViewModel: ViewModel, IItemViewModel {
+    class MockItemViewModel: IItemViewModel {
         let id: String
         
         let title = Observable<String?>.never()
@@ -37,6 +37,7 @@ class DesignSheetViewModelTests: XCTestCase {
         let formula = Observable<String?>.never()
         let visible = Observable<Bool>.never()
         let format = Observable<String?>.never()
+        var message = Observable<Message>.never()
         
         let onSelectName = ActionObserver<Void>().asObserver()
         let onSelectType = ActionObserver<Void>().asObserver()

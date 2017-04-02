@@ -29,7 +29,7 @@ import RxSwift
 
 class ItemViewModelTests: XCTestCase {
     
-    class MockItemNameViewModel: ViewModel, IItemNameViewModel {
+    class MockItemNameViewModel: IItemNameViewModel {
         let id: String
         
         let name = Observable<String?>.never()
@@ -41,7 +41,7 @@ class ItemViewModelTests: XCTestCase {
         }
     }
 
-    class MockItemTypeViewModel: ViewModel, IItemTypeViewModel {
+    class MockItemTypeViewModel: IItemTypeViewModel {
         let id: String
         
         let typeList = Observable<[IItemTypeElementViewModel]>.never()
@@ -52,7 +52,7 @@ class ItemViewModelTests: XCTestCase {
         }
     }
     
-    class MockFormulaViewModel: ViewModel, IFormulaViewModel {
+    class MockFormulaViewModel: IFormulaViewModel {
         let id: String
         
         let formula = Observable<String?>.never()
@@ -63,7 +63,7 @@ class ItemViewModelTests: XCTestCase {
         }
     }
     
-    class MockItemFormatViewModel: ViewModel, IItemFormatViewModel {
+    class MockItemFormatViewModel: IItemFormatViewModel {
         let id: String
         
         let items = Observable<ItemFormatElementViewModels>.never()

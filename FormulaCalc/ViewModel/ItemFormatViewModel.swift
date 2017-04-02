@@ -57,18 +57,17 @@ extension DefaultLocator: IItemFormatViewModelLocator {
     }
 }
 
-class ThousandSeparatorElementViewModel: ViewModel, IThousandSeparatorElementViewModel {
+class ThousandSeparatorElementViewModel: IThousandSeparatorElementViewModel {
     let thousandSeparator: Observable<Bool>
     let onChangeThousandSeparator: AnyObserver<Bool>
     
     init(thousandSeparator: Observable<Bool>, onChangeThousandSeparator: AnyObserver<Bool>) {
         self.thousandSeparator = thousandSeparator
         self.onChangeThousandSeparator = onChangeThousandSeparator
-        super.init()
     }
 }
 
-class FractionDigitsElementViewModel: ViewModel, IFractionsDigitsElementViewModel {
+class FractionDigitsElementViewModel: IFractionsDigitsElementViewModel {
     public let name: Observable<String?>
     public let accessoryType: Observable<UITableViewCellAccessoryType>
 
@@ -82,12 +81,10 @@ class FractionDigitsElementViewModel: ViewModel, IFractionsDigitsElementViewMode
                 guard let fd = fdOrNil else { return .none }
                 return (fd == value) ? .checkmark : .none
             }
-        
-        super.init()
     }
 }
 
-public class ItemFormatViewModel: ViewModel, IItemFormatViewModel {
+public class ItemFormatViewModel: IItemFormatViewModel {
     public typealias Locator = ISheetItemStoreLocator
 
     public let items: Observable<ItemFormatElementViewModels>
@@ -131,7 +128,5 @@ public class ItemFormatViewModel: ViewModel, IItemFormatViewModel {
         let thousandSeparatorElementViewModel = ThousandSeparatorElementViewModel(thousandSeparator: thousandSeparator, onChangeThousandSeparator: onChangeThousandSeparator)
         
         items = Observable.just(ItemFormatElementViewModels(thousandSeparator: [thousandSeparatorElementViewModel], fractionDigits: fractionDigitsList))
-        
-        super.init()
     }
 }

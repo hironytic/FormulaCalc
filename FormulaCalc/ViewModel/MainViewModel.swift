@@ -30,20 +30,23 @@ public protocol IMainViewModel: IViewModel {
     var onViewDidAppear: AnyObserver<[Any]> { get }
 }
 
-public class MainViewModel: ViewModel, IMainViewModel {
+public class MainViewModel: IMainViewModel {
     public typealias Locator = ISheetListViewModelLocator
     
+    public let message: Observable<Message>
+
     public let onViewDidAppear: AnyObserver<[Any]>
     
     private let _locator: Locator
     private var _startupDidEnd: Bool = false
     private let _onViewDidAppear = ActionObserver<[Any]>()
+    private let _messageSlot = MessageSlot()
     
     public init(locator: Locator) {
         _locator = locator
         onViewDidAppear = _onViewDidAppear.asObserver()
-        
-        super.init()
+
+        message = _messageSlot.message
         
         _onViewDidAppear.handler = { [weak self] _ in self?.handleViewDidAppear() }
     }
@@ -51,7 +54,7 @@ public class MainViewModel: ViewModel, IMainViewModel {
     private func handleViewDidAppear() {
         if !_startupDidEnd {
             let sheetListViewModel = _locator.resolveSheetListViewModel()
-            sendMessage(TransitionMessage(viewModel: sheetListViewModel, type: .present, animated: false))
+            _messageSlot.send(TransitionMessage(viewModel: sheetListViewModel, type: .present, animated: false))
             _startupDidEnd = true
         }
     }

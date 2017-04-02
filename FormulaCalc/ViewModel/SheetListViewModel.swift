@@ -33,6 +33,7 @@ public protocol ISheetListElementViewModel: IViewModel {
 
 public protocol ISheetListViewModel: IViewModel {
     var sheetList: Observable<[ISheetListElementViewModel]> { get }
+    var message: Observable<Message> { get }
     
     var onNew: AnyObserver<Void> { get }
     var onDelete: AnyObserver<ISheetListElementViewModel> { get }
@@ -48,31 +49,31 @@ extension DefaultLocator: ISheetListViewModelLocator {
     }
 }
 
-class SheetListElementViewModel: ViewModel, ISheetListElementViewModel {
+class SheetListElementViewModel: ISheetListElementViewModel {
     public let id: String
     public let title: Observable<String?>
-    
+
     public init(id: String, title: String) {
         self.id = id
         self.title = Observable.just(title)
-        
-        super.init()
     }
 }
 
-public class SheetListViewModel: ViewModel, ISheetListViewModel {
+public class SheetListViewModel: ISheetListViewModel {
     public typealias Locator = ISheetListStoreLocator & ISheetViewModelLocator
     
     public let sheetList: Observable<[ISheetListElementViewModel]>
-    public private(set) var onNew: AnyObserver<Void>
-    public private(set) var onDelete: AnyObserver<ISheetListElementViewModel>
-    public private(set) var onSelect: AnyObserver<ISheetListElementViewModel>
+    public let onNew: AnyObserver<Void>
+    public let onDelete: AnyObserver<ISheetListElementViewModel>
+    public let onSelect: AnyObserver<ISheetListElementViewModel>
+    public let message: Observable<Message>
     
     private let _locator: Locator
     private let _sheetListStore: ISheetListStore
     private let _onNew = ActionObserver<Void>()
     private let _onDelete = ActionObserver<ISheetListElementViewModel>()
     private let _onSelect = ActionObserver<ISheetListElementViewModel>()
+    private let _messageSlot = MessageSlot()
     
     public init(locator: Locator) {
         _locator = locator
@@ -92,7 +93,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
         onDelete = _onDelete.asObserver()
         onSelect = _onSelect.asObserver()
         
-        super.init()
+        message = _messageSlot.message
         
         _onNew.handler = { [weak self] in self?.handleOnNew() }
         _onSelect.handler = { [weak self] item in self?.handleOnSelect(item) }
@@ -100,7 +101,7 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
     }
     
     private func handleOnNew() {
-        class InputNameViewModel: ViewModel, IInputOneTextViewModel {
+        class InputNameViewModel: IInputOneTextViewModel {
             let title: String? = ResourceUtils.getString(R.String.newSheetTitle)
             let detailMessage: String? = nil
             let placeholder: String? = ResourceUtils.getString(R.String.newSheetPlaceholder)
@@ -113,20 +114,19 @@ public class SheetListViewModel: ViewModel, ISheetListViewModel {
 
             init(onDone: @escaping (String) -> Void) {
                 self.onDone = ActionObserver(handler: onDone).asObserver()
-                super.init()
             }
         }
         
         let viewModel = InputNameViewModel() { [weak self] name in
             self?._sheetListStore.onCreateNewSheet.onNext(name)
         }
-        sendMessage(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: viewModel, type: .present, animated: true))
     }
     
     private func handleOnSelect(_ item: ISheetListElementViewModel) {
         let id = item.id
         let sheetViewModel = _locator.resolveSheetViewModel(id: id)
-        sendMessage(TransitionMessage(viewModel: sheetViewModel, type: .push, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: sheetViewModel, type: .push, animated: true))
     }
     
     private func handleOnDelete(_ item: ISheetListElementViewModel) {

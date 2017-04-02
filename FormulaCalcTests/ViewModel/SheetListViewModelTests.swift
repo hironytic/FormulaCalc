@@ -85,10 +85,11 @@ class SheetListViewModelTests: XCTestCase {
         }
     }
     
-    class MockSheetViewModel: ViewModel, ISheetViewModel {
+    class MockSheetViewModel: ISheetViewModel {
         let id: String
         let title = Observable<String?>.never()
         let itemList = Observable<[ISheetElementViewModel]>.never()
+        var message = Observable<Message>.never()
         let onTapDesignButton = ActionObserver<Void>().asObserver()
         
         init(id: String) {

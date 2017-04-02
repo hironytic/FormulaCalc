@@ -42,7 +42,7 @@ extension DefaultLocator: IItemNameViewModelLocator {
     }
 }
 
-public class ItemNameViewModel: ViewModel, IItemNameViewModel {
+public class ItemNameViewModel: IItemNameViewModel {
     public typealias Locator = ISheetItemStoreLocator
     
     public let name: Observable<String?>
@@ -78,8 +78,6 @@ public class ItemNameViewModel: ViewModel, IItemNameViewModel {
         onNameChanged = _onNameChanged.asObserver()
         onNameEditingDidEnd = _onNameEditingDidEnd.asObserver()
 
-        super.init()
-        
         _onNameChanged.handler = { [weak self] (name: String?) in self?.handleOnNameChanged(name) }
         _onNameEditingDidEnd.handler = { [weak self] in self?.handleOnNameEditingDidEnd() }
     }

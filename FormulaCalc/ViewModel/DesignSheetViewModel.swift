@@ -36,6 +36,7 @@ public protocol IDesignSheetElementViewModel: IViewModel {
 public protocol IDesignSheetViewModel: IViewModel {
     var title: Observable<String?> { get }
     var itemList: Observable<[IDesignSheetElementViewModel]> { get }
+    var message: Observable<Message> { get }
     
     var onNewItem: AnyObserver<Void> { get }
     var onSelectItem: AnyObserver<IDesignSheetElementViewModel> { get }
@@ -52,7 +53,7 @@ extension DefaultLocator: IDesignSheetViewModelLocator {
     }
 }
 
-class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
+class DesignSheetElementViewModel: IDesignSheetElementViewModel {
     public typealias Locator = ISheetItemStoreLocator
 
     public let id: String
@@ -101,14 +102,13 @@ class DesignSheetElementViewModel: ViewModel, IDesignSheetElementViewModel {
             }
             .asDriver(onErrorJustReturn: true)
             .asObservable()
-        
-        super.init()
     }
 }
 
-public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
+public class DesignSheetViewModel: IDesignSheetViewModel {
     public typealias Locator = ISheetStoreLocator & ISheetItemStoreLocator & IItemViewModelLocator
     
+    public let message: Observable<Message>
     public let title: Observable<String?>
     public let itemList: Observable<[IDesignSheetElementViewModel]>
     
@@ -120,6 +120,7 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
     private let _locator: Locator
     private let _id: String
     private let _sheetStore: ISheetStore
+    private let _messageSlot = MessageSlot()
     private let _onSelectItem = ActionObserver<IDesignSheetElementViewModel>()
     private let _onDone = ActionObserver<Void>()
     
@@ -152,19 +153,19 @@ public class DesignSheetViewModel: ViewModel, IDesignSheetViewModel {
             }
         onSelectItem = _onSelectItem.asObserver()
         onDone = _onDone.asObserver()
-        
-        super.init()
+
+        message = _messageSlot.message
         
         _onDone.handler = { [weak self] in self?.handleOnDone() }
         _onSelectItem.handler = { [weak self] in self?.handleOnSelect($0) }
     }
     
     private func handleOnDone() {
-        sendMessage(DismissingMessage(type: .dismiss, animated: true))
+        _messageSlot.send(DismissingMessage(type: .dismiss, animated: true))
     }
     
     private func handleOnSelect(_ sheetElementViewModel: IDesignSheetElementViewModel) {
         let itemViewModel = _locator.resolveItemViewModel(id: sheetElementViewModel.id)
-        sendMessage(TransitionMessage(viewModel: itemViewModel, type: .push, animated: true))
+        _messageSlot.send(TransitionMessage(viewModel: itemViewModel, type: .push, animated: true))
     }
 }

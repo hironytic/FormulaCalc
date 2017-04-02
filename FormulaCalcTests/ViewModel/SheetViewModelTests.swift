@@ -29,11 +29,12 @@ import RealmSwift
 @testable import FormulaCalc
 
 class SheetViewModelTests: XCTestCase {
-    class MockDesignSheetViewModel: ViewModel, IDesignSheetViewModel {
+    class MockDesignSheetViewModel: IDesignSheetViewModel {
         let id: String
         
         var title = Observable<String?>.never()
         var itemList = Observable<[IDesignSheetElementViewModel]>.never()
+        var message = Observable<Message>.never()
         
         var onNewItem = ActionObserver<Void>().asObserver()
         var onSelectItem = ActionObserver<IDesignSheetElementViewModel>().asObserver()

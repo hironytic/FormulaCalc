@@ -27,21 +27,4 @@ import Foundation
 import RxSwift
 
 public protocol IViewModel: class {
-    var message: Observable<Message> { get }
-}
-
-public class ViewModel: IViewModel {
-    public var message: Observable<Message> {
-        get {
-            return _messageSlot.message
-        }
-    }
-    private let _messageSlot = MessageSlot()
-
-    public init() {
-    }
-    
-    public func sendMessage(_ message: Message) {
-        _messageSlot.send(message)
-    }
 }

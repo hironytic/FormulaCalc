@@ -1,5 +1,5 @@
 //
-// Resource+Id.swift
+// R+Id.swift
 // FormulaCalc
 //
 // Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,7 +25,7 @@
 
 import Foundation
 
-public extension Resource {
+public extension R {
     public struct Id {
         private init() { }
         

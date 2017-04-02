@@ -26,8 +26,6 @@
 import Foundation
 import RxSwift
 
-private typealias R = Resource
-
 public protocol IDesignSheetElementViewModel: IViewModel {
     var id: String { get }
     var name: Observable<String?> { get }

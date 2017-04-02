@@ -26,8 +26,6 @@
 import Foundation
 import RxSwift
 
-private typealias R = Resource
-
 public protocol IItemViewModel: IViewModel {
     var title: Observable<String?> { get }
     var name: Observable<String?> { get }

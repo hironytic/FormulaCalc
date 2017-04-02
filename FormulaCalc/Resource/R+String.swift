@@ -1,8 +1,8 @@
 //
-// Resource.swift
+// R+String.swift
 // FormulaCalc
 //
-// Copyright (c) 2016, 2017 Hironori Ichimiya <hiron@hironytic.com>
+// Copyright (c) 2017 Hironori Ichimiya <hiron@hironytic.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,21 @@
 
 import Foundation
 
-public struct Resource {
-    private init() { }
-    
+public extension R {
+    public struct String {
+        private init() { }
+        
+        public static let ok = "FormulaCalc.ok"
+        public static let cancel = "FormulaCalc.cancel"
+        public static let newSheetTitle = "FormulaCalc.newSheetTitle"
+        public static let newSheetPlaceholder = "FormulaCalc.newSheetPlaceholder"
+        public static let newSheetDone = "FormulaCalc.newSheetDone"
+        public static let newItemNameFormat = "FormulaCalc.newItemNameFormat"
+        public static let sheetItemTypeNumeric = "FormulaCalc.sheetItemTypeNumeric"
+        public static let sheetItemTypeString = "FormulaCalc.sheetItemTypeString"
+        public static let sheetItemTypeFormula = "FormulaCalc.sheetItemTypeFormula"
+        public static let thousandSeparatorOn = "FormulaCalc.thousandSeparatorOn"
+        public static let fractionDigitsAuto = "FormulaCalc.fractionDigitsAuto"
+        public static let fractionDigitsFormat = "FormulaCalc.fractionDigitsFormat"
+    }
 }

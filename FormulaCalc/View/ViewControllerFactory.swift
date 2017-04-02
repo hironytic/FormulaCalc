@@ -25,8 +25,6 @@
 
 import UIKit
 
-private typealias R = Resource
-
 public func createViewController(for viewModel: IViewModel) -> UIViewController {
     switch viewModel {
     case let viewModel as IDesignSheetViewModel:

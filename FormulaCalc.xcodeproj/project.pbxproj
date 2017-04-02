@@ -27,8 +27,8 @@
 		50AE03561E06586400739B0B /* ItemNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE03551E06586400739B0B /* ItemNameViewModel.swift */; };
 		50AE035B1E06B25200739B0B /* ItemName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50AE035A1E06B25200739B0B /* ItemName.storyboard */; };
 		50AE035D1E06B42400739B0B /* ItemNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE035C1E06B42400739B0B /* ItemNameViewController.swift */; };
-		50BD22FE1E0514D200A64650 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD22FC1E0514D200A64650 /* Resource.swift */; };
-		50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD22FD1E0514D200A64650 /* Resource+Id.swift */; };
+		50BD22FE1E0514D200A64650 /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD22FC1E0514D200A64650 /* R.swift */; };
+		50BD22FF1E0514D200A64650 /* R+Id.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD22FD1E0514D200A64650 /* R+Id.swift */; };
 		50BD23021E05165500A64650 /* SheetListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23011E05165500A64650 /* SheetListViewModel.swift */; };
 		50BD23041E05289100A64650 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23031E05289100A64650 /* MainViewModel.swift */; };
 		50BD23061E05360900A64650 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23051E05360900A64650 /* ViewControllerFactory.swift */; };
@@ -57,7 +57,7 @@
 		50C45E491E2202A400F72DD0 /* SheetStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E481E2202A400F72DD0 /* SheetStoreTests.swift */; };
 		50C45E4B1E2273F200F72DD0 /* InputOneTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E4A1E2273F200F72DD0 /* InputOneTextViewModel.swift */; };
 		50C45E4E1E230D1A00F72DD0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50C45E4D1E230D1A00F72DD0 /* Localizable.strings */; };
-		50C45E501E230E6600F72DD0 /* Resource+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E4F1E230E6600F72DD0 /* Resource+String.swift */; };
+		50C45E501E230E6600F72DD0 /* R+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E4F1E230E6600F72DD0 /* R+String.swift */; };
 		50C45E521E230FAB00F72DD0 /* ResourceUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E511E230FAB00F72DD0 /* ResourceUtils.swift */; };
 		50C45E541E2378A700F72DD0 /* ErrorStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E531E2378A700F72DD0 /* ErrorStore.swift */; };
 		50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE21911DFD83140042E103 /* AppDelegate.swift */; };
@@ -114,8 +114,8 @@
 		50AE03551E06586400739B0B /* ItemNameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewModel.swift; sourceTree = "<group>"; };
 		50AE035A1E06B25200739B0B /* ItemName.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemName.storyboard; sourceTree = "<group>"; };
 		50AE035C1E06B42400739B0B /* ItemNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemNameViewController.swift; sourceTree = "<group>"; };
-		50BD22FC1E0514D200A64650 /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
-		50BD22FD1E0514D200A64650 /* Resource+Id.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+Id.swift"; sourceTree = "<group>"; };
+		50BD22FC1E0514D200A64650 /* R.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.swift; sourceTree = "<group>"; };
+		50BD22FD1E0514D200A64650 /* R+Id.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "R+Id.swift"; sourceTree = "<group>"; };
 		50BD23011E05165500A64650 /* SheetListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListViewModel.swift; sourceTree = "<group>"; };
 		50BD23031E05289100A64650 /* MainViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		50BD23051E05360900A64650 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 		50C45E481E2202A400F72DD0 /* SheetStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetStoreTests.swift; sourceTree = "<group>"; };
 		50C45E4A1E2273F200F72DD0 /* InputOneTextViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputOneTextViewModel.swift; sourceTree = "<group>"; };
 		50C45E4D1E230D1A00F72DD0 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		50C45E4F1E230E6600F72DD0 /* Resource+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+String.swift"; sourceTree = "<group>"; };
+		50C45E4F1E230E6600F72DD0 /* R+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "R+String.swift"; sourceTree = "<group>"; };
 		50C45E511E230FAB00F72DD0 /* ResourceUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceUtils.swift; sourceTree = "<group>"; };
 		50C45E531E2378A700F72DD0 /* ErrorStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorStore.swift; sourceTree = "<group>"; };
 		50CE218E1DFD83140042E103 /* FormulaCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulaCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,9 +224,9 @@
 			isa = PBXGroup;
 			children = (
 				50C45E4C1E230CFA00F72DD0 /* Strings */,
-				50BD22FC1E0514D200A64650 /* Resource.swift */,
-				50BD22FD1E0514D200A64650 /* Resource+Id.swift */,
-				50C45E4F1E230E6600F72DD0 /* Resource+String.swift */,
+				50BD22FC1E0514D200A64650 /* R.swift */,
+				50BD22FD1E0514D200A64650 /* R+Id.swift */,
+				50C45E4F1E230E6600F72DD0 /* R+String.swift */,
 				50C45E511E230FAB00F72DD0 /* ResourceUtils.swift */,
 			);
 			path = Resource;
@@ -535,7 +535,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C45E1D1E0F70E500F72DD0 /* DefaultLocator.swift in Sources */,
-				50C45E501E230E6600F72DD0 /* Resource+String.swift in Sources */,
+				50C45E501E230E6600F72DD0 /* R+String.swift in Sources */,
 				50CE21941DFD83140042E103 /* MainViewController.swift in Sources */,
 				50C45E521E230FAB00F72DD0 /* ResourceUtils.swift in Sources */,
 				50DFDFE61E2ED604008E67D5 /* SheetItemStore.swift in Sources */,
@@ -543,7 +543,7 @@
 				50F6FECE1E035A1C002E849C /* DismissingMessage.swift in Sources */,
 				505BFC271E0E0C4000AAC3D2 /* ItemViewController.swift in Sources */,
 				50BD23021E05165500A64650 /* SheetListViewModel.swift in Sources */,
-				50BD22FE1E0514D200A64650 /* Resource.swift in Sources */,
+				50BD22FE1E0514D200A64650 /* R.swift in Sources */,
 				50C45E2D1E19215900F72DD0 /* FormulaViewController.swift in Sources */,
 				50AE03541E0642CF00739B0B /* RxCocoaComplement.swift in Sources */,
 				50C45E271E175B7400F72DD0 /* ItemFormatViewModel.swift in Sources */,
@@ -560,7 +560,7 @@
 				50F6FEC61E02BF8E002E849C /* Message.swift in Sources */,
 				50C45E391E20C14300F72DD0 /* SheetListStore.swift in Sources */,
 				50CE21921DFD83140042E103 /* AppDelegate.swift in Sources */,
-				50BD22FF1E0514D200A64650 /* Resource+Id.swift in Sources */,
+				50BD22FF1E0514D200A64650 /* R+Id.swift in Sources */,
 				50C45E211E11479200F72DD0 /* ItemTypeViewController.swift in Sources */,
 				50C45E4B1E2273F200F72DD0 /* InputOneTextViewModel.swift in Sources */,
 				50C45E541E2378A700F72DD0 /* ErrorStore.swift in Sources */,

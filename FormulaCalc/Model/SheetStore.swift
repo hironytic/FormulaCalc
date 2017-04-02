@@ -27,8 +27,6 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-private typealias R = Resource
-
 public enum SheetStoreError: Error {
     case sheetNotFound
     case itemNotFound

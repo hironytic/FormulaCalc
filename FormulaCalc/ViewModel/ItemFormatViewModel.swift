@@ -26,8 +26,6 @@
 import UIKit
 import RxSwift
 
-fileprivate typealias R = Resource
-
 public protocol IThousandSeparatorElementViewModel: IViewModel {
     var thousandSeparator: Observable<Bool> { get }
     

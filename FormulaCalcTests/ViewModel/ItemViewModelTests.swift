@@ -27,8 +27,6 @@ import XCTest
 import RxSwift
 @testable import FormulaCalc
 
-private typealias R = Resource
-
 class ItemViewModelTests: XCTestCase {
     
     class MockItemNameViewModel: ViewModel, IItemNameViewModel {

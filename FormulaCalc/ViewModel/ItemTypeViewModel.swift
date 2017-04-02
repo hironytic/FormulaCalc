@@ -26,8 +26,6 @@
 import UIKit
 import RxSwift
 
-fileprivate typealias R = Resource
-
 public protocol IItemTypeElementViewModel: IViewModel {
     var name: Observable<String?> { get }
     var accessoryType: Observable<UITableViewCellAccessoryType> { get }

@@ -27,8 +27,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-private typealias R = Resource
-
 public class ItemTypeElementCell: UITableViewCell {
     private var _disposeBag: DisposeBag?
     

@@ -82,94 +82,53 @@ class ItemTypeViewModelTests: XCTestCase {
         
         let viewModel = ItemTypeViewModel(locator: mockLocator, id: "sheet_item_zero")
         
-        var listDisposeBag: DisposeBag!
-        let exp = expectation(description: "Right options are in the list")
-        viewModel.typeList.subscribe (onNext: { list in
-            listDisposeBag = DisposeBag()
-            
-            var conditions = [false, false, false]
-            func fulfillCondition(index: Int) {
-                conditions[index] = true
-                if !conditions.contains(false) {
-                    exp.fulfill()
+        let optionNameList = viewModel.typeList
+            .flatMapLatest { (list) -> Observable<(String?, String?, String?)> in
+                if list.count == 3 {
+                    return Observable
+                        .combineLatest(list[0].name, list[1].name, list[2].name, resultSelector: { ($0, $1, $2) })
+                } else {
+                    return Observable.never()
                 }
             }
-            
-            if list.count == 3 {
-                list[0].name.subscribe(onNext: { (name: String?) in
-                    if name == ResourceUtils.getString(R.String.sheetItemTypeNumeric) {
-                        fulfillCondition(index: 0)
-                    }
-                })
-                .disposed(by: listDisposeBag)
-
-                list[1].name.subscribe(onNext: { (name: String?) in
-                    if name == ResourceUtils.getString(R.String.sheetItemTypeString) {
-                        fulfillCondition(index: 1)
-                    }
-                })
-                .disposed(by: listDisposeBag)
-
-                list[2].name.subscribe(onNext: { (name: String?) in
-                    if name == ResourceUtils.getString(R.String.sheetItemTypeFormula) {
-                        fulfillCondition(index: 2)
-                    }
-                })
-                .disposed(by: listDisposeBag)
-            }
-        }, onDisposed: {
-            listDisposeBag = nil
-        })
-        .disposed(by: disposeBag)
+        
+        let optionNameObserver = FulfillObserver(expectation(description: "Numeric, string and formula are on the list")) { (name0: String?, name1: String?, name2: String?) in
+            return name0 == ResourceUtils.getString(R.String.sheetItemTypeNumeric)
+                && name1 == ResourceUtils.getString(R.String.sheetItemTypeString)
+                && name2 == ResourceUtils.getString(R.String.sheetItemTypeFormula)
+        }
+        optionNameList
+            .bindTo(optionNameObserver)
+            .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
     }
-
+    
     func testOptionsAccessoryType() {
         // SCENARIO:
         // (1) Check the each option's accessory type.
         
         let viewModel = ItemTypeViewModel(locator: mockLocator, id: "sheet_item_zero")
         
-        var listDisposeBag: DisposeBag!
-        let exp = expectation(description: "String is only checked")
-        viewModel.typeList.subscribe (onNext: { list in
-            listDisposeBag = DisposeBag()
-            
-            var conditions = [false, false, false]
-            func fulfillCondition(index: Int) {
-                conditions[index] = true
-                if !conditions.contains(false) {
-                    exp.fulfill()
+        let accessoryTypes = viewModel.typeList
+            .flatMapLatest { (list) -> Observable<(UITableViewCellAccessoryType, UITableViewCellAccessoryType, UITableViewCellAccessoryType)> in
+                if list.count == 3 {
+                    return Observable
+                        .combineLatest(list[0].accessoryType, list[1].accessoryType, list[2].accessoryType, resultSelector: { ($0, $1, $2) })
+                } else {
+                    return Observable.never()
                 }
-            }
-            
-            if list.count == 3 {
-                list[0].accessoryType.subscribe(onNext: { (type: UITableViewCellAccessoryType) in
-                    if type == .none {
-                        fulfillCondition(index: 0)
-                    }
-                })
-                .disposed(by: listDisposeBag)
-                
-                list[1].accessoryType.subscribe(onNext: { (type: UITableViewCellAccessoryType) in
-                    if type == .checkmark {
-                        fulfillCondition(index: 1)
-                    }
-                })
-                .disposed(by: listDisposeBag)
-                
-                list[2].accessoryType.subscribe(onNext: { (type: UITableViewCellAccessoryType) in
-                    if type == .none {
-                        fulfillCondition(index: 2)
-                    }
-                })
-                .disposed(by: listDisposeBag)
-            }
-        }, onDisposed: {
-            listDisposeBag = nil
-        })
-        .disposed(by: disposeBag)
+        }
+        
+        // (1) "String" is checked
+        let accessoryTypeObserver = FulfillObserver(expectation(description: "String is only checked")) { (type0: UITableViewCellAccessoryType, type1: UITableViewCellAccessoryType, type2: UITableViewCellAccessoryType) in
+            return type0 == .none
+                && type1 == .checkmark
+                && type2 == .none
+        }
+        accessoryTypes
+            .bindTo(accessoryTypeObserver)
+            .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
     }
@@ -185,8 +144,12 @@ class ItemTypeViewModelTests: XCTestCase {
         
         let accessoryTypes = viewModel.typeList
             .flatMapLatest { (list) -> Observable<(UITableViewCellAccessoryType, UITableViewCellAccessoryType, UITableViewCellAccessoryType)> in
-                return Observable
-                    .combineLatest(list[0].accessoryType, list[1].accessoryType, list[2].accessoryType, resultSelector: { ($0, $1, $2) })
+                if list.count == 3 {
+                    return Observable
+                        .combineLatest(list[0].accessoryType, list[1].accessoryType, list[2].accessoryType, resultSelector: { ($0, $1, $2) })
+                } else {
+                    return Observable.never()
+                }
             }
         
         // (1) "String" is checked

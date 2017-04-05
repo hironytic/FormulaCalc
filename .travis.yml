@@ -1,11 +1,10 @@
 language: objective-c
-osx_image: xcode8.2
+osx_image: xcode8.3
 before_install:
 - carthage bootstrap --platform ios
 script:
 - set -o pipefail
-# { platform:iOS Simulator, id:22FA2149-1241-469C-BF6D-462D3837DB72, OS:10.2, name:iPhone 7 }
-- travis_retry xcodebuild test -project FormulaCalc.xcodeproj -scheme FormulaCalc -destination 'platform=iOS Simulator,id=22FA2149-1241-469C-BF6D-462D3837DB72' ONLY_ACTIVE_ARCH=NO | xcpretty
+- travis_retry xcodebuild test -project FormulaCalc.xcodeproj -scheme FormulaCalc -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3' ONLY_ACTIVE_ARCH=NO | xcpretty
 env:
   global:
     secure: fDs1oSSzanqbYSTHHKNXijQvyfTgYGEzDpb7RyQTCrCR/dTZKRCu6/zOgO0UR73De8cS+3auiBvXXAMOoRtVmpMxgYq1J2SLzfVLtC7rrsF5GXpDVfZ1O2lfJKDbRJt5j9/kWI7V04VOo72+bIaujZqBDqlzWx5BikIZSUBAu1LSp70r8U56Kh/BXGibJIMfVIsWsxgGpiC9MI2pCWhwgaNd5rt3lho5+P21O8PPA7i0ghA/lWuBNDzxiQdM1mM704revSSI4Zc88MYqJAa4cfx/CyFUaIn9Yiyih//dvBeUOuD7CaU9o/M77S6ukha5xOj14A++26LwZu8EAqQW1LZyoHEtP74qiiyDNlXRBeTKKjbpxG2JeFBSALPs3Ga1O+aN4c+vNxz2cwrFA4KW4320eADJQm0H2nagnNHBaJmUv7YS3JdLjhUKF6aLKKyAwg5Vb8arEt7wvF6S2lYfbSFXRjY7MnL5eNyLOgYzJ+XwFofN1NQBJja6Hm1s/d8vHG2/r92WYyhPs1aYw473greOBszt2cEHSqXTHkFu6TXsbm5TuhGwE475PHTu2xjxKbCVm3jpP1gqVCqDpJN0lQ7TApCGW3kYw9/9Rpg6ZnJcjlTf7Cg6FiKgDbKlGqSLw0LzPQAkmkhp7F9A0Vp//gwxmxlM2z0eVrB7xlz+cYw=

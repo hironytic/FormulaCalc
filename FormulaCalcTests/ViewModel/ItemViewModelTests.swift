@@ -239,6 +239,57 @@ class ItemViewModelTests: XCTestCase {
         
         waitForExpectations(timeout: 3.0)
     }
+    
+    func testFormulaChangedByType() {
+        // SCENARIO:
+        // (1) Check the formula of the item. 
+        // (2) Type of the item is changed to string.
+        // (3) Formula is empty.
+        // (4) Type of the item is changed to formula.
+        // (5) Formula is back.
+
+        let viewModel = ItemViewModel(locator: mockLocator, id: "sheet_item_one")
+
+        let sheetItemStore1 = mockLocator.resolveSheetItemStore(id: "sheet_item_one") as! MockSheetItemStore
+        
+        let formulaObserver = FulfillObserver(expectation(description: "The formula of item becomes 10+20")) { (formula: String?) in
+            // (1) Check the formula of the item.
+            guard let formula = formula else { return false }
+            return formula == "10+20"
+        }
+        
+        viewModel.formula
+            .bindTo(formulaObserver)
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 3.0)
+
+        formulaObserver.reset(expectation(description: "The formula becomes empty")) { (formula: String?) in
+            // (3) Formula is empty.
+            guard let formula = formula else { return false }
+            return formula == ""
+        }
+        
+        // (2) Type of the item is changed to string.
+        if let sheetItem = sheetItemStore1.item {
+            sheetItem.type = .numeric
+            sheetItemStore1.update(item: sheetItem)
+        }
+        waitForExpectations(timeout: 3.0)
+        
+        formulaObserver.reset(expectation(description: "The formula is back")) { (formula: String?) in
+            // (5) Formula is back.
+            guard let formula = formula else { return false }
+            return formula == "10+20"
+        }
+        
+        // (4) Type of the item is changed to formula.
+        if let sheetItem = sheetItemStore1.item {
+            sheetItem.type = .formula
+            sheetItemStore1.update(item: sheetItem)
+        }
+        waitForExpectations(timeout: 3.0)        
+    }
 
     func testVisible() {
         // SCENARIO:

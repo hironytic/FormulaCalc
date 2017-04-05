@@ -117,10 +117,15 @@ public class ItemViewModel: IItemViewModel {
             .asObservable()
 
         formula = _sheetItemStore.update
-            .filter { $0?.type == .formula }
-            .distinctUntilChanged({ $0?.formula }, comparer: { $0 == $1 })
+            .distinctUntilChanged({ ($0?.type, $0?.formula) }, comparer: { $0.0 == $1.0 && $0.1 == $1.1 })
             .map { sheetItem in
-                return sheetItem?.formula ?? ""
+                guard let sheetItem = sheetItem else { return "" }
+                
+                if sheetItem.type == .formula {
+                    return sheetItem.formula
+                } else {
+                    return ""
+                }
             }
             .startWith("")
             .asDriver(onErrorJustReturn: "")

@@ -30,6 +30,7 @@ public protocol IFormulaViewModel: IViewModel {
     var formula: Observable<String?> { get }
     
     var onFormulaChanged: AnyObserver<String?> { get }
+    var onFormulaEditingDidEnd: AnyObserver<Void> { get }
 }
 
 public protocol IFormulaViewModelLocator {
@@ -37,20 +38,55 @@ public protocol IFormulaViewModelLocator {
 }
 extension DefaultLocator: IFormulaViewModelLocator {
     public func resolveFormulaViewModel(id: String) -> IFormulaViewModel {
-        return FormulaViewModel(id: id)
+        return FormulaViewModel(locator: self, id: id)
     }
 }
 
 public class FormulaViewModel: IFormulaViewModel {
+    public typealias Locator = ISheetItemStoreLocator
+    
     public let formula: Observable<String?>
     public let onFormulaChanged: AnyObserver<String?>
+    public let onFormulaEditingDidEnd: AnyObserver<Void>
     
     private let _onFormulaChanged = ActionObserver<String?>()
+    private let _onFormulaEditingDidEnd = ActionObserver<Void>()
     
-    public init(id: String) {
-        self.formula = Observable
-            .just("{身長(cm)}/100")
+    private let _locator: Locator
+    private let _id: String
+    private let _sheetItemStore: ISheetItemStore
+    private let _disposeBag = DisposeBag()
+    private let _formula = Variable<String?>("")
+    
+    public init(locator: Locator, id: String) {
+        _locator = locator
+        _id = id
+        _sheetItemStore = _locator.resolveSheetItemStore(id: id)
         
-        self.onFormulaChanged = _onFormulaChanged.asObserver()
+        _sheetItemStore.update
+            .distinctUntilChanged({ $0?.formula }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                return sheetItem?.formula ?? ""
+            }
+            .bindTo(_formula)
+            .disposed(by: _disposeBag)
+        
+        formula = _formula
+            .asDriver()
+            .asObservable()
+        
+        onFormulaChanged = _onFormulaChanged.asObserver()
+        onFormulaEditingDidEnd = _onFormulaEditingDidEnd.asObserver()
+        
+        _onFormulaChanged.handler = { [weak self] (formula: String?) in self?.handleOnFormulaChanged(formula) }
+        _onFormulaEditingDidEnd.handler = { [weak self] in self?.handleOnFormulaEditingDidEnd() }
+    }
+    
+    private func handleOnFormulaChanged(_ formula: String?) {
+        _formula.value = formula
+    }
+    
+    private func handleOnFormulaEditingDidEnd() {
+        _sheetItemStore.onUpdateFormula.onNext(_formula.value ?? "")
     }
 }

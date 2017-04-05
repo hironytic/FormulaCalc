@@ -51,6 +51,14 @@ public class FormulaViewController: UITableViewController {
             .bindTo(formulaField.rx.text)
             .disposed(by: disposeBag)
         
+        formulaField.rx.text
+            .bindTo(viewModel.onFormulaChanged)
+            .disposed(by: disposeBag)
+        
+        formulaField.rx.controlEvent(UIControlEvents.editingDidEnd)
+            .bindTo(viewModel.onFormulaEditingDidEnd)
+            .disposed(by: disposeBag)
+        
         _disposeBag = disposeBag
     }
 }

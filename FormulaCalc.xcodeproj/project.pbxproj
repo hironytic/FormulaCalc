@@ -32,6 +32,7 @@
 		50BD23021E05165500A64650 /* SheetListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23011E05165500A64650 /* SheetListViewModel.swift */; };
 		50BD23041E05289100A64650 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23031E05289100A64650 /* MainViewModel.swift */; };
 		50BD23061E05360900A64650 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD23051E05360900A64650 /* ViewControllerFactory.swift */; };
+		50C2E7AA1E952C9E00AAEA7D /* FormulaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2E7A91E952C9E00AAEA7D /* FormulaViewModelTests.swift */; };
 		50C45E1D1E0F70E500F72DD0 /* DefaultLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E1C1E0F70E500F72DD0 /* DefaultLocator.swift */; };
 		50C45E1F1E11470B00F72DD0 /* ItemType.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50C45E1E1E11470B00F72DD0 /* ItemType.storyboard */; };
 		50C45E211E11479200F72DD0 /* ItemTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C45E201E11479200F72DD0 /* ItemTypeViewController.swift */; };
@@ -119,6 +120,7 @@
 		50BD23011E05165500A64650 /* SheetListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetListViewModel.swift; sourceTree = "<group>"; };
 		50BD23031E05289100A64650 /* MainViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		50BD23051E05360900A64650 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
+		50C2E7A91E952C9E00AAEA7D /* FormulaViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormulaViewModelTests.swift; sourceTree = "<group>"; };
 		50C45E1C1E0F70E500F72DD0 /* DefaultLocator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultLocator.swift; sourceTree = "<group>"; };
 		50C45E1E1E11470B00F72DD0 /* ItemType.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemType.storyboard; sourceTree = "<group>"; };
 		50C45E201E11479200F72DD0 /* ItemTypeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTypeViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				501563FE1E4CB22100129964 /* DesignSheetViewModelTests.swift */,
+				50C2E7A91E952C9E00AAEA7D /* FormulaViewModelTests.swift */,
 				506948741E606FB600131138 /* ItemViewModelTests.swift */,
 				50DC84B11E90D40500089B8E /* ItemFormatViewModelTests.swift */,
 				506D111E1E82BB3C00738238 /* ItemNameViewModelTests.swift */,
@@ -593,6 +596,7 @@
 				50C45E451E210E1500F72DD0 /* FulfillObserver.swift in Sources */,
 				50C45E3C1E21034800F72DD0 /* SheetListStoreTests.swift in Sources */,
 				506948751E606FB600131138 /* ItemViewModelTests.swift in Sources */,
+				50C2E7AA1E952C9E00AAEA7D /* FormulaViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

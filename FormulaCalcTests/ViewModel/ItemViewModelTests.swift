@@ -57,6 +57,7 @@ class ItemViewModelTests: XCTestCase {
         
         let formula = Observable<String?>.never()
         let onFormulaChanged = ActionObserver<String?>().asObserver()
+        let onFormulaEditingDidEnd = ActionObserver<Void>().asObserver()
         
         init(id: String) {
             self.id = id

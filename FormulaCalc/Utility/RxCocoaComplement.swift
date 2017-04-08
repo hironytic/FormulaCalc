@@ -51,3 +51,13 @@ extension Reactive where Base: UITableViewCell {
         }.asObserver()
     }
 }
+
+extension ObserverType where E == String? {
+    /// To avoid setting empty string, replace it with one space character.
+    /// See: https://discussions.apple.com/thread/2628089?start=0&tstart=0
+    public var avoidsEmpty: AnyObserver<String?> {
+        return self.mapObserver { value -> String? in
+            return value.flatMap { $0.isEmpty ? nil : $0 } ?? " "
+        }
+    }
+}

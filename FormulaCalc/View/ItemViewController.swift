@@ -56,15 +56,15 @@ public class ItemViewController: UITableViewController {
             .disposed(by: disposeBag)
         
         viewModel.name
-            .bindTo(nameLabel.rx.text)
+            .bindTo(nameLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
         
         viewModel.type
-            .bindTo(typeLabel.rx.text)
+            .bindTo(typeLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
         
         viewModel.formula
-            .bindTo(formulaLabel.rx.text)
+            .bindTo(formulaLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
         
         viewModel.visible
@@ -72,7 +72,7 @@ public class ItemViewController: UITableViewController {
             .disposed(by: disposeBag)
         
         viewModel.format
-            .bindTo(formatLabel.rx.text)
+            .bindTo(formatLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
 
         itemSelectedAt(section: 0, row: 0)

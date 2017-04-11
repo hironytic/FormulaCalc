@@ -30,8 +30,13 @@ public protocol ISheetElementViewModel: IViewModel {
     var id: String { get }
     var name: Observable<String?> { get }
     var value: Observable<String?> { get }
+    var editingValue: Observable<String?> { get }
+    var valueLabelHidden: Observable<Bool> { get }
+    var valueEditHidden: Observable<Bool> { get }
     
     var onTapValue: AnyObserver<Void> { get }
+    var onValueChanged: AnyObserver<String?> { get }
+    var onValueEditingDidEnd: AnyObserver<Void> { get }
 }
 
 public protocol ISheetViewModel: IViewModel {
@@ -57,11 +62,21 @@ class SheetElementViewModel: ISheetElementViewModel {
     public let id: String
     public let name: Observable<String?>
     public let value: Observable<String?>
+    public let editingValue: Observable<String?>
+    public let valueLabelHidden: Observable<Bool>
+    public let valueEditHidden: Observable<Bool>
 
     private let _locator: Locator
     private let _sheetItemStore: ISheetItemStore
     
     public let onTapValue: AnyObserver<Void>
+    public let onValueChanged: AnyObserver<String?>
+    public let onValueEditingDidEnd: AnyObserver<Void>
+
+    private let _onValueChanged = ActionObserver<String?>()
+    private let _onValueEditingDidEnd = ActionObserver<Void>()
+    private let _disposeBag = DisposeBag()
+    private let _editingValue = Variable<String?>("")
     
     public init(locator: Locator, id: String, editingItemId: Observable<String?>, onChangeEditingItemId: AnyObserver<String?>) {
         _locator = locator
@@ -92,12 +107,63 @@ class SheetElementViewModel: ISheetElementViewModel {
             }
             .asDriver(onErrorJustReturn: "")
             .asObservable()
+
+        _sheetItemStore.update
+            .distinctUntilChanged({ $0?.type }, comparer: { $0 == $1 })
+            .map { sheetItem in
+                guard let sheetItem = sheetItem else { return "" }
+                
+                switch sheetItem.type {
+                case .numeric:
+                    return "\(sheetItem.numberValue)"
+                case .string:
+                    return sheetItem.stringValue
+                default:
+                    return ""
+                }
+            }
+            .bindTo(_editingValue)
+            .disposed(by: _disposeBag)
+
+        editingValue = _editingValue
+            .asDriver()
+            .asObservable()
+        
+        valueLabelHidden = editingItemId
+            .map { editingId in
+                if let  editingId = editingId {
+                    return editingId == id
+                } else {
+                    return false
+                }
+            }
+            .asDriver(onErrorJustReturn: false)
+            .asObservable()
+        
+        valueEditHidden = valueLabelHidden
+            .map { !$0 }
         
         onTapValue = onChangeEditingItemId
             .mapObserver { _ in
                 return id
             }
+        
+        onValueChanged = _onValueChanged.asObserver()
+        onValueEditingDidEnd = _onValueEditingDidEnd.asObserver()
+        
+        _onValueChanged.handler = { [weak self] (name: String?) in self?.handleOnValueChanged(name) }
+        _onValueEditingDidEnd.handler = { [weak self] in self?.handleOnValueEditingDidEnd() }
     }
+    
+    private func handleOnValueChanged(_ value: String?) {
+        _editingValue.value = value
+    }
+    
+    private func handleOnValueEditingDidEnd() {
+        // TODO:
+//        _sheetItemStore.onUpdateName.onNext(_name.value ?? "")
+    }
+    
 }
 
 public class SheetViewModel: ISheetViewModel {

@@ -162,7 +162,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.title
-            .bindTo(titleObserver)
+            .bind(to: titleObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -180,7 +180,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.name
-            .bindTo(nameObserver)
+            .bind(to: nameObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -198,7 +198,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.type
-            .bindTo(typeObserver)
+            .bind(to: typeObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -216,7 +216,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.formula
-            .bindTo(formulaObserver)
+            .bind(to: formulaObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -234,7 +234,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.formula
-            .bindTo(formulaObserver)
+            .bind(to: formulaObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -259,7 +259,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.formula
-            .bindTo(formulaObserver)
+            .bind(to: formulaObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -302,7 +302,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.visible
-            .bindTo(visibleObserver)
+            .bind(to: visibleObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -319,7 +319,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.visible
-            .bindTo(visibleObserver)
+            .bind(to: visibleObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -337,7 +337,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.format
-            .bindTo(formatObserver)
+            .bind(to: formatObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -355,7 +355,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.format
-            .bindTo(formatObserver)
+            .bind(to: formatObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -375,7 +375,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User selects the name.
@@ -398,7 +398,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User selects the type.
@@ -421,7 +421,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User selects the formula.
@@ -466,7 +466,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User selects the format.
@@ -490,7 +490,7 @@ class ItemViewModelTests: XCTestCase {
         }
 
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User taps "Name"
@@ -514,7 +514,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User taps "Type"
@@ -538,7 +538,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User taps "Formula"
@@ -574,7 +574,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.visible
-            .bindTo(onChangeVisibleObserver)
+            .bind(to: onChangeVisibleObserver)
             .disposed(by: disposeBag)
         
         // (1) User changes "Visible"
@@ -598,7 +598,7 @@ class ItemViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User taps "Format"

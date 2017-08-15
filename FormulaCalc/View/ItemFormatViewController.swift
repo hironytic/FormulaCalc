@@ -40,11 +40,11 @@ public class ThousandSeparatorElementCell: UITableViewCell {
             let disposeBag = DisposeBag()
             
             viewModel.thousandSeparator
-                .bindTo(thousandSeparatorSwitch.rx.isOn)
+                .bind(to: thousandSeparatorSwitch.rx.isOn)
                 .disposed(by: disposeBag)
 
             thousandSeparatorSwitch.rx.isOn
-                .bindTo(viewModel.onChangeThousandSeparator)
+                .bind(to: viewModel.onChangeThousandSeparator)
                 .disposed(by: disposeBag)
             
             _disposeBag = disposeBag
@@ -70,12 +70,12 @@ public class FractionDigitsElementCell: UITableViewCell {
             
             if let textLabel = textLabel {
                 viewModel.name
-                    .bindTo(textLabel.rx.text)
+                    .bind(to: textLabel.rx.text)
                     .disposed(by: disposeBag)
             }
             
             viewModel.accessoryType
-                .bindTo(self.rx.accessoryType)
+                .bind(to: self.rx.accessoryType)
                 .disposed(by: disposeBag)
             
             _disposeBag = disposeBag
@@ -109,11 +109,11 @@ public class ItemFormatViewController: UITableViewController {
         
         let dataSource = ItemFormatDataSource()
         viewModel.items
-            .bindTo(tableView.rx.items(dataSource: dataSource))
+            .bind(to: tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         tableView.rx.modelSelected(IFractionsDigitsElementViewModel.self)
-            .bindTo(viewModel.onSelectFractionDigits)
+            .bind(to: viewModel.onSelectFractionDigits)
             .disposed(by: disposeBag)
         
         _disposeBag = disposeBag

@@ -68,7 +68,7 @@ public class ItemNameViewModel: IItemNameViewModel {
             .map { sheetItem in
                 return sheetItem?.name ?? ""
             }
-            .bindTo(_name)
+            .bind(to: _name)
             .disposed(by: _disposeBag)
         
         name = _name

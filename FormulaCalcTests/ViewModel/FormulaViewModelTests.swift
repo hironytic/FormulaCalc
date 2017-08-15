@@ -86,7 +86,7 @@ class FormulaViewModelTests: XCTestCase {
         }
         
         viewModel.formula
-            .bindTo(formulaObserver)
+            .bind(to: formulaObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -123,7 +123,7 @@ class FormulaViewModelTests: XCTestCase {
         }
         
         viewModel.formula
-            .bindTo(formulaObserver)
+            .bind(to: formulaObserver)
             .disposed(by: disposeBag)
         
         // (1) User changes formula

@@ -98,7 +98,7 @@ class ItemFormatViewModelTests: XCTestCase {
         }
         
         thousandSeparator
-            .bindTo(thousandSeparatorObserver)
+            .bind(to: thousandSeparatorObserver)
             .disposed(by: disposeBag)
 
         waitForExpectations(timeout: 3.0)
@@ -162,7 +162,7 @@ class ItemFormatViewModelTests: XCTestCase {
         }
         
         optionNames
-            .bindTo(optionNamesObserver)
+            .bind(to: optionNamesObserver)
             .addDisposableTo(disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -196,7 +196,7 @@ class ItemFormatViewModelTests: XCTestCase {
         }
         
         accessoryTypes
-            .bindTo(accessoryTypesObserver)
+            .bind(to: accessoryTypesObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)

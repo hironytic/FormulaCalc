@@ -150,7 +150,7 @@ class DesignSheetViewModelTests: XCTestCase {
         }
         
         viewModel.title
-            .bindTo(titleObserver)
+            .bind(to: titleObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -178,7 +178,7 @@ class DesignSheetViewModelTests: XCTestCase {
                 return name == "Item 0"
             }
             elementViewModel0.name
-                .bindTo(itemNameObserver)
+                .bind(to: itemNameObserver)
                 .disposed(by: self.disposeBag)
             
             // (3) The value of the first item is 'foobar'.
@@ -187,7 +187,7 @@ class DesignSheetViewModelTests: XCTestCase {
                 return type == ResourceUtils.getString(R.String.sheetItemTypeString)
             }
             elementViewModel0.type
-                .bindTo(itemTypeObserver)
+                .bind(to: itemTypeObserver)
                 .disposed(by: self.disposeBag)
             
             // (4) The invisible mark of the first item is hidden.
@@ -195,14 +195,14 @@ class DesignSheetViewModelTests: XCTestCase {
                 return hidden
             }
             elementViewModel0.invisibleMarkHidden
-                .bindTo(invisibleMarkObserver)
+                .bind(to: invisibleMarkObserver)
                 .disposed(by: self.disposeBag)
             
             return true
         }
         
         viewModel.itemList
-            .bindTo(itemListObserver)
+            .bind(to: itemListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -252,7 +252,7 @@ class DesignSheetViewModelTests: XCTestCase {
         }
 
         viewModel.itemList
-            .bindTo(itemListObserver)
+            .bind(to: itemListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -285,7 +285,7 @@ class DesignSheetViewModelTests: XCTestCase {
         }
         
         viewModel.itemList
-            .bindTo(itemListObserver)
+            .bind(to: itemListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -298,7 +298,7 @@ class DesignSheetViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (2) User selects the first item.
@@ -343,7 +343,7 @@ class DesignSheetViewModelTests: XCTestCase {
         }
         
         viewModel.itemList
-            .bindTo(itemListObserver)
+            .bind(to: itemListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -375,7 +375,7 @@ class DesignSheetViewModelTests: XCTestCase {
         }
         
         viewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User taps done button.

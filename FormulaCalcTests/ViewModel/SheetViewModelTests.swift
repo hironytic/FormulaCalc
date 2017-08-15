@@ -147,7 +147,7 @@ class SheetViewModelTests: XCTestCase {
         }
         
         sheetViewModel.title
-            .bindTo(titleObserver)
+            .bind(to: titleObserver)
             .disposed(by: disposeBag)
 
         waitForExpectations(timeout: 3.0)
@@ -174,7 +174,7 @@ class SheetViewModelTests: XCTestCase {
                 return name == "Item 0"
             }
             elementViewModel0.name
-                .bindTo(itemNameObserver)
+                .bind(to: itemNameObserver)
                 .disposed(by: self.disposeBag)
             
             // (3) The value of the first item is 'foobar'.
@@ -183,14 +183,14 @@ class SheetViewModelTests: XCTestCase {
                 return value == "foobar"
             }
             elementViewModel0.value
-                .bindTo(itemValueObserver)
+                .bind(to: itemValueObserver)
                 .disposed(by: self.disposeBag)
             
             return true
         }
         
         sheetViewModel.itemList
-            .bindTo(itemListObserver)
+            .bind(to: itemListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -211,7 +211,7 @@ class SheetViewModelTests: XCTestCase {
         }
         
         sheetViewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (1) User taps design button.

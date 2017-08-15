@@ -70,7 +70,7 @@ class SheetListStoreTests: XCTestCase {
             return update.sheetList.count == 0
         }
         sheetListStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
         
@@ -101,7 +101,7 @@ class SheetListStoreTests: XCTestCase {
             return false
         }
         sheetListStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 
@@ -129,7 +129,7 @@ class SheetListStoreTests: XCTestCase {
             return false
         }
         sheetListStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         waitForExpectations(timeout: 3.0, handler: nil)
 

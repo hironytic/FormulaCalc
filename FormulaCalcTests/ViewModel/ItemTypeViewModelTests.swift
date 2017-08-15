@@ -96,7 +96,7 @@ class ItemTypeViewModelTests: XCTestCase {
                 && name2 == ResourceUtils.getString(R.String.sheetItemTypeFormula)
         }
         optionNameList
-            .bindTo(optionNameObserver)
+            .bind(to: optionNameObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -125,7 +125,7 @@ class ItemTypeViewModelTests: XCTestCase {
                 && type2 == .none
         }
         accessoryTypes
-            .bindTo(accessoryTypeObserver)
+            .bind(to: accessoryTypeObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -157,7 +157,7 @@ class ItemTypeViewModelTests: XCTestCase {
                 && type2 == .none
         }
         accessoryTypes
-            .bindTo(accessoryTypeObserver)
+            .bind(to: accessoryTypeObserver)
             .disposed(by: disposeBag)
 
         waitForExpectations(timeout: 3.0)

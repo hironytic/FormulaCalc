@@ -42,15 +42,15 @@ public class DesignSheetElementCell: UITableViewCell {
             let disposeBag = DisposeBag()
             
             viewModel.name
-                .bindTo(nameLabel.rx.text)
+                .bind(to: nameLabel.rx.text)
                 .disposed(by: disposeBag)
             
             viewModel.type
-                .bindTo(typeLabel.rx.text)
+                .bind(to: typeLabel.rx.text)
                 .disposed(by: disposeBag)
             
             viewModel.invisibleMarkHidden
-                .bindTo(invisibleMark.rx.isHidden)
+                .bind(to: invisibleMark.rx.isHidden)
                 .disposed(by: disposeBag)
             
             _disposeBag = disposeBag
@@ -92,33 +92,33 @@ public class DesignSheetViewController: UITableViewController {
         let disposeBag = DisposeBag()
 
         viewModel.message
-            .bindTo(transitioner)
+            .bind(to: transitioner)
             .disposed(by: disposeBag)
         
         viewModel.itemList
-            .bindTo(tableView.rx.items(cellIdentifier:R.Id.cell, cellType: DesignSheetElementCell.self)) { (row, element, cell) in
+            .bind(to: tableView.rx.items(cellIdentifier:R.Id.cell, cellType: DesignSheetElementCell.self)) { (row, element, cell) in
                 cell.viewModel = element
             }
             .disposed(by: disposeBag)
         
         viewModel.title
-            .bindTo(navigationItem.rx.title)
+            .bind(to: navigationItem.rx.title)
             .disposed(by: disposeBag)
         
         newItemButton.rx.tap
-            .bindTo(viewModel.onNewItem)
+            .bind(to: viewModel.onNewItem)
             .disposed(by: disposeBag)
         
         doneButton.rx.tap
-            .bindTo(viewModel.onDone)
+            .bind(to: viewModel.onDone)
             .disposed(by: disposeBag)
         
         tableView.rx.modelSelected(IDesignSheetElementViewModel.self)
-            .bindTo(viewModel.onSelectItem)
+            .bind(to: viewModel.onSelectItem)
             .disposed(by: disposeBag)
         
         tableView.rx.modelDeleted(IDesignSheetElementViewModel.self)
-            .bindTo(viewModel.onDeleteItem)
+            .bind(to: viewModel.onDeleteItem)
             .disposed(by: disposeBag)
         
         _disposeBag = disposeBag

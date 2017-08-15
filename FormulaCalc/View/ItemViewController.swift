@@ -52,47 +52,47 @@ public class ItemViewController: UITableViewController {
         let disposeBag = DisposeBag()
         
         viewModel.message
-            .bindTo(transitioner)
+            .bind(to: transitioner)
             .disposed(by: disposeBag)
         
         viewModel.name
-            .bindTo(nameLabel.rx.text.avoidsEmpty)
+            .bind(to: nameLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
         
         viewModel.type
-            .bindTo(typeLabel.rx.text.avoidsEmpty)
+            .bind(to: typeLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
         
         viewModel.formula
-            .bindTo(formulaLabel.rx.text.avoidsEmpty)
+            .bind(to: formulaLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
         
         viewModel.visible
-            .bindTo(visibleSwitch.rx.isOn)
+            .bind(to: visibleSwitch.rx.isOn)
             .disposed(by: disposeBag)
         
         viewModel.format
-            .bindTo(formatLabel.rx.text.avoidsEmpty)
+            .bind(to: formatLabel.rx.text.avoidsEmpty)
             .disposed(by: disposeBag)
 
         itemSelectedAt(section: 0, row: 0)
-            .bindTo(viewModel.onSelectName)
+            .bind(to: viewModel.onSelectName)
             .disposed(by: disposeBag)
 
         itemSelectedAt(section: 0, row: 1)
-            .bindTo(viewModel.onSelectType)
+            .bind(to: viewModel.onSelectType)
             .disposed(by: disposeBag)
 
         itemSelectedAt(section: 1, row: 0)
-            .bindTo(viewModel.onSelectFormula)
+            .bind(to: viewModel.onSelectFormula)
             .disposed(by: disposeBag)
 
         visibleSwitch.rx.isOn
-            .bindTo(viewModel.onChangeVisible)
+            .bind(to: viewModel.onChangeVisible)
             .disposed(by: disposeBag)
         
         itemSelectedAt(section: 2, row: 1)
-            .bindTo(viewModel.onSelectFormat)
+            .bind(to: viewModel.onSelectFormat)
             .disposed(by: disposeBag)
         
         _disposeBag = disposeBag

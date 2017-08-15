@@ -142,13 +142,13 @@ class SheetListViewModelTests: XCTestCase {
             }
             
             elementViewModel0.title
-                .bindTo(sheetTitleObserver)
+                .bind(to: sheetTitleObserver)
                 .disposed(by: self.disposeBag)
             return true
         }
         
         sheetListViewModel.sheetList
-            .bindTo(sheetListObserver)
+            .bind(to: sheetListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -230,7 +230,7 @@ class SheetListViewModelTests: XCTestCase {
         }
         
         sheetListViewModel.sheetList
-            .bindTo(sheetListObserver)
+            .bind(to: sheetListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -274,7 +274,7 @@ class SheetListViewModelTests: XCTestCase {
         }
         
         sheetListViewModel.sheetList
-            .bindTo(sheetListObserver)
+            .bind(to: sheetListObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -287,7 +287,7 @@ class SheetListViewModelTests: XCTestCase {
         }
         
         sheetListViewModel.message
-            .bindTo(messageObserver)
+            .bind(to: messageObserver)
             .disposed(by: disposeBag)
         
         // (2) User selects the first sheet.

@@ -86,7 +86,7 @@ class ItemNameViewModelTests: XCTestCase {
         }
         
         viewModel.name
-            .bindTo(nameObserver)
+            .bind(to: nameObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0)
@@ -123,7 +123,7 @@ class ItemNameViewModelTests: XCTestCase {
         }
         
         viewModel.name
-            .bindTo(nameObserver)
+            .bind(to: nameObserver)
             .disposed(by: disposeBag)
 
         // (1) User changes name

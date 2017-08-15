@@ -122,7 +122,7 @@ class SheetElementViewModel: ISheetElementViewModel {
                     return ""
                 }
             }
-            .bindTo(_editingValue)
+            .bind(to: _editingValue)
             .disposed(by: _disposeBag)
 
         editingValue = _editingValue

@@ -68,7 +68,7 @@ public class FormulaViewModel: IFormulaViewModel {
             .map { sheetItem in
                 return sheetItem?.formula ?? ""
             }
-            .bindTo(_formula)
+            .bind(to: _formula)
             .disposed(by: _disposeBag)
         
         formula = _formula

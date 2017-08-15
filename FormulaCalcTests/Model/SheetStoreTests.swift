@@ -89,7 +89,7 @@ class SheetStoreTests: XCTestCase {
             return sheet.name == "Sheet 2"
         }
         sheetStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0, handler: nil)
@@ -102,7 +102,7 @@ class SheetStoreTests: XCTestCase {
             return sheet == nil
         }
         sheetStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0, handler: nil)
@@ -116,7 +116,7 @@ class SheetStoreTests: XCTestCase {
             return sheet.name == "Sheet 2"
         }
         sheetStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0, handler: nil)
@@ -140,7 +140,7 @@ class SheetStoreTests: XCTestCase {
             }
         })
         testLocator.resolveErrorStore().error
-            .bindTo(errorObserver)
+            .bind(to: errorObserver)
             .disposed(by: disposeBag)
         
         sheetStore.onUpdateName.onNext("Renamed")
@@ -155,7 +155,7 @@ class SheetStoreTests: XCTestCase {
             return sheet.items.isEmpty
         }
         sheetStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0, handler: nil)
@@ -190,7 +190,7 @@ class SheetStoreTests: XCTestCase {
             }
         })
         testLocator.resolveErrorStore().error
-            .bindTo(errorObserver)
+            .bind(to: errorObserver)
             .disposed(by: disposeBag)
         
         sheetStore.onNewItem.onNext(())
@@ -206,7 +206,7 @@ class SheetStoreTests: XCTestCase {
             return true
         }
         sheetStore.update
-            .bindTo(updateObserver)
+            .bind(to: updateObserver)
             .disposed(by: disposeBag)
         
         waitForExpectations(timeout: 3.0, handler: nil)
@@ -231,7 +231,7 @@ class SheetStoreTests: XCTestCase {
             }
         })
         testLocator.resolveErrorStore().error
-            .bindTo(errorObserver)
+            .bind(to: errorObserver)
             .disposed(by: disposeBag)
         
         sheetStore.onDeleteItem.onNext("item-x")

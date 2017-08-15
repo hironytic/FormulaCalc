@@ -48,15 +48,15 @@ public class ItemNameViewController: UITableViewController {
         let disposeBag = DisposeBag()
     
         viewModel.name
-            .bindTo(nameField.rx.text)
+            .bind(to: nameField.rx.text)
             .disposed(by: disposeBag)
         
         nameField.rx.text
-            .bindTo(viewModel.onNameChanged)
+            .bind(to: viewModel.onNameChanged)
             .disposed(by: disposeBag)
         
         nameField.rx.controlEvent(UIControlEvents.editingDidEnd)
-            .bindTo(viewModel.onNameEditingDidEnd)
+            .bind(to: viewModel.onNameEditingDidEnd)
             .disposed(by: disposeBag)
         
         _disposeBag = disposeBag
